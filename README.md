@@ -1,6 +1,6 @@
 # EVFX
 
-Independent plugins, scripts, and useful oddities for the moving image.
+EVFX plugins and tools for After Effects, Blender, and Windows.
 
 **Site:** https://sbilogic.github.io/evfx/  
 **Downloads:** https://github.com/sbilogic/evfx/releases
@@ -38,6 +38,12 @@ node scripts/publish.mjs --prepare-only
 ```
 
 To publish a subset, use `--only=smart-grain,blurry`. Public copy, requirements, and status are in `catalog.json`; preview, legacy, and lab labels are explicit. Empty project folders are omitted until there is a described tool or distribution.
+
+## Support payments
+
+`support.json` holds the public creator/payment URL and an optional monthly-support URL. The header and bottom of the catalog show a plain **Support EVFX** link once the main URL is configured. Monthly support appears only when its own URL is provided. Links open the payment provider directly; there are no embedded widgets, third-party scripts, download gates, or prompts.
+
+An unset URL renders no payment link. Create the creator account and complete its payout setup first, then add the verified public page URL. `node scripts/check.mjs` validates the configuration. The signup username alone is not treated as a working payment destination.
 
 ## Automatic hosting updates
 

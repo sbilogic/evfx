@@ -1,6 +1,6 @@
 {
   "repository": "sbilogic/evfx",
-  "title": "EVFX — A little less friction. A little more magic.",
+  "title": "EVFX — Plugins & tools",
   "tools": [
     {
       "id": "smart-grain",
@@ -9,7 +9,7 @@
       "category": "ae",
       "kind": "Native plugin",
       "art": "grain",
-      "description": "Keep the grain you shot. Match the grain you add.",
+      "description": "Preserve original grain and match grain in edited areas.",
       "detail": "Preserves the original plate’s captured grain in unchanged areas and generates matched grain where your comp differs from the denoised plate. Match against a representative frame, then finish the shot with one effect.",
       "requirements": "Windows x64 · After Effects · 8 / 16 / 32 bpc",
       "install": "Extract the ZIP, close After Effects, then run Install.cmd. Restart AE and find EVFX Smart Grain v2 in the EVFX effects category. Select your original and denoised plates, then click Match Grain at Full resolution.",
@@ -28,7 +28,7 @@
       "category": "ae",
       "kind": "Native plugin",
       "art": "denoise",
-      "description": "Less noise. More of the image underneath.",
+      "description": "Spatial and temporal denoising with optional NVIDIA acceleration.",
       "detail": "Noise-profile-driven spatial and temporal denoising with automatic analysis, detail protection, and a removed-noise preview. NVIDIA CUDA acceleration is available, with a CPU fallback on other hardware.",
       "requirements": "Windows x64 · After Effects · 8 / 16 / 32 bpc · NVIDIA optional",
       "install": "Extract the ZIP and follow its included installation instructions with After Effects closed. Apply EVFX Smart Denoise to footage or a precomp. Automatic analysis starts immediately; inspect the result at Full resolution.",
@@ -47,7 +47,7 @@
       "category": "ae",
       "kind": "Native plugin",
       "art": "blur",
-      "description": "A little out of focus. A lot of character.",
+      "description": "Depth-aware defocus, custom bokeh and optical aberrations.",
       "detail": "Optical defocus with or without a depth map. Shape the aperture, stretch anamorphic bokeh, add chromatic aberration, or work with custom bokeh and obstruction textures. Rendering runs on the CPU.",
       "requirements": "Windows x64 · After Effects · 8 / 16 / 32 bpc",
       "install": "Extract the entire ZIP, close AE, and run Install.cmd. The package includes its OpenMP runtime. Restart AE and apply EVFX Blurry Ultimate. Without a depth layer, start with Simple Blur → Blur Diameter.",
@@ -66,7 +66,7 @@
       "category": "ae",
       "kind": "Plugin + panel",
       "art": "crop",
-      "description": "Keep what matters. Lose the empty pixels.",
+      "description": "Crop layers from rendered alpha; preview and prerender.",
       "detail": "Crops from rendered alpha with editable previews, duration and mask crops, and recoverable prerenders. A native effect and dockable panel keep the crop workflow inside After Effects.",
       "requirements": "Windows x64 · After Effects",
       "install": "Extract the ZIP and follow the included README and installer instructions. Restart After Effects, then open EVFX Crop from the Window menu or the installed layer menu.",
@@ -76,7 +76,7 @@
         "releaseTag": "crop-ae-v0.1.2-665298049e",
         "reviewedAt": "2026-10-31",
         "evidence": "EVFX Crop/docs/VERIFICATION.md: Limits; open feature tickets and pending dock review.",
-        "note": "Core cropping has tests, but translation, mask bypass/deletion and alpha expansion remain unfinished. Redesigned dock restoration still needs final visual review."
+        "note": "Incomplete: translation, mask bypass/deletion and alpha expansion. Dock restoration still needs visual verification."
       }
     },
     {
@@ -86,7 +86,7 @@
       "category": "ae",
       "kind": "Native plugin",
       "art": "picker",
-      "description": "Find a colour. Follow it somewhere new.",
+      "description": "Sample up to eight colours and generate gradients.",
       "detail": "Up to eight colour samplers with masked and radial sampling, expression-friendly readouts, and Live, Held, or Custom colour sources. Generate smooth, mesh, cell, linear, radial, and angular gradients from your palette.",
       "requirements": "Windows x64 · After Effects · 8 / 16 / 32 bpc",
       "install": "Close After Effects. Copy PixelPicker.aex to Adobe’s shared MediaCore plug-ins folder, then restart AE. The ZIP includes the exact installation path and a short guide.",
@@ -96,7 +96,7 @@
         "releaseTag": "pixel-picker-v1.1.0-fbc4b929df",
         "reviewedAt": "2026-10-31",
         "evidence": "EVFX-PixelPicker/docs/QA-RESULTS.md: 2026-10-30 version repair and unobserved host loading.",
-        "note": "The latest version repair was built and installed, but loading and hands-on acceptance in After Effects have not been observed. Runtime stability is unverified."
+        "note": "AE loading and runtime behaviour remain unverified after the version repair."
       }
     },
     {
@@ -106,7 +106,7 @@
       "category": "ae",
       "kind": "Native plugin",
       "art": "levels",
-      "description": "Bring your foreground into the same world.",
+      "description": "Match foreground black and white levels to a reference plate.",
       "detail": "Matches foreground shadow and highlight luminance to a background plate across red, green, and blue channels. The native SmartFX effect includes keyframeable strength and gamma controls.",
       "requirements": "Windows x64 · After Effects · 8 / 16 / 32 bpc",
       "install": "Close AE and copy EVFX_AutoLevels.aex into Adobe’s shared MediaCore plug-ins folder. Restart AE, apply Auto Levels from the EVFX category, and choose your background reference.",
@@ -116,7 +116,7 @@
         "releaseTag": "auto-levels-v2.0.0-fe42881538",
         "reviewedAt": "2026-10-31",
         "evidence": "EVFX Auto Levels/README.md and docs/plugin_build_guide.md: build/use instructions; no completed host-acceptance report found.",
-        "note": "The native plugin is available, but no completed After Effects runtime-acceptance report accompanies this build. Verify loading, reference sampling and renders in a test project."
+        "note": "No recorded AE runtime test. Check reference sampling and renders on a test project."
       }
     },
     {
@@ -126,7 +126,7 @@
       "category": "ae",
       "kind": "Panel + helper",
       "art": "layers",
-      "description": "All those render passes. One place to put them.",
+      "description": "Combine render passes into multilayer OpenEXR sequences.",
       "detail": "An After Effects panel and Python helper for assembling render passes into multilayer OpenEXR files. The Windows setup detects installed AE versions and handles panel and helper installation.",
       "requirements": "Windows · After Effects · Setup installs Python dependencies",
       "install": "Run the setup executable and follow the prompts. Internet access may be needed for Python and EXR dependencies. Restart After Effects and open the EVFX Multilayer EXR panel from Window.",
@@ -136,7 +136,7 @@
         "releaseTag": "multilayer-exr-v1.0.4-91759a560d",
         "reviewedAt": "2026-10-31",
         "evidence": "EVFX Multilayer EXR for AE/README.md and docs/antigravity/walkthrough.md: installation and backend workflow documentation.",
-        "note": "The installer is available, but complete installation and After Effects workflow validation are not documented for this release. Try it on a test project first."
+        "note": "The installer and complete AE workflow have no recorded end-to-end test."
       }
     },
     {
@@ -146,7 +146,7 @@
       "category": "ae",
       "kind": "ScriptUI panel",
       "art": "orbit",
-      "description": "Give your 2D tracks another dimension.",
+      "description": "Build 3D camera motion and nulls from 2D tracks.",
       "detail": "Builds camera motion, depth-aware nulls, and solids from existing 2D point tracks. Includes camera solving, parallax tools, scene origin and scale normalization, and quick VFX rigs. Tracking quality depends on your input tracks and depth assumptions.",
       "requirements": "After Effects · JSX script",
       "install": "Copy EVFX_3D_Null_Tracker.jsx to AE’s Scripts/ScriptUI Panels folder and restart AE. Open it from Window, select your tracked nulls, and add them to the solve list. See the included guide for depth setup.",
@@ -156,7 +156,7 @@
         "releaseTag": "null-tracker-v2.0.0-9d9f0d251f",
         "reviewedAt": "2026-10-31",
         "evidence": "EVFX 3d Null Tracker/README.md: described solver and setup; no separate runtime-acceptance report present.",
-        "note": "No completed runtime-validation report accompanies this script build. Check camera solving, depth assumptions and tracking accuracy on a test shot before production use."
+        "note": "Camera solving and tracking accuracy have no recorded runtime test."
       }
     },
     {
@@ -166,7 +166,7 @@
       "category": "ae",
       "kind": "ScriptUI panel",
       "art": "clean",
-      "description": "Same footage, fewer copies. A clearer project.",
+      "description": "Consolidate duplicate footage imports across compositions.",
       "detail": "Finds repeated imports of the same disk file and consolidates compatible footage items throughout nested comps. Preview the candidates, keep the default project backup, and review the result with one-step Undo available. Media on disk stays intact.",
       "requirements": "After Effects GUI · Local project · JSX script",
       "install": "Choose File → Scripts → Run Script File and select the JSX. For a dockable panel, install it in Scripts/ScriptUI Panels and restart AE. Scan the project before cleaning; leave backup enabled.",
@@ -185,7 +185,7 @@
       "category": "ae",
       "kind": "ScriptUI panel",
       "art": "select",
-      "description": "One effect stack. Only the layers you choose.",
+      "description": "Link one master effect stack to selected layers.",
       "detail": "Clones a master effect stack onto selected layers and expression-links their properties back to the master. Adjust the master once and the linked layers follow, including keyframed properties.",
       "requirements": "After Effects 2020+ · JSX script",
       "install": "Copy EVFX_SelectiveFX.jsx to Scripts/ScriptUI Panels, restart AE, and open it from Window. Choose a master null or adjustment layer, then tick the layers that should receive the linked effects.",
@@ -195,7 +195,7 @@
         "releaseTag": "selective-fx-snapshot-9ea5d70d7e",
         "reviewedAt": "2026-10-31",
         "evidence": "EVFX Pick and Choose Adjustment Layer/EVFX_SelectiveFX.jsx: standalone script; no accompanying validation report.",
-        "note": "Unversioned script snapshot with no recorded After Effects runtime-acceptance results. Verify the master effect links on a duplicate project before use."
+        "note": "Unversioned script; effect links have no recorded runtime test."
       }
     },
     {
@@ -205,7 +205,7 @@
       "category": "blender",
       "kind": "Add-on",
       "art": "frame",
-      "description": "Render the subject. Keep the whole picture.",
+      "description": "Render a subject region with full-frame placement metadata.",
       "detail": "Renders a padded camera-space region around a moving subject while retaining the original projection and pixel density. Exports cropped 32-bit RGBA EXRs with placement metadata and reconstructs full-resolution sequences.",
       "requirements": "Blender · Cycles · See package for version requirements",
       "install": "Install the ZIP as a Blender add-on, enable EVFX Crop, and open the EVFX tab in the 3D View sidebar. Set your camera and output settings, choose the subject, then render the subject region.",
@@ -215,7 +215,7 @@
         "releaseTag": "crop-blender-v0.2.0-c73569f80b",
         "reviewedAt": "2026-10-31",
         "evidence": "evfx crop for blender/README.md: EVFX-017 stabilization playback pending visible verification.",
-        "note": "The render crop workflow has verified checks. Revised stabilization playback still needs visible verification, and cropped denoising can differ from a full-frame render."
+        "note": "Stabilization playback is unverified. Cropped denoising can differ from a full-frame render."
       }
     },
     {
@@ -225,7 +225,7 @@
       "category": "windows",
       "kind": "Standalone app",
       "art": "sequence",
-      "description": "From a folder of frames to a moving image.",
+      "description": "Play and inspect image sequences and movies.",
       "detail": "A native image-sequence and movie viewer. Open a frame to load its numbered sequence, bring in multiple shots, or drag media straight in. Includes playback and inspection tools for reviewing VFX media.",
       "requirements": "Windows x64",
       "install": "Run the setup executable for a per-user installation and Start menu entry. A portable ZIP is also available in this tool’s release. Open a frame from an image sequence to load the shot.",
@@ -244,7 +244,7 @@
       "category": "windows",
       "kind": "Explorer utility",
       "art": "menu",
-      "description": "Useful things, one right-click away.",
+      "description": "Downscale and denoise videos from Windows Explorer.",
       "detail": "Adds plate downscaling and denoising to Windows Explorer. Halve a plate’s resolution or choose a denoise strength from a small progress window. Runs on the CPU with a bundled helper for supported 12-bit ProRes formats.",
       "requirements": "Windows · Python with tkinter · FFmpeg + ffprobe",
       "install": "Extract the entire ZIP, ensure Python and FFmpeg/ffprobe are installed, then double-click Install.cmd in Explorer. Right-click a supported movie and choose EVFX Menu. Windows 11 may place it under Show more options.",
@@ -263,7 +263,7 @@
       "category": "windows",
       "kind": "Standalone app",
       "art": "key",
-      "description": "A new way through the green screen.",
+      "description": "Subject masking and RGBA matting with CorridorKey 2.0.",
       "detail": "A standalone workspace around CorridorKey 2.0 for subject masks and full-resolution RGBA matting, with automatic GPU memory planning. This is a packaged preview; the latest installer has not had an end-to-end installation test.",
       "requirements": "Windows 10/11 x64 · NVIDIA RTX 30-series or newer · About 25 GB free · Internet for models",
       "install": "Run the online setup. It downloads missing pinned runtime and model dependencies; the download size is much larger than the installer. CorridorKey uses Corridor Digital’s Corridor Key Licence v2.0, including noncommercial terms. Review the licence shown by setup before use.",
@@ -273,7 +273,7 @@
         "releaseTag": "corridor-key-v0.15.0-63e8b49beb",
         "reviewedAt": "2026-10-31",
         "evidence": "EVFX Corridor Key 2.0/dist/standalone/START HERE.txt: Delivery Status.",
-        "note": "Experimental online installer. Version 0.15.0 was compiled and packaged only; installation and the complete matting workflow have not been tested end to end. Runtime stability is unverified."
+        "note": "Experimental: installation and the complete matting workflow are untested. May be unstable."
       }
     },
     {
@@ -283,7 +283,7 @@
       "category": "ae",
       "kind": "Native plugin",
       "art": "qc",
-      "description": "Keep the notes with the shot.",
+      "description": "Store shot status, reviewer and notes inside an AE project.",
       "detail": "Stores a shot’s QC status, shot ID, reviewer, and notes in an After Effects effect instance. Includes a passed checkbox and optional preview overlay. An early development build for trying the workflow.",
       "requirements": "Windows x64 · After Effects · Development build",
       "install": "Close AE and copy EVFXShotQC.aex into Adobe’s shared MediaCore plug-ins folder. Restart AE and search for EVFX Shot QC. Keep a backup when evaluating development builds.",
@@ -293,7 +293,7 @@
         "releaseTag": "shot-qc-v0.2.0-227dabd192",
         "reviewedAt": "2026-10-31",
         "evidence": "EVFX-AE-Collection/plugins/EVFXShotQC/README.md: MVP and external import/sync listed as a next step.",
-        "note": "Early development build with unfinished external JSON import/sync. No completed runtime-acceptance report accompanies it; stability is unverified."
+        "note": "Experimental: JSON import/sync is unfinished; runtime stability is unverified."
       }
     },
     {
@@ -303,7 +303,7 @@
       "category": "ae",
       "kind": "Native plugin",
       "art": "residual",
-      "description": "The original grain experiment.",
+      "description": "Restore residual grain from original and denoised plates.",
       "detail": "An earlier residual-grain transfer effect with legacy and hybrid modes. Uses original and denoised reference plates to restore grain above your comp. Retained for older workflows; Smart Grain is the current tool for new work.",
       "requirements": "Windows x64 · After Effects · Legacy development build",
       "install": "Close AE and copy EVFXMatchGrain.aex into Adobe’s shared MediaCore plug-ins folder. Restart AE and find EVFX Match Grain. Set Original Plate and Denoised Plate. Consider Smart Grain for new projects.",
@@ -313,7 +313,7 @@
         "releaseTag": "match-grain-v0.2.0-c6bda64cd3",
         "reviewedAt": "2026-10-31",
         "evidence": "EVFX-AE-Collection/plugins/EVFXMatchGrain/README.md: MVP limitations and next recommended improvements.",
-        "note": "Legacy development build with unfinished contamination guards and transform/retime tracking. Evaluate it on a duplicate project; use Smart Grain for new work."
+        "note": "Legacy: contamination guards and transform/retime tracking are unfinished. Use Smart Grain for new projects."
       }
     },
     {
@@ -323,7 +323,7 @@
       "category": "windows",
       "kind": "Research project",
       "art": "screen",
-      "description": "Screen tracking, still taking shape.",
+      "description": "Screen tracking research.",
       "detail": "An ongoing screen-tracking research project with a reference editor and tracking experiments. There is no packaged public release in this collection yet.",
       "requirements": "In development",
       "install": "A download will appear here when a distributable release is ready.",
@@ -333,7 +333,7 @@
         "releaseTag": null,
         "reviewedAt": "2026-10-31",
         "evidence": "EVFX OnlyScreens project contains research and tracker experiments; no packaged release available.",
-        "note": "Incomplete research project. No packaged public release or installation-ready download is available."
+        "note": "Incomplete research project. No installable release."
       }
     }
   ]

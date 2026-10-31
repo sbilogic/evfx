@@ -114,9 +114,9 @@ for(const item of prepared){
   console.log(`Verified ${tool.id} ${version||'snapshot'}`);
 }
 run(process.execPath,['scripts/check.mjs','--require-downloads']);
-console.log(run(process.execPath,['--test','tests/readiness.test.mjs']));
+console.log(run(process.execPath,['--test','tests/readiness.test.mjs','tests/support.test.mjs']));
 console.log(run(process.execPath,['scripts/build.mjs']));
-run('git',['add','--','.gitignore','README.md','package.json','catalog.json','sources.json','releases.lock.json','src','scripts','tests','.github','Sync EVFX.cmd']);
+run('git',['add','--','.gitignore','README.md','package.json','catalog.json','sources.json','support.json','releases.lock.json','src','scripts','tests','.github','Sync EVFX.cmd']);
 if(run('git',['diff','--cached','--name-only']).trim()){
   commit('Publish latest EVFX catalog and release checksums');
   run('git',['push','-u','origin','main']);

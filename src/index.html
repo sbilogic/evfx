@@ -4,9 +4,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#f4f2e9">
-  <meta name="description" content="Independent plugins, scripts, and useful oddities for After Effects, Blender, and Windows. Explore the EVFX collection and download the latest releases.">
-  <meta property="og:title" content="EVFX — A little less friction. A little more magic.">
-  <meta property="og:description" content="A collection of independent tools for people who make moving images.">
+  <meta name="description" content="Download EVFX plugins and tools for After Effects, Blender and Windows. Versions, requirements, installation and build warnings.">
+  <meta property="og:title" content="EVFX — Plugins & tools">
+  <meta property="og:description" content="After Effects, Blender and Windows downloads.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://sbilogic.github.io/evfx/">
   <link rel="canonical" href="https://sbilogic.github.io/evfx/">
@@ -16,67 +16,34 @@
   <title>{{TITLE}}</title>
 </head>
 <body id="top">
-  <a class="skip-link" href="#collection">Skip to the tools</a>
+  <a class="skip-link" href="#collection">Skip to downloads</a>
   <header class="site-header wrap">
-    <a class="wordmark" href="#top" aria-label="EVFX, back to top">e<span class="v-mark">v</span>fx<span class="logo-star" aria-hidden="true">✳</span></a>
-    <p class="header-note">Independent tools.<br>A different frame of mind.</p>
-    <nav aria-label="Main navigation"><a href="#collection">The collection <span aria-hidden="true">↙</span></a><a href="#about">A small note <span aria-hidden="true">↙</span></a></nav>
+    <a class="wordmark" href="#top" aria-label="EVFX, back to top">evfx<span aria-hidden="true">✳</span></a>
+    <nav aria-label="Main navigation"><a href="#collection">Downloads</a><a href="https://github.com/sbilogic/evfx/releases">Releases ↗</a>{{SUPPORT_NAV}}</nav>
   </header>
-
   <main>
     <section class="hero wrap" aria-labelledby="hero-title">
-      <div class="hero-top mono"><span>A FIELD KIT FOR THE MOVING IMAGE</span><span class="hero-edition">VOL. 01 / ALWAYS EVOLVING</span></div>
-      <div class="hero-composition">
-        <h1 id="hero-title">Less friction.<br>More <em>magic.</em></h1>
-        <figure class="hero-art" aria-label="An abstract orange sphere surrounded by fine orbital lines">
-          <div class="art-stage">{{HERO_ART}}</div>
-          <figcaption class="mono"><span>FIG. 001 — A SHIFT IN PERSPECTIVE</span><span aria-hidden="true">↗</span></figcaption>
-        </figure>
-        <span class="hero-cross cross-one" aria-hidden="true">+</span>
-        <span class="hero-cross cross-two" aria-hidden="true">+</span>
-      </div>
-      <div class="hero-bottom">
-        <p>Plugins, scripts & useful oddities.<br>Built to get you back to making.</p>
-        <p class="hero-aside">For the tiny fixes.<br>The happy accidents.<br>The last two percent.</p>
-        <a class="explore-link" href="#collection"><span>Find your next tool</span><span class="round-arrow" aria-hidden="true">↓</span></a>
-      </div>
+      <h1 id="hero-title">Plugins<br>&amp; <em>tools</em></h1>
+      <div class="hero-art" aria-hidden="true">{{HERO_ART}}</div>
     </section>
-
-    <div class="index-strip mono" aria-hidden="true"><div class="wrap"><span>LESS IN THE WAY.</span><span>MORE IN THE FRAME.</span><span>EVFX / AN OPEN TOOLBOX</span></div></div>
-
     <section id="collection" class="collection wrap" aria-labelledby="collection-title">
-      <div class="section-eyebrow mono"><span>01 / THE COLLECTION</span><span>LATEST AVAILABLE BUILDS</span></div>
-      <div class="collection-heading"><h2 id="collection-title">Small tools.<br><em>Good company.</em></h2><p>A few things to make the work flow.<br>Pick one. Make something with it.</p></div>
-      <aside class="readiness-notice" aria-label="Build readiness notice"><span class="warning-symbol" aria-hidden="true">⚠</span><div><strong>Check the warnings before downloading.</strong><p>{{WARNING_COUNT}} tools have incomplete features, experimental builds, or gaps in runtime verification. Their warnings stay visible below. Use a test project and keep a backup.</p></div></aside>
+      <h2 id="collection-title" class="sr-only">Downloads</h2>
       <div class="collection-controls">
-        <div class="filters" role="group" aria-label="Filter tools by application">
-          <button type="button" data-filter="all" aria-pressed="true">Everything <sup>{{COUNT}}</sup></button>
+        <div class="filters" role="group" aria-label="Filter by application">
+          <button type="button" data-filter="all" aria-pressed="true">All <sup>{{COUNT}}</sup></button>
           <button type="button" data-filter="ae" aria-pressed="false">After Effects</button>
           <button type="button" data-filter="blender" aria-pressed="false">Blender</button>
           <button type="button" data-filter="windows" aria-pressed="false">Windows</button>
         </div>
-        <label class="search"><span class="sr-only">Search tools</span><svg viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="currentColor" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5"/><path d="m13 13 4 4"/></svg><input id="tool-search" type="search" placeholder="Find something" autocomplete="off"></label>
+        <label class="search"><span class="sr-only">Search tools</span><svg viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="currentColor" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5"/><path d="m13 13 4 4"/></svg><input id="tool-search" type="search" placeholder="Search tools" autocomplete="off"></label>
       </div>
       <p id="results-count" class="sr-only" role="status" aria-live="polite">{{COUNT}} tools</p>
       <div class="tool-list">{{TOOLS}}</div>
-      <div id="empty-state" class="empty-state" hidden><p>No tools in this corner.</p><button id="reset-filters" type="button">Show the whole collection <span aria-hidden="true">↗</span></button></div>
-      <div class="collection-foot mono"><span>BUILT WITH INTENTION. SHARED WITH YOU.</span><span>{{DOWNLOAD_COUNT}} DOWNLOADS / 1 EXPERIMENT IN PROGRESS</span></div>
-      <noscript><p class="noscript-note">Every tool and download is available below without JavaScript. Search and filters need JavaScript.</p></noscript>
+      <div id="empty-state" class="empty-state" hidden><p>No matching tools.</p><button id="reset-filters" type="button">Reset filters</button></div>
+      <noscript><p class="noscript-note">Enable JavaScript to search or filter.</p></noscript>
     </section>
-
-    <section id="about" class="about wrap" aria-labelledby="about-title">
-      <div class="section-eyebrow mono"><span>02 / A SMALL NOTE</span><span>FROM THE WORKBENCH</span></div>
-      <div class="about-grid">
-        <h2 id="about-title">Made between shots.<br><em>For the next one.</em></h2>
-        <div class="about-copy"><p>EVFX is a growing collection of tools by Sahil Bloch. Little solutions to the things that get in the way of making moving images.</p><p>Some are native effects. Some are a few lines of script. All begin with the same thought: there has to be a nicer way to do this.</p><a class="text-link" href="https://github.com/sbilogic/evfx/releases">Releases & installation files <span aria-hidden="true">↗</span></a></div>
-      </div>
-      <div class="practical-note"><span class="note-symbol" aria-hidden="true">↳</span><p>Most native plugins here are Windows builds. Open a tool’s notes for requirements and installation. Preview and legacy builds are marked; check a tool on your own shot before putting it to work.</p></div>
-    </section>
+    {{SUPPORT_SECTION}}
   </main>
-
-  <footer class="site-footer wrap">
-    <div class="footer-top"><a class="footer-wordmark" href="#top" aria-label="EVFX, back to top">evfx<span aria-hidden="true">✳</span></a><p>A little less friction.<br>A little more you.</p></div>
-    <div class="footer-bottom mono"><span>© {{YEAR}} EVFX / SAHIL BLOCH</span><a href="https://github.com/sbilogic/evfx">GITHUB <span aria-hidden="true">↗</span></a><a href="#top">BACK TO THE TOP <span aria-hidden="true">↑</span></a></div>
-  </footer>
+  <footer class="site-footer wrap"><span>© {{YEAR}} Sahil Bloch</span><a href="https://github.com/sbilogic/evfx">GitHub ↗</a><a href="#top">Back to top ↑</a></footer>
 </body>
 </html>

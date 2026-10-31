@@ -2,9 +2,11 @@ import assert from 'node:assert/strict';
 import { readFile,readdir } from 'node:fs/promises';
 import { dirname,join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { renderSupport } from './support.mjs';
 const root=dirname(dirname(fileURLToPath(import.meta.url)));
 const load=async name=>JSON.parse(await readFile(join(root,name),'utf8'));
 const [catalog,sources,releases]=await Promise.all(['catalog.json','sources.json','releases.lock.json'].map(load));
+renderSupport(await load('support.json'));
 const ids=new Set();
 for(const tool of catalog.tools){
   assert.match(tool.id,/^[a-z][a-z0-9-]+$/);
