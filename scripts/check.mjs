@@ -3,16 +3,19 @@ import { readFile,readdir } from 'node:fs/promises';
 import { dirname,join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { renderSupport } from './support.mjs';
+import { getReadiness } from './readiness.mjs';
 const root=dirname(dirname(fileURLToPath(import.meta.url)));
 const load=async name=>JSON.parse(await readFile(join(root,name),'utf8'));
 const [catalog,sources,releases]=await Promise.all(['catalog.json','sources.json','releases.lock.json'].map(load));
+const config=await load('sync.config.json');
 renderSupport(await load('support.json'));
 const ids=new Set();
 for(const tool of catalog.tools){
   assert.match(tool.id,/^[a-z][a-z0-9-]+$/);
   assert(!ids.has(tool.id),`Duplicate tool ID ${tool.id}`);ids.add(tool.id);
+  assert(!config.excludedIds.includes(tool.id),`${tool.id} is excluded from this collection`);
   for(const key of ['name','host','kind','description','detail','requirements','install','art'])assert(tool[key],`${tool.id} needs ${key}`);
-  assert(['ae','blender','windows'].includes(tool.category));
+  assert.match(tool.category,/^[a-z][a-z0-9-]*$/);
   assert(['release','preview','legacy','lab'].includes(tool.status));
   assert(tool.readiness,`${tool.id} needs an explicit readiness review`);
   assert(['reviewed','incomplete','experimental','unverified','legacy','development'].includes(tool.readiness.state),`${tool.id} has an invalid readiness state`);
@@ -25,6 +28,7 @@ for(const tool of catalog.tools){
   const release=releases[tool.id];
   if(process.argv.includes('--require-downloads')&&tool.status!=='lab')assert(release,`${tool.id} needs a published release`);
   if(!release)continue;
+  if(release.complete){assert.equal(getReadiness(tool,release.complete).state,'reviewed',`${tool.id}: complete download lacks a matching review`);}
   assert.match(release.releaseUrl,new RegExp(`^https://github\\.com/${catalog.repository}/releases/tag/`));
   assert(release.downloads.length>0);
   assert.equal(release.downloads.filter(a=>a.primary).length,1,'Exactly one primary download per tool');

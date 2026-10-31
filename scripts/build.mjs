@@ -12,19 +12,19 @@ const [catalog, releases, supportConfig] = await Promise.all(['catalog.json','re
 const support=renderSupport(supportConfig);
 const bytes = n => n >= 1e6 ? `${(n/1e6).toFixed(1)} MB` : `${Math.max(1,Math.round(n/1000))} KB`;
 
-function toolRow(tool,index) {
-  const release = releases[tool.id];
+function toolRow(tool,index,release,variant,hasComplete) {
   const asset = release?.downloads.find(d=>d.primary) ?? release?.downloads[0];
   const version = release?.version ? `v${release.version}` : tool.status==='lab' ? 'In development' : 'Snapshot';
   const readiness=getReadiness(tool,release);
   const hasWarning=readiness.state!=='reviewed';
-  const warningId=`${tool.id}-warning`;
+  const rowId=variant==='development'&&hasComplete?`${tool.id}-development`:tool.id;
+  const warningId=`${rowId}-warning`;
   const warning=hasWarning?`<aside id="${warningId}" class="tool-warning" aria-label="EVFX ${escape(tool.name)}: ${escape(readiness.title)}"><span class="warning-symbol" aria-hidden="true">⚠</span><p>${escape(readiness.note)}</p></aside>`:'';
   const action = asset
     ? `<a class="download-link" href="${escape(asset.url)}" aria-label="Download EVFX ${escape(tool.name)}, ${escape(version)}"${hasWarning?` aria-describedby="${warningId}"`:''}>Download <span aria-hidden="true">↗</span></a>${hasWarning?`<span class="download-caution">⚠ ${escape(readiness.badge)}</span>`:''}<span class="download-size">${escape(asset.name.endsWith('.exe')?'SETUP':'ZIP')} / ${bytes(asset.bytes)}</span>`
     : `<span class="lab-label">${tool.status==='lab'?'No download':'Release pending'}</span>`;
   const search = `${tool.name} EVFX ${tool.host} ${tool.kind} ${tool.description} ${tool.detail} ${readiness.title||''} ${readiness.note||''}`.toLocaleLowerCase();
-  return `<article id="${tool.id}" class="tool tool-${tool.status}" data-category="${tool.category}" data-search="${escape(search)}">
+  return `<article id="${rowId}" class="tool tool-${tool.status}" data-product="${tool.id}" data-variant="${variant}" data-category="${escape(tool.category)}" data-search="${escape(search)}"${variant==='development'?' hidden':''}>
     <span class="tool-number" aria-hidden="true">${String(index+1).padStart(2,'0')}</span>
     <div class="tool-art">${toolArt(tool.art)}</div>
     <div class="tool-identity"><h3><span class="tool-name-prefix">EVFX </span>${escape(tool.name)}</h3><div class="tool-meta"><span>${escape(tool.host)}</span><span class="meta-dot" aria-hidden="true"></span><span>${escape(version)}</span></div></div>
@@ -36,12 +36,23 @@ function toolRow(tool,index) {
 }
 
 let html = await readFile(join(root,'src/index.html'),'utf8');
+const rows=[];
+let completeCount=0;
+const completeCategories=new Set();
+for(const [index,tool] of catalog.tools.entries()){
+  const latest=releases[tool.id];
+  const complete=latest?.complete||(latest&&getReadiness(tool,latest).state==='reviewed'?latest:null);
+  if(complete){rows.push(toolRow(tool,completeCount++,complete,'complete',true));completeCategories.add(tool.category);}
+  if(!complete||latest.tag!==complete.tag)rows.push(toolRow(tool,index,latest,'development',!!complete));
+}
+const categoryLabels=new Map(catalog.tools.map(t=>[t.category,t.host]));
 const replacements = {
-  TITLE:escape(catalog.title), COUNT:catalog.tools.length,
+  TITLE:escape(catalog.title), COUNT:completeCount,
   DOWNLOAD_COUNT:catalog.tools.filter(t=>t.status!=='lab').length,
   WARNING_COUNT:catalog.tools.filter(t=>getReadiness(t,releases[t.id]).state!=='reviewed').length,
   YEAR: new Date().getFullYear(), HERO_ART:heroArt(),
-  TOOLS:catalog.tools.map(toolRow).join('\n'),
+  TOOLS:rows.join('\n'),
+  APP_FILTERS:[...categoryLabels].map(([id,label])=>`<button type="button" data-filter="${escape(id)}" aria-pressed="false"${completeCategories.has(id)?'':' hidden'}>${escape(label)}</button>`).join(''),
   SUPPORT_NAV:support.nav, SUPPORT_SECTION:support.section
 };
 for(const [key,value] of Object.entries(replacements)) html=html.replaceAll(`{{${key}}}`,String(value));

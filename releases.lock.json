@@ -15,22 +15,6 @@
       }
     ]
   },
-  "smart-denoise": {
-    "version": "1.0.2",
-    "publishedAt": "2026-10-31T00:41:33Z",
-    "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/smart-denoise-v1.0.2-78a2ac0dd7",
-    "tag": "smart-denoise-v1.0.2-78a2ac0dd7",
-    "prerelease": false,
-    "downloads": [
-      {
-        "name": "EVFXSmartDenoise-v1.0.2-Windows.zip",
-        "url": "https://github.com/sbilogic/evfx/releases/download/smart-denoise-v1.0.2-78a2ac0dd7/EVFXSmartDenoise-v1.0.2-Windows.zip",
-        "bytes": 112295,
-        "sha256": "312c52ada31cce12795e4c98ded28c7d48cb1bc4ce488cf015ab1d795fa2821a",
-        "primary": true
-      }
-    ]
-  },
   "blurry": {
     "version": "2.1.0",
     "publishedAt": "2026-10-31T00:41:37Z",
@@ -242,22 +226,6 @@
         "url": "https://github.com/sbilogic/evfx/releases/download/shot-qc-v0.2.0-227dabd192/EVFX-shot-qc-0.2.0.zip",
         "bytes": 8291,
         "sha256": "0311cb0962953f298db14e944d4551e39d25f09732a27bb9ebd976981d3bb1da",
-        "primary": true
-      }
-    ]
-  },
-  "match-grain": {
-    "version": "0.2.0",
-    "publishedAt": "2026-10-31T00:43:10Z",
-    "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/match-grain-v0.2.0-c6bda64cd3",
-    "tag": "match-grain-v0.2.0-c6bda64cd3",
-    "prerelease": true,
-    "downloads": [
-      {
-        "name": "EVFX-match-grain-0.2.0.zip",
-        "url": "https://github.com/sbilogic/evfx/releases/download/match-grain-v0.2.0-c6bda64cd3/EVFX-match-grain-0.2.0.zip",
-        "bytes": 35518,
-        "sha256": "89656738246b0e3e277bbeb8253803c6717688f86bd180fa63e64a4654599820",
         "primary": true
       }
     ]

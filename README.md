@@ -1,74 +1,74 @@
 # EVFX
 
-EVFX plugins and tools for After Effects, Blender, and Windows.
+Plugins and tools for After Effects, Blender, and Windows.
 
-**Site:** https://sbilogic.github.io/evfx/  
-**Downloads:** https://github.com/sbilogic/evfx/releases
+[Site](https://sbilogic.github.io/evfx/) · [Downloads](https://github.com/sbilogic/evfx/releases) · [Support](https://buymeacoffee.com/eclipsevfx)
 
-Plain HTML, CSS, inline SVG, and a small progressive-enhancement script. No runtime dependencies, external fonts, tracking, database, paid hosting, or visitor-side GitHub API requests. Every description and download is rendered into HTML, including when JavaScript is disabled. GitHub Pages serves the page; GitHub Releases serves the larger downloads.
+Static HTML, CSS, SVG and JavaScript. No runtime dependencies, external fonts, tracking, database or paid hosting. GitHub Pages serves the page; release assets carry the downloads.
 
-## Maintain the collection
+## Automatic local sync
 
-This site is a separate repository. It does not publish the private plugin repositories or include the AE SDK, model weights, source footage, or local runtime folders.
+The local helper checks EVFX folders every 60 seconds while this Windows user is logged in. It starts at login, waits for build files to settle, then uploads changed distributions and deploys the catalog. Unchanged scans make no GitHub requests. No AI job or subscription is involved.
 
-With this checkout beside the EVFX project folders, **double-click `Sync EVFX.cmd`** after making new release builds. Or run:
+`sync.config.json` lists roots relative to this checkout: the EVFX Collection folder and its parent Dev folder. Only immediate EVFX-prefixed projects and the collection's plugin subfolders are inspected. Release/dist packages and native Release AEX/JSX files are supported. Source/reference archives, generated dependency trees and empty projects are excluded. Smart Denoise and Match Grain are explicitly excluded and cannot be rediscovered.
 
-```sh
-node scripts/publish.mjs
+New plugins get their name and description from the project folder and README. Existing curated descriptions stay in place unless project release metadata supplies a replacement. `catalog.json`, `sources.json` and `releases.lock.json` are generated; new plugin/version entries do not require website edits.
+
+The helper streams uploads, verifies SHA-256 digests, validates ZIP integrity, and reuses prior checks for identical files. It never builds a plugin, launches an installer or AE, uploads whole project folders, or changes private repository visibility. It pauses publication while site code is being edited. Interrupted publications retry on subsequent checks; existing downloads remain available.
+
+GitHub cannot read folders on an offline PC. The local sync resumes after login; GitHub Actions separately refreshes already published release metadata every day.
+
+## Complete and development builds
+
+The site defaults to complete, reviewed builds. **Show development** includes the newest incomplete, experimental and unverified builds with visible warnings. If a newer build is unverified, the last reviewed download stays in the default view.
+
+A version number or ZIP filename does not establish completeness. Existing reviews apply to exact release tags. A plugin's normal test/package process can write `evfx-release.json` at the project root:
+
+```json
+{
+  "description": "Process alpha masks.",
+  "readiness": {
+    "state": "complete",
+    "runtimeVerified": true,
+    "sha256": "SHA256_OF_THE_PRIMARY_PACKAGE"
+  }
+}
 ```
 
-Requires Node 22+, Python 3, Git, and GitHub authentication through Git Credential Manager or a session-only `GH_TOKEN`. Credentials stay in process memory; they are never saved to the repository, release metadata, or a browser bundle. Set `EVFX_COLLECTION_ROOT` if the collection lives somewhere else.
+The declaration must match the uploaded package, or the single AEX/JSX payload being wrapped, and record completed runtime verification. Prerelease versions remain development builds. A declaration without the matching hash and verification cannot promote a build. Known problems can be declared with a readiness state such as `incomplete` and a `note`. This is build metadata maintained by the plugin's packaging process, not a website entry.
 
-The publisher selects the highest semantic version of packaged builds, prepares the explicitly listed bundles, creates immutable per-tool releases with SHA-256 checksums, verifies GitHub’s uploaded digest when available, updates the release lock, checks and builds the page, and pushes the site. It never compiles, runs an installer, processes footage, uploads entire project folders, or changes existing private repository visibility. Interrupted uploads can be resumed by running it again.
+## Local controls
 
-### Readiness warnings
-
-Every tool has an explicit `readiness` record in `catalog.json`, with the exact reviewed release tag and a short evidence note. Incomplete, experimental, unverified, legacy, and unfinished research tools show an always-visible warning explaining what is missing, a warning badge, and a caution beside the download. The download link references its warning for screen readers. These notices work without JavaScript.
-
-`reviewed` records a build-specific evidence review; it is not a universal stability certification. A new release tag, even with the same version number, defaults to **unverified** until that exact build is reviewed. GitHub prerelease flags also force a warning. Known incomplete features remain warnings across new builds. Adding a tool without readiness metadata fails the catalog check.
-
-The publisher writes the same warnings at the top of GitHub release notes and marks builds needing caution as prereleases. To apply edited warnings to already published releases without uploading binaries again, run `node scripts/sync-warnings.mjs`, then `node scripts/refresh.mjs` and commit the catalog and release lock. Release availability never automatically clears a readiness warning.
-
-`sources.json` is an explicit list of distribution inputs. Change a native plugin’s version and artifact path when its build location or version changes. ZIP/EXE versions are selected from filenames rather than timestamps. Unversioned utilities are labelled snapshots. Changes to a binary with the same version receive a new immutable release tag.
-
-To inspect package preparation without publishing:
+Requires Node 22+, Python 3, Git and cached GitHub authentication through Git Credential Manager, or a session-only `GH_TOKEN`. The login helper uses the current Windows user and stores no credentials.
 
 ```sh
-node scripts/publish.mjs --prepare-only
+node scripts/install-auto-sync.mjs
+node scripts/auto-sync.mjs --status
+node scripts/auto-sync.mjs --once --force
+node scripts/install-auto-sync.mjs --uninstall
 ```
 
-To publish a subset, use `--only=smart-grain,blurry`. Public copy, requirements, and status are in `catalog.json`; preview, legacy, and lab labels are explicit. Empty project folders are omitted until there is a described tool or distribution.
+Installation creates `EVFX Site Auto Sync.vbs` in the current user's Startup folder and launches a hidden helper. Status, bounded logs and locks are under ignored `.local/`. Uninstall removes only the owned Startup entry and disables the runner; a running publication can finish before it exits.
 
-## Support payments
+`Sync EVFX.cmd` remains an optional immediate manual sync. `node scripts/discover.mjs` previews discovery without uploading. `node scripts/publish.mjs --prepare-only` prepares and checks packages without publishing. `--only=smart-grain,blurry` limits a manual publication.
 
-`support.json` holds the public creator/payment URL and an optional monthly-support URL. The header and bottom of the catalog show a plain **Support EVFX** link once the main URL is configured. Monthly support appears only when its own URL is provided. Links open the payment provider directly; there are no embedded widgets, third-party scripts, download gates, or prompts.
-
-`.github/FUNDING.yml` points the repository's Sponsor button to the same creator page.
-
-An unset URL renders no support link. Set the verified public creator-page URL; the signup username alone is not sufficient. The payment provider requires payout setup before the page can receive payments. `node scripts/check.mjs` validates the link configuration.
-
-## Automatic hosting updates
-
-GitHub Actions rebuilds and deploys on pushes and release changes. A daily reconciliation also refreshes release metadata, so the live page does not rely on an open local computer. The workflow uses GitHub’s built-in token and public-repository runners. It only publishes the small `dist/` folder.
-
-Release downloads are resolved at build time. `refresh.mjs` reads each release’s `evfx-release` manifest, verifies asset presence, byte size, and available SHA-256 digests, then selects the highest semantic version per tool, using publication time for revised builds and unversioned snapshots. Unmarked releases are ignored. Known prereleases remain visible with readiness warnings. To update a tool from GitHub directly, publish a release with a matching manifest; the local publisher writes these automatically. No personal access token is needed in repository secrets.
-
-## Preview and check
+## Preview and verification
 
 ```sh
 node scripts/check.mjs
+node --test
 node scripts/build.mjs
 node scripts/serve.mjs
 ```
 
-Open http://127.0.0.1:4173/evfx/ . All asset paths work under a GitHub project-site base path. `node scripts/refresh.mjs` refreshes from remote releases when authenticated.
+Open http://127.0.0.1:4173/evfx/ . All paths support a GitHub project-site base path. The build reports raw and gzip size. Complete downloads work without JavaScript; filters and development builds need JavaScript.
 
-The build reports raw and gzip sizes. All artwork is deterministic SVG made in code. The UI has application filters, text search, keyboard-accessible install notes, direct downloads, reduced-motion support, and usable HTML without JavaScript.
+GitHub Actions checks and deploys pushes and release changes. Metadata is resolved at build time, including a separate last-complete download. The browser makes no GitHub API calls. Credentials stay in process memory and never enter the site, release notes, or repository.
+
+## Support
+
+`support.json` points header and footer support actions to the public creator page. Monthly support appears only if its own URL is configured. `.github/FUNDING.yml` configures the repository Sponsor button. These are direct links, with no embedded widgets or download gates. The creator's payout setup is required before the support page can receive payments.
 
 ## Distribution notes
 
-Most native AEX builds are Windows x64. Scripts and add-ons have their own compatibility notes. Corridor Key is an online installer requiring compatible NVIDIA hardware, substantial model/runtime downloads, and acceptance of the upstream noncommercial licence. Its current package is marked preview. Shot QC is a development build; Match Grain is legacy. OnlyScreens is research with no downloadable package yet.
-
-Third-party components retain their own licences; this website does not relicense the plugin binaries or their dependencies. Review each download’s included notices and requirements.
-
-Hosting references: [GitHub Pages](https://docs.github.com/en/pages/getting-started-with-github-pages/what-is-github-pages), [Pages limits](https://docs.github.com/en/pages/getting-started-with-github-pages/github-pages-limits), [release storage](https://docs.github.com/en/repositories/releasing-projects-on-github/about-releases).
+Native AEX builds are Windows x64; scripts and add-ons have their own requirements. Corridor Key is an online installer requiring compatible NVIDIA hardware, runtime/model downloads and the upstream noncommercial licence. OnlyScreens has no public package yet. Each download retains its own licences and notices; this site does not relicense binaries or dependencies.

@@ -7,6 +7,9 @@ const labels = {
 };
 
 export function getReadiness(tool, release) {
+  const proof=release?.review;
+  const primary=release?.downloads?.find(d=>d.primary);
+  if(!release?.prerelease&&!release?.version?.includes('-')&&proof?.state==='complete'&&proof.runtimeVerified===true&&primary&&proof.sha256===primary.sha256)return {state:'reviewed'};
   const review=tool.readiness;
   if(!review) return {state:'unverified',...labels.unverified,note:'This tool has no recorded readiness review. Evaluate it in a test project before use.'};
   if(review.state==='reviewed') {

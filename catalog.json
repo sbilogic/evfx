@@ -22,25 +22,6 @@
       }
     },
     {
-      "id": "smart-denoise",
-      "name": "Smart Denoise",
-      "host": "After Effects",
-      "category": "ae",
-      "kind": "Native plugin",
-      "art": "denoise",
-      "description": "Spatial and temporal denoising with optional NVIDIA acceleration.",
-      "detail": "Noise-profile-driven spatial and temporal denoising with automatic analysis, detail protection, and a removed-noise preview. NVIDIA CUDA acceleration is available, with a CPU fallback on other hardware.",
-      "requirements": "Windows x64 · After Effects · 8 / 16 / 32 bpc · NVIDIA optional",
-      "install": "Extract the ZIP and follow its included installation instructions with After Effects closed. Apply EVFX Smart Denoise to footage or a precomp. Automatic analysis starts immediately; inspect the result at Full resolution.",
-      "status": "release",
-      "readiness": {
-        "state": "reviewed",
-        "releaseTag": "smart-denoise-v1.0.2-78a2ac0dd7",
-        "reviewedAt": "2026-10-31",
-        "evidence": "EVFXSmartGrain/denoise/docs/validation.md: 1.0.2 native AE render and playback checks."
-      }
-    },
-    {
       "id": "blurry",
       "name": "Blurry",
       "host": "After Effects",
@@ -297,26 +278,6 @@
       }
     },
     {
-      "id": "match-grain",
-      "name": "Match Grain",
-      "host": "After Effects",
-      "category": "ae",
-      "kind": "Native plugin",
-      "art": "residual",
-      "description": "Restore residual grain from original and denoised plates.",
-      "detail": "An earlier residual-grain transfer effect with legacy and hybrid modes. Uses original and denoised reference plates to restore grain above your comp. Retained for older workflows; Smart Grain is the current tool for new work.",
-      "requirements": "Windows x64 · After Effects · Legacy development build",
-      "install": "Close AE and copy EVFXMatchGrain.aex into Adobe’s shared MediaCore plug-ins folder. Restart AE and find EVFX Match Grain. Set Original Plate and Denoised Plate. Consider Smart Grain for new projects.",
-      "status": "legacy",
-      "readiness": {
-        "state": "legacy",
-        "releaseTag": "match-grain-v0.2.0-c6bda64cd3",
-        "reviewedAt": "2026-10-31",
-        "evidence": "EVFX-AE-Collection/plugins/EVFXMatchGrain/README.md: MVP limitations and next recommended improvements.",
-        "note": "Legacy: contamination guards and transform/retime tracking are unfinished. Use Smart Grain for new projects."
-      }
-    },
-    {
       "id": "onlyscreens",
       "name": "OnlyScreens",
       "host": "Windows",
@@ -334,6 +295,48 @@
         "reviewedAt": "2026-10-31",
         "evidence": "EVFX OnlyScreens project contains research and tracker experiments; no packaged release available.",
         "note": "Incomplete research project. No installable release."
+      }
+    },
+    {
+      "id": "choke-it",
+      "name": "Choke It",
+      "host": "After Effects",
+      "category": "ae",
+      "kind": "Plugin",
+      "art": "screen",
+      "description": "RGBA blur, directional choke/grow, and optional matte shading.",
+      "detail": "RGBA blur, directional choke/grow, and optional matte shading.",
+      "requirements": "Windows x64 · After Effects",
+      "install": "Extract the ZIP and follow the included installation instructions.",
+      "status": "preview",
+      "autoDiscovered": true,
+      "readiness": {
+        "state": "unverified",
+        "releaseTag": null,
+        "reviewedAt": "2026-10-31",
+        "evidence": "EVFX Choke It: automatically discovered distribution",
+        "note": "Newly discovered build; runtime readiness has not been verified."
+      }
+    },
+    {
+      "id": "flares",
+      "name": "Flares",
+      "host": "After Effects",
+      "category": "ae",
+      "kind": "Plugin",
+      "art": "screen",
+      "description": "100 named signatures plus 12 templates, five styles and GPU rendering.",
+      "detail": "100 named signatures plus 12 templates, five styles and GPU rendering.",
+      "requirements": "Windows x64 · After Effects",
+      "install": "Extract the ZIP and follow the included installation instructions.",
+      "status": "preview",
+      "autoDiscovered": true,
+      "readiness": {
+        "state": "experimental",
+        "releaseTag": null,
+        "reviewedAt": "2026-10-31",
+        "evidence": "EVFX Flares: automatically discovered distribution",
+        "note": "Development build. Features and runtime stability may be incomplete."
       }
     }
   ]

@@ -30,17 +30,15 @@
       <h2 id="collection-title" class="sr-only">Downloads</h2>
       <div class="collection-controls">
         <div class="filters" role="group" aria-label="Filter by application">
-          <button type="button" data-filter="all" aria-pressed="true">All <sup>{{COUNT}}</sup></button>
-          <button type="button" data-filter="ae" aria-pressed="false">After Effects</button>
-          <button type="button" data-filter="blender" aria-pressed="false">Blender</button>
-          <button type="button" data-filter="windows" aria-pressed="false">Windows</button>
+          <button type="button" data-filter="all" aria-pressed="true">All <sup id="tools-total">{{COUNT}}</sup></button>
+          {{APP_FILTERS}}
         </div>
-        <label class="search"><span class="sr-only">Search tools</span><svg viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="currentColor" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5"/><path d="m13 13 4 4"/></svg><input id="tool-search" type="search" placeholder="Search tools" autocomplete="off"></label>
+        <div class="tool-options"><label class="development-toggle"><input id="show-development" type="checkbox" autocomplete="off">Show development</label><label class="search"><span class="sr-only">Search tools</span><svg viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="currentColor" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5"/><path d="m13 13 4 4"/></svg><input id="tool-search" type="search" placeholder="Search tools" autocomplete="off"></label></div>
       </div>
       <p id="results-count" class="sr-only" role="status" aria-live="polite">{{COUNT}} tools</p>
       <div class="tool-list">{{TOOLS}}</div>
-      <div id="empty-state" class="empty-state" hidden><p>No matching tools.</p><button id="reset-filters" type="button">Reset filters</button></div>
-      <noscript><p class="noscript-note">Enable JavaScript to search or filter.</p></noscript>
+      <div id="empty-state" class="empty-state" hidden><p>No matching tools.</p><button id="show-development-results" type="button" hidden>Show development</button><button id="reset-filters" type="button">Reset filters</button></div>
+      <noscript><p class="noscript-note">Enable JavaScript for filters and development builds.</p></noscript>
     </section>
     {{SUPPORT_SECTION}}
   </main>

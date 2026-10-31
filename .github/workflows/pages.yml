@@ -32,8 +32,8 @@ jobs:
           GH_TOKEN: ${{ github.token }}
       - name: Check catalog
         run: node scripts/check.mjs
-      - name: Verify warnings and support links
-        run: node --test tests/readiness.test.mjs tests/support.test.mjs
+      - name: Verify discovery, readiness and support
+        run: node --test
       - name: Build static page
         run: node scripts/build.mjs
       - uses: actions/configure-pages@v5
