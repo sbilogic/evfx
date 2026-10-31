@@ -12,6 +12,13 @@ for(const tool of catalog.tools){
   for(const key of ['name','host','kind','description','detail','requirements','install','art'])assert(tool[key],`${tool.id} needs ${key}`);
   assert(['ae','blender','windows'].includes(tool.category));
   assert(['release','preview','legacy','lab'].includes(tool.status));
+  assert(tool.readiness,`${tool.id} needs an explicit readiness review`);
+  assert(['reviewed','incomplete','experimental','unverified','legacy','development'].includes(tool.readiness.state),`${tool.id} has an invalid readiness state`);
+  assert(tool.readiness.evidence,`${tool.id} needs a readiness evidence note`);
+  if(tool.readiness.state==='reviewed'){
+    assert.equal(tool.status,'release',`${tool.id}: preview, legacy and lab tools must carry a warning`);
+    assert(tool.readiness.releaseTag,`${tool.id}: a review must identify the exact release`);
+  }else assert(tool.readiness.note,`${tool.id} needs a visible warning explaining the limitation`);
   if(tool.status!=='lab')assert(sources[tool.id],`Missing distribution source for ${tool.id}`);
   const release=releases[tool.id];
   if(process.argv.includes('--require-downloads')&&tool.status!=='lab')assert(release,`${tool.id} needs a published release`);

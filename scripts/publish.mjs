@@ -4,6 +4,7 @@ import { spawnSync } from 'node:child_process';
 import { dirname,join,resolve,basename } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { github,lockFromRelease } from './github.mjs';
+import { getReadiness,warningMarkdown } from './readiness.mjs';
 
 const root=dirname(dirname(fileURLToPath(import.meta.url)));
 const workspace=resolve(process.env.EVFX_COLLECTION_ROOT||join(root,'..'));
@@ -84,11 +85,14 @@ if(!hasHead){run('git',['add','--','README.md']);commit('Create EVFX release and
 
 for(const item of prepared){
   const {tool,version,assets,tag}=item;
+  const buildReadiness=getReadiness(tool,{tag,prerelease:false});
   let release=await github(`/repos/${catalog.repository}/releases/tags/${tag}`,{allow404:true});
   const metadata={id:tool.id,version,files:assets.map(({path,...asset})=>asset)};
-  const notes=`${tool.detail}\n\n### Requirements\n${tool.requirements}\n\n### Installation\n${tool.install}\n\n${tool.status==='preview'?'**Preview build.** Read the requirements and evaluate on a test shot.\n\n':''}${tool.status==='legacy'?'**Legacy build.** Smart Grain is the current tool for new work.\n\n':''}### SHA-256\n${assets.map(a=>`- \`${a.name}\`: \`${a.sha256}\``).join('\n')}\n\n<!-- evfx-release\n${JSON.stringify(metadata)}\n-->`;
+  const notes=warningMarkdown(tool,{tag,prerelease:false})+`${tool.detail}\n\n### Requirements\n${tool.requirements}\n\n### Installation\n${tool.install}\n\n${tool.status==='preview'?'**Preview build.** Read the requirements and evaluate on a test shot.\n\n':''}${tool.status==='legacy'?'**Legacy build.** Smart Grain is the current tool for new work.\n\n':''}### SHA-256\n${assets.map(a=>`- \`${a.name}\`: \`${a.sha256}\``).join('\n')}\n\n<!-- evfx-release\n${JSON.stringify(metadata)}\n-->`;
   if(!release){
-    release=await github(`/repos/${catalog.repository}/releases`,{method:'POST',body:{tag_name:tag,target_commitish:'main',name:`EVFX ${tool.name} — ${version||'snapshot'}`,body:notes,draft:true,prerelease:['preview','legacy'].includes(tool.status),make_latest:'false'}});
+    release=await github(`/repos/${catalog.repository}/releases`,{method:'POST',body:{tag_name:tag,target_commitish:'main',name:`EVFX ${tool.name} — ${version||'snapshot'}`,body:notes,draft:true,prerelease:buildReadiness.state!=='reviewed',make_latest:'false'}});
+  }else if(release.body!==notes){
+    release=await github(`/repos/${catalog.repository}/releases/${release.id}`,{method:'PATCH',body:{body:notes,prerelease:buildReadiness.state!=='reviewed',make_latest:'false'}});
   }
   for(const asset of assets){
     const existing=release.assets.find(a=>a.name===asset.name);
@@ -110,9 +114,10 @@ for(const item of prepared){
   console.log(`Verified ${tool.id} ${version||'snapshot'}`);
 }
 run(process.execPath,['scripts/check.mjs','--require-downloads']);
+console.log(run(process.execPath,['--test','tests/readiness.test.mjs']));
 console.log(run(process.execPath,['scripts/build.mjs']));
-run('git',['add','--','.gitignore','README.md','package.json','catalog.json','sources.json','releases.lock.json','src','scripts','.github','Sync EVFX.cmd']);
-if(run('git',['status','--porcelain']).trim()){
+run('git',['add','--','.gitignore','README.md','package.json','catalog.json','sources.json','releases.lock.json','src','scripts','tests','.github','Sync EVFX.cmd']);
+if(run('git',['diff','--cached','--name-only']).trim()){
   commit('Publish latest EVFX catalog and release checksums');
   run('git',['push','-u','origin','main']);
 }

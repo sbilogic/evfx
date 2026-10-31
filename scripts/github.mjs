@@ -56,5 +56,5 @@ export function lockFromRelease(release,meta){
     if(!/^[a-f0-9]{64}$/.test(file.sha256))throw new Error('Invalid asset checksum');
     return {name:asset.name,url:asset.browser_download_url,bytes:asset.size,sha256:file.sha256,primary:!!file.primary};
   });
-  return {version:meta.version??null,publishedAt:release.published_at,releaseUrl:release.html_url,tag:release.tag_name,downloads};
+  return {version:meta.version??null,publishedAt:release.published_at,releaseUrl:release.html_url,tag:release.tag_name,prerelease:!!release.prerelease,downloads};
 }

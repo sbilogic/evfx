@@ -21,6 +21,14 @@ Requires Node 22+, Python 3, Git, and GitHub authentication through Git Credenti
 
 The publisher selects the highest semantic version of packaged builds, prepares the explicitly listed bundles, creates immutable per-tool releases with SHA-256 checksums, verifies GitHub’s uploaded digest when available, updates the release lock, checks and builds the page, and pushes the site. It never compiles, runs an installer, processes footage, uploads entire project folders, or changes existing private repository visibility. Interrupted uploads can be resumed by running it again.
 
+### Readiness warnings
+
+Every tool has an explicit `readiness` record in `catalog.json`, with the exact reviewed release tag and a short evidence note. Incomplete, experimental, unverified, legacy, and unfinished research tools show an always-visible warning explaining what is missing, a warning badge, and a caution beside the download. The download link references its warning for screen readers. These notices work without JavaScript.
+
+`reviewed` records a build-specific evidence review; it is not a universal stability certification. A new release tag, even with the same version number, defaults to **unverified** until that exact build is reviewed. GitHub prerelease flags also force a warning. Known incomplete features remain warnings across new builds. Adding a tool without readiness metadata fails the catalog check.
+
+The publisher writes the same warnings at the top of GitHub release notes and marks builds needing caution as prereleases. To apply edited warnings to already published releases without uploading binaries again, run `node scripts/sync-warnings.mjs`, then `node scripts/refresh.mjs` and commit the catalog and release lock. Release availability never automatically clears a readiness warning.
+
 `sources.json` is an explicit list of distribution inputs. Change a native plugin’s version and artifact path when its build location or version changes. ZIP/EXE versions are selected from filenames rather than timestamps. Unversioned utilities are labelled snapshots. Changes to a binary with the same version receive a new immutable release tag.
 
 To inspect package preparation without publishing:
@@ -35,7 +43,7 @@ To publish a subset, use `--only=smart-grain,blurry`. Public copy, requirements,
 
 GitHub Actions rebuilds and deploys on pushes and release changes. A daily reconciliation also refreshes release metadata, so the live page does not rely on an open local computer. The workflow uses GitHub’s built-in token and public-repository runners. It only publishes the small `dist/` folder.
 
-Release downloads are resolved at build time. `refresh.mjs` reads each release’s `evfx-release` manifest, verifies asset presence, byte size, and available SHA-256 digests, then selects the highest semantic version per tool, using publication time for revised builds and unversioned snapshots. Unmarked releases are ignored. Prereleases are accepted only for explicitly preview or legacy tools. To update a tool from GitHub directly, publish a release with a matching manifest; the local publisher writes these automatically. No personal access token is needed in repository secrets.
+Release downloads are resolved at build time. `refresh.mjs` reads each release’s `evfx-release` manifest, verifies asset presence, byte size, and available SHA-256 digests, then selects the highest semantic version per tool, using publication time for revised builds and unversioned snapshots. Unmarked releases are ignored. Known prereleases remain visible with readiness warnings. To update a tool from GitHub directly, publish a release with a matching manifest; the local publisher writes these automatically. No personal access token is needed in repository secrets.
 
 ## Preview and check
 

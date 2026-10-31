@@ -7,8 +7,10 @@
   "scripts": {
     "build": "node scripts/build.mjs",
     "check": "node scripts/check.mjs",
+    "test": "node --test tests/*.test.mjs",
     "preview": "node scripts/serve.mjs",
     "refresh": "node scripts/refresh.mjs",
-    "publish": "node scripts/publish.mjs"
+    "publish": "node scripts/publish.mjs",
+    "sync-warnings": "node scripts/sync-warnings.mjs"
   }
 }

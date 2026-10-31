@@ -9,8 +9,7 @@ const releases=(await allReleases(catalog.repository)).filter(r=>!r.draft)
   .map(release=>({release,meta:metadataFromRelease(release)})).filter(x=>x.meta&&known.has(x.meta.id));
 const lock={};
 for(const tool of catalog.tools){
-  const candidates=releases.filter(({release,meta})=>meta.id===tool.id
-    &&(!release.prerelease||['preview','legacy'].includes(tool.status)));
+  const candidates=releases.filter(({meta})=>meta.id===tool.id);
   candidates.sort((a,b)=>{
     const av=/^\d+\.\d+\.\d+$/.test(a.meta.version||'')?a.meta.version.split('.').map(Number):null;
     const bv=/^\d+\.\d+\.\d+$/.test(b.meta.version||'')?b.meta.version.split('.').map(Number):null;

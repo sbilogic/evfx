@@ -3,6 +3,7 @@ import { fileURLToPath } from 'node:url';
 import { join, dirname } from 'node:path';
 import { gzipSync } from 'node:zlib';
 import { toolArt, heroArt } from './art.mjs';
+import { getReadiness } from './readiness.mjs';
 
 export const root = dirname(dirname(fileURLToPath(import.meta.url)));
 export const escape = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -13,17 +14,22 @@ function toolRow(tool,index) {
   const release = releases[tool.id];
   const asset = release?.downloads.find(d=>d.primary) ?? release?.downloads[0];
   const version = release?.version ? `v${release.version}` : tool.status==='lab' ? 'In development' : 'Snapshot';
-  const status = ['preview','legacy'].includes(tool.status) ? `<span class="status-badge status-${tool.status}">${tool.status}</span>` : '';
+  const readiness=getReadiness(tool,release);
+  const hasWarning=readiness.state!=='reviewed';
+  const warningId=`${tool.id}-warning`;
+  const status=hasWarning?`<span class="status-badge readiness-badge">⚠ ${escape(readiness.badge)}</span>`:'';
+  const warning=hasWarning?`<aside id="${warningId}" class="tool-warning" aria-label="EVFX ${escape(tool.name)} readiness warning"><span class="warning-symbol" aria-hidden="true">⚠</span><div><strong>${escape(readiness.title)}</strong><p>${escape(readiness.note)}</p></div></aside>`:'';
   const action = asset
-    ? `<a class="download-link" href="${escape(asset.url)}" aria-label="Download EVFX ${escape(tool.name)}, ${escape(version)}">Download <span aria-hidden="true">↗</span></a><span class="download-size">${escape(asset.name.endsWith('.exe')?'SETUP':'ZIP')} / ${bytes(asset.bytes)}</span>`
-    : `<span class="lab-label">${tool.status==='lab'?'IN THE LAB<br>↗ STILL EXPLORING':'RELEASE PENDING'}</span>`;
-  const search = `${tool.name} EVFX ${tool.host} ${tool.kind} ${tool.description} ${tool.detail}`.toLocaleLowerCase();
+    ? `<a class="download-link" href="${escape(asset.url)}" aria-label="Download EVFX ${escape(tool.name)}, ${escape(version)}"${hasWarning?` aria-describedby="${warningId}"`:''}>Download <span aria-hidden="true">↗</span></a>${hasWarning?`<span class="download-caution">⚠ ${escape(readiness.badge)} build</span>`:''}<span class="download-size">${escape(asset.name.endsWith('.exe')?'SETUP':'ZIP')} / ${bytes(asset.bytes)}</span>`
+    : `<span class="lab-label">${tool.status==='lab'?'⚠ INCOMPLETE<br>NO PUBLIC BUILD':'RELEASE PENDING'}</span>`;
+  const search = `${tool.name} EVFX ${tool.host} ${tool.kind} ${tool.description} ${tool.detail} ${readiness.badge||''} ${readiness.note||''}`.toLocaleLowerCase();
   return `<article id="${tool.id}" class="tool tool-${tool.status}" data-category="${tool.category}" data-search="${escape(search)}">
     <span class="tool-number" aria-hidden="true">${String(index+1).padStart(2,'0')}</span>
     <div class="tool-art">${toolArt(tool.art)}</div>
     <div class="tool-identity"><h3><span class="tool-name-prefix">EVFX </span>${escape(tool.name)}</h3><div class="tool-meta"><span>${escape(tool.host)}</span><span class="meta-dot" aria-hidden="true"></span><span>${escape(version)}</span>${status}</div></div>
     <p class="tool-description">${escape(tool.description)}</p>
     <div class="tool-action">${action}</div>
+    ${warning}
     <details class="tool-notes"><summary>About & install<span class="sr-only"> EVFX ${escape(tool.name)}</span></summary><div class="notes-content"><div><p class="note-label">WHAT IT DOES</p><p>${escape(tool.detail)}</p></div><div><p class="note-label">GET GOING</p><p>${escape(tool.install)}</p>${release?`<a class="release-link" href="${escape(release.releaseUrl)}">Release notes${release.downloads.length>1?' & portable download':''} ↗</a>`:''}</div><p class="requirements">${escape(tool.requirements)}</p>${asset?`<div class="checksum">SHA-256 <code>${escape(asset.sha256)}</code></div>`:''}</div></details>
   </article>`;
 }
@@ -32,6 +38,7 @@ let html = await readFile(join(root,'src/index.html'),'utf8');
 const replacements = {
   TITLE:escape(catalog.title), COUNT:catalog.tools.length,
   DOWNLOAD_COUNT:catalog.tools.filter(t=>t.status!=='lab').length,
+  WARNING_COUNT:catalog.tools.filter(t=>getReadiness(t,releases[t.id]).state!=='reviewed').length,
   YEAR: new Date().getFullYear(), HERO_ART:heroArt(),
   TOOLS:catalog.tools.map(toolRow).join('\n')
 };
