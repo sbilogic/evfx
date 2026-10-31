@@ -1,8 +1,19 @@
 {
   "roots": [
-    { "id": "collection", "path": ".." },
-    { "id": "dev", "path": "../.." }
+    {
+      "id": "collection",
+      "path": ".."
+    },
+    {
+      "id": "dev",
+      "path": "../.."
+    }
   ],
-  "excludedIds": ["smart-denoise", "match-grain"],
-  "settleSeconds": 30
+  "excludedIds": [
+    "smart-denoise",
+    "match-grain"
+  ],
+  "settleSeconds": 30,
+  "enabled": false,
+  "mode": "after-build"
 }

@@ -135,7 +135,7 @@ async function publish({automatic=false,prepareOnly=false,only=null,expectedFing
   console.log(run(process.execPath,['scripts/check.mjs','--require-downloads']));
   console.log(run(process.execPath,['scripts/build.mjs']));
   if(automatic)run(git,['add','--',...generated]);
-  else run(git,['add','--','.gitignore','README.md','package.json','catalog.json','sources.json','support.json','sync.config.json','releases.lock.json','src','scripts','tests','.github','Sync EVFX.cmd']);
+  else run(git,['add','--','.gitignore','README.md','package.json','build-hooks.json','catalog.json','sources.json','support.json','sync.config.json','releases.lock.json','src','scripts','tests','.github','Sync EVFX.cmd']);
   let pushed=false;
   if(run(git,['diff','--cached','--name-only'])){
     run(git,['-c',`user.name=${user.name||user.login}`,'-c',`user.email=${user.id}+${user.login}@users.noreply.github.com`,'commit','-m','Sync EVFX releases and catalog']);

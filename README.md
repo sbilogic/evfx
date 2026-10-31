@@ -8,15 +8,17 @@ Static HTML, CSS, SVG and JavaScript. No runtime dependencies, external fonts, t
 
 ## Automatic local sync
 
-The local helper uses Windows file-change notifications. It checks once at login, then waits until an EVFX build or release declaration changes. After files settle for 30 seconds, it verifies the change and uploads updated distributions. There are no recurring scans or idle GitHub requests.
+Sync runs as a finite step after packaging, then exits. There is no file watcher, login helper, service, scheduled task, recurring scan, or idle Node process. Unchanged builds make no GitHub requests.
+
+One-shot hooks are connected to Choke It, Flares, Sequencer, PixelPicker (Release only), Multilayer EXR, and Corridor Key's standalone installer scripts. Hook installation preserves backups and only appends an owned block after the successful build path. A failed sync warns without failing the build. `build-hooks.json` records the connected scripts.
 
 `sync.config.json` lists roots relative to this checkout: the EVFX Collection folder and its parent Dev folder. Only immediate EVFX-prefixed projects and the collection's plugin subfolders are inspected. Release/dist packages and native Release AEX/JSX files are supported. Source/reference archives, generated dependency trees and empty projects are excluded. Smart Denoise and Match Grain are explicitly excluded and cannot be rediscovered.
 
-New plugins get their name and description from the project folder and README. Existing curated descriptions stay in place unless project release metadata supplies a replacement. `catalog.json`, `sources.json` and `releases.lock.json` are generated; new plugin/version entries do not require website edits.
+Each one-shot sync discovers new plugins and updated builds in both roots. New plugins get their name and description from the project folder and README. Existing curated descriptions stay in place unless project release metadata supplies a replacement. `catalog.json`, `sources.json` and `releases.lock.json` are generated; new plugin/version entries do not require website edits. Folders are inspected only when a connected build or manual sync runs.
 
-The helper streams uploads, verifies SHA-256 digests, validates ZIP integrity, and reuses prior checks for identical files. It never builds a plugin, launches an installer or AE, uploads whole project folders, or changes private repository visibility. It pauses publication while site code is being edited and checks again after a commit. Failed publications can retry on the next build change, login, or manual sync; existing downloads remain available.
+The helper streams uploads, verifies SHA-256 digests, validates ZIP integrity, and reuses prior checks for identical files. It never builds a plugin, launches an installer or AE, uploads whole project folders, or changes private repository visibility. It skips publication while site code is being edited. Failed or deferred publications can retry on the next connected build or manual sync; existing downloads remain available.
 
-GitHub cannot read folders on an offline PC. The local sync catches up at login. GitHub Actions deploys repository pushes and release changes, with no scheduled rebuilds.
+GitHub Actions deploys repository pushes and release changes, with no scheduled rebuilds. Hosting the site consumes no local PC resources.
 
 ## Complete and development builds
 
@@ -39,18 +41,18 @@ The declaration must match the uploaded package, or the single AEX/JSX payload b
 
 ## Local controls
 
-Requires Node 22+, Python 3, Git and cached GitHub authentication through Git Credential Manager, or a session-only `GH_TOKEN`. The login helper uses the current Windows user and stores no credentials.
+Requires Node 22+, Python 3, Git and cached GitHub authentication through Git Credential Manager, or a session-only `GH_TOKEN`. No credentials are stored by the hooks.
 
 ```sh
-node scripts/install-auto-sync.mjs
+node scripts/install-build-hooks.mjs
+node scripts/install-build-hooks.mjs --uninstall
+node scripts/sync-after-build.mjs
 node scripts/auto-sync.mjs --status
-node scripts/auto-sync.mjs --once --force
-node scripts/install-auto-sync.mjs --uninstall
 ```
 
-Installation creates `EVFX Site Auto Sync.vbs` in the current user's Startup folder and launches a hidden helper. Status, bounded logs and locks are under ignored `.local/`. Uninstall removes only the owned Startup entry and disables the runner; a running publication can finish before it exits.
+For a new project's packaging command, call `node <path-to-EVFX-Site>/scripts/sync-after-build.mjs` only after successful packaging, or invoke `scripts/AfterBuild.ps1` from PowerShell. It scans both roots and exits; it creates no watcher or startup entry. Status, bounded logs, original script backups and locks are under ignored `.local/`. The retired auto-start installer only supports removing an old installation.
 
-`Sync EVFX.cmd` remains an optional immediate manual sync. `node scripts/discover.mjs` previews discovery without uploading. `node scripts/publish.mjs --prepare-only` prepares and checks packages without publishing. `--only=smart-grain,blurry` limits a manual publication.
+`Sync EVFX.cmd` handles direct JSX edits and builds without a connected hook. `node scripts/discover.mjs` previews discovery without uploading. `node scripts/publish.mjs --prepare-only` prepares and checks packages without publishing. `--only=smart-grain,blurry` limits a manual publication.
 
 ## Preview and verification
 

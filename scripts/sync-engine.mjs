@@ -6,7 +6,7 @@ import { loadJson,saveJson,withLock } from './sync-files.mjs';
 export async function syncOnce(root,{force=false,publish,now=()=>Date.now()}={}){
   return withLock(join(root,'.local/scan.lock'),async()=>{
     const config=await loadJson(join(root,'sync.config.json'));
-    if(config.enabled===false)return {phase:'disabled'};
+    if(config.enabled===false&&!force)return {phase:'disabled'};
     const state=await loadJson(join(root,'.local/sync-state.json'),{});
     const catalog=await loadJson(join(root,'catalog.json')),sources=await loadJson(join(root,'sources.json'));
     const scan=await discoverLocalPlugins(root,{catalog,sources,config});

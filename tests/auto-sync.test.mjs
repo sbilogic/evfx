@@ -30,5 +30,10 @@ test('auto sync waits for stable files, publishes changes once, and stays idle a
     await writeFile(artifact,'updated build with changed bytes');
     clock+=60000;assert.equal((await syncOnce(root,{publish,now:()=>clock})).phase,'settling');
     clock+=31000;assert.equal((await syncOnce(root,{publish,now:()=>clock})).phase,'published');assert.equal(calls,2);
+    await saveJson(join(root,'sync.config.json'),{...config,enabled:false,mode:'after-build'});
+    await writeFile(artifact,'build completed with the background helper disabled');
+    assert.equal((await syncOnce(root,{publish,now:()=>clock})).phase,'disabled');assert.equal(calls,2);
+    assert.equal((await syncOnce(root,{force:true,publish,now:()=>clock})).phase,'published');assert.equal(calls,3);
+    assert.equal((await syncOnce(root,{force:true,publish,now:()=>clock})).phase,'idle');assert.equal(calls,3);
   }finally{assert.equal(dirname(resolve(base)),resolve(tmpdir()));assert.match(basename(base),/^evfx-auto-/);await rm(base,{recursive:true,force:true});}
 });

@@ -13,7 +13,8 @@
     "publish": "node scripts/publish.mjs",
     "discover": "node scripts/discover.mjs",
     "sync": "node scripts/auto-sync.mjs --once --force",
-    "auto-sync:install": "node scripts/install-auto-sync.mjs",
+    "sync:install-build-hooks": "node scripts/install-build-hooks.mjs",
+    "sync:remove-build-hooks": "node scripts/install-build-hooks.mjs --uninstall",
     "auto-sync:status": "node scripts/auto-sync.mjs --status",
     "auto-sync:uninstall": "node scripts/install-auto-sync.mjs --uninstall",
     "sync-warnings": "node scripts/sync-warnings.mjs"
