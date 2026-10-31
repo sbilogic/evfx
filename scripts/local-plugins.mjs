@@ -1,5 +1,5 @@
 import { readdir,readFile,stat } from 'node:fs/promises';
-import { resolve,join,relative,basename,extname,sep } from 'node:path';
+import { resolve,join,relative,basename,dirname,extname,sep } from 'node:path';
 import { createHash } from 'node:crypto';
 
 const normalize=value=>String(value).replace(/^evfx[\s_-]*/i,'').replace(/[^a-z0-9]/gi,'').toLowerCase();
@@ -116,13 +116,8 @@ function projectForSource(source){
   return parts[1]==='plugins'?parts.slice(0,3).join('/'):parts[0];
 }
 
-/** Read EVFX distribution folders. No project is built, executed, changed, or uploaded. */
-export async function discoverLocalPlugins(siteRoot,{catalog,sources,config}){
-  catalog=structuredClone(catalog);sources=structuredClone(sources);
-  const excluded=new Set(config.excludedIds.map(normalize));
-  catalog.tools=catalog.tools.filter(tool=>!excluded.has(normalize(tool.id)));
-  for(const id of Object.keys(sources))if(excluded.has(normalize(id)))delete sources[id];
-  const projects=[],observations=[],issues=[];
+export async function findLocalProjects(siteRoot,config){
+  const projects=[];
   for(const root of config.roots){
     const directory=resolve(siteRoot,root.path);
     for(const entry of await entries(directory)){
@@ -135,6 +130,17 @@ export async function discoverLocalPlugins(siteRoot,{catalog,sources,config}){
       }else projects.push({base:root.id,project:entry.name,absolute:project});
     }
   }
+  return projects;
+}
+
+/** Read EVFX distribution folders. No project is built, executed, changed, or uploaded. */
+export async function discoverLocalPlugins(siteRoot,{catalog,sources,config}){
+  catalog=structuredClone(catalog);sources=structuredClone(sources);
+  const excluded=new Set(config.excludedIds.map(normalize));
+  catalog.tools=catalog.tools.filter(tool=>!excluded.has(normalize(tool.id)));
+  for(const id of Object.keys(sources))if(excluded.has(normalize(id)))delete sources[id];
+  const projects=await findLocalProjects(siteRoot,config),observations=[],issues=[];
+  const completedBuilds=await readJson(join(siteRoot,'.local/completed-builds.json'))||{};
   const known=new Map(catalog.tools.map(tool=>[normalize(tool.name),tool.id]));
   for(const [id,source] of Object.entries(sources))known.set(normalize(basename(projectForSource(source))),id);
   const visited=new Set();
@@ -151,7 +157,17 @@ export async function discoverLocalPlugins(siteRoot,{catalog,sources,config}){
     packages.sort((a,b)=>compareVersions(b.version,a.version)||b.mtime-a.mtime||(/setup|installer/i.test(b.path)?1:0)-(/setup|installer/i.test(a.path)?1:0));
     let selected=packages[0];
     let source=existing?structuredClone(existing):null;
-    if(selected){
+    const completed=completedBuilds[`${project.base}:${project.project}`];
+    const completedPath=completed?resolve(project.absolute,completed.artifact):null;
+    const completedInfo=completedPath&&inside(project.absolute,completedPath)&&/\.aex$/i.test(completedPath)?await fileStat(completedPath):null;
+    if(completedInfo&&completedInfo.size===completed.size&&completedInfo.mtimeMs===completed.mtime&&(!selected||/\.zip$/i.test(selected.path)&&completed.mtime>selected.mtime)){
+      const base=sourceRoot(siteRoot,config,{base:project.base});
+      let version=await sourceVersion(project.absolute,completedPath,selected?.version??existing?.version);
+      if(selected?.version?.includes('-')&&version===selected.version.split('-')[0])version=selected.version;
+      const companions=(await entries(dirname(completedPath))).filter(entry=>entry.isFile()&&!entry.isSymbolicLink()&&/\.(jsx|dll)$/i.test(entry.name)).map(entry=>slash(relative(base,join(dirname(completedPath),entry.name))));
+      source={base:project.base,project:project.project,version,files:[slash(relative(base,completedPath)),...companions],...(selected?{templateArtifact:slash(relative(base,selected.path))}:{})};
+      selected={path:completedPath,mtime:completedInfo.mtimeMs,size:completedInfo.size};
+    }else if(selected){
       const best=packages.filter(p=>p.version===selected.version);
       const setup=best.find(p=>/setup|installer/i.test(basename(p.path)));
       if(setup)selected=setup;
@@ -198,7 +214,7 @@ export async function discoverLocalPlugins(siteRoot,{catalog,sources,config}){
       tool.readiness={state,note,releaseTag:null,reviewedAt:same?tool.readiness.reviewedAt:new Date().toISOString().slice(0,10),evidence:`${project.project}/evfx-release.json`};
       tool.status=state==='legacy'?'legacy':'preview';
     }
-    const inputPaths=source.artifacts||(!source.bundleRoot?source.files:[])||[];
+    const inputPaths=[...(source.artifacts||(!source.bundleRoot?source.files:[])||[]),...(source.templateArtifact?[source.templateArtifact]:[])];
     for(const input of inputPaths){
       const path=sourcePath(siteRoot,config,source,input),info=await fileStat(path);
       if(info)observations.push({toolId:id,path:slash(path),size:info.size,mtime:info.mtimeMs});

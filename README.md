@@ -10,7 +10,9 @@ Static HTML, CSS, SVG and JavaScript. No runtime dependencies, external fonts, t
 
 Sync runs as a finite step after packaging, then exits. There is no file watcher, login helper, service, scheduled task, recurring scan, or idle Node process. Unchanged builds make no GitHub requests.
 
-One-shot hooks are connected to Choke It, Flares, Sequencer, PixelPicker (Release only), Multilayer EXR, and Corridor Key's standalone installer scripts. Hook installation preserves backups and only appends an owned block after the successful build path. A failed sync warns without failing the build. `build-hooks.json` records the connected scripts.
+One-shot hooks cover native CMake Release builds, PowerShell packaging, Blender add-on packaging, and JSX build scripts. The installer discovers supported commands in both EVFX roots, preserves backups, and appends an owned block after the successful build path. It runs again during publication to connect newly found projects. `build-hooks.json` supplies additional known entry points; `.local/build-hooks.json` records the complete installed set. Failed publication warns without failing the build and retries on the next build.
+
+Native builds report their actual AEX output. If a previously packaged ZIP is older, the publisher replaces its binary and matching companion scripts while retaining install files, presets and licences. A newly packaged ZIP takes precedence again. Debug builds do not publish. A new native hash remains unverified until its own runtime review; the last complete release stays in the default view.
 
 `sync.config.json` lists roots relative to this checkout: the EVFX Collection folder and its parent Dev folder. Only immediate EVFX-prefixed projects and the collection's plugin subfolders are inspected. Release/dist packages and native Release AEX/JSX files are supported. Source/reference archives, generated dependency trees and empty projects are excluded. Smart Denoise and Match Grain are explicitly excluded and cannot be rediscovered.
 
@@ -50,9 +52,9 @@ node scripts/sync-after-build.mjs
 node scripts/auto-sync.mjs --status
 ```
 
-For a new project's packaging command, call `node <path-to-EVFX-Site>/scripts/sync-after-build.mjs` only after successful packaging, or invoke `scripts/AfterBuild.ps1` from PowerShell. It scans both roots and exits; it creates no watcher or startup entry. Status, bounded logs, original script backups and locks are under ignored `.local/`. The retired auto-start installer only supports removing an old installation.
+New EVFX project setup must run `node <path-to-EVFX-Site>/scripts/install-build-hooks.mjs` before its first release build. The Dev workspace's EVFX instructions require agents to do this during setup. An arbitrary new build command cannot trigger publication until its hook is connected. Supported CMake, PowerShell, Python add-on and JSX builders are discovered automatically; other build systems can call `node <path-to-EVFX-Site>/scripts/sync-after-build.mjs` after successful packaging. Native CMake callbacks also pass `--project <project-root> --artifact <built-aex>`. Status, bounded logs, original script backups and locks are under ignored `.local/`. The retired auto-start installer only supports removing an old installation.
 
-`Sync EVFX.cmd` handles direct JSX edits and builds without a connected hook. `node scripts/discover.mjs` previews discovery without uploading. `node scripts/publish.mjs --prepare-only` prepares and checks packages without publishing. `--only=smart-grain,blurry` limits a manual publication.
+The normal build/package command publishes automatically; running sync manually is not part of the release workflow. `Sync EVFX.cmd` remains an optional repair command for direct edits without a build. `node scripts/discover.mjs` previews discovery without uploading. `node scripts/publish.mjs --prepare-only` prepares and checks packages without publishing. `--only=smart-grain,blurry` limits a manual publication.
 
 ## Preview and verification
 
