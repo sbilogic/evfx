@@ -8,16 +8,21 @@ if(process.argv.includes('--status')){
   console.log(JSON.stringify({runner:await loadJson(join(root,'.local/runner.json'),null),sync:await loadJson(join(root,'.local/auto-sync-status.json'),null)},null,2));
 }else if(process.argv.includes('--watch')){
   await withLock(join(root,'.local/runner.lock'),async()=>{
-    await saveJson(join(root,'.local/runner.json'),{pid:process.pid,script,startedAt:new Date().toISOString()});
-    while(true){
-      const config=await loadJson(join(root,'sync.config.json'));
-      if(config.enabled===false)break;
-      await new Promise(resolve=>{
-        const child=spawn(process.execPath,[script,'--once'],{cwd:root,windowsHide:true,stdio:'ignore',env:{...process.env,EVFX_SYNC_RUNNER_PID:String(process.pid)}});
-        child.on('error',resolve);child.on('close',resolve);
-      });
-      await new Promise(resolve=>setTimeout(resolve,Math.max(10,config.intervalSeconds)*1000));
-    }
+    const {watchLocalBuilds}=await import('./build-watcher.mjs');
+    const {logSync}=await import('./sync-engine.mjs');
+    const runner={pid:process.pid,script,startedAt:new Date().toISOString()};
+    const watcher=await watchLocalBuilds(root,{
+      onState:state=>saveJson(join(root,'.local/runner.json'),{...runner,...state}),
+      onError:error=>logSync(root,`File watcher: ${error.message}`),
+      sync:()=>new Promise(resolve=>{
+        const child=spawn(process.execPath,[script,'--once'],{cwd:root,windowsHide:true,stdio:['ignore','pipe','ignore'],env:{...process.env,EVFX_SYNC_RUNNER_PID:String(process.pid)}});
+        let output='';child.stdout.on('data',chunk=>{output=(output+chunk).slice(-100000);});
+        child.on('error',error=>resolve({phase:'error',error:error.message}));
+        child.on('close',()=>{try{resolve(JSON.parse(output.trim().split(/\r?\n/).at(-1)));}catch{resolve({phase:'error'});}});
+      })
+    });
+    process.once('SIGINT',watcher.close);process.once('SIGTERM',watcher.close);
+    await watcher.done;
   });
 }else{
   const {syncOnce,logSync}=await import('./sync-engine.mjs');

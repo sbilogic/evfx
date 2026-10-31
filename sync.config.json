@@ -4,6 +4,5 @@
     { "id": "dev", "path": "../.." }
   ],
   "excludedIds": ["smart-denoise", "match-grain"],
-  "intervalSeconds": 60,
   "settleSeconds": 30
 }

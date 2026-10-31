@@ -8,15 +8,15 @@ Static HTML, CSS, SVG and JavaScript. No runtime dependencies, external fonts, t
 
 ## Automatic local sync
 
-The local helper checks EVFX folders every 60 seconds while this Windows user is logged in. It starts at login, waits for build files to settle, then uploads changed distributions and deploys the catalog. Unchanged scans make no GitHub requests. No AI job or subscription is involved.
+The local helper uses Windows file-change notifications. It checks once at login, then waits until an EVFX build or release declaration changes. After files settle for 30 seconds, it verifies the change and uploads updated distributions. There are no recurring scans or idle GitHub requests.
 
 `sync.config.json` lists roots relative to this checkout: the EVFX Collection folder and its parent Dev folder. Only immediate EVFX-prefixed projects and the collection's plugin subfolders are inspected. Release/dist packages and native Release AEX/JSX files are supported. Source/reference archives, generated dependency trees and empty projects are excluded. Smart Denoise and Match Grain are explicitly excluded and cannot be rediscovered.
 
 New plugins get their name and description from the project folder and README. Existing curated descriptions stay in place unless project release metadata supplies a replacement. `catalog.json`, `sources.json` and `releases.lock.json` are generated; new plugin/version entries do not require website edits.
 
-The helper streams uploads, verifies SHA-256 digests, validates ZIP integrity, and reuses prior checks for identical files. It never builds a plugin, launches an installer or AE, uploads whole project folders, or changes private repository visibility. It pauses publication while site code is being edited. Interrupted publications retry on subsequent checks; existing downloads remain available.
+The helper streams uploads, verifies SHA-256 digests, validates ZIP integrity, and reuses prior checks for identical files. It never builds a plugin, launches an installer or AE, uploads whole project folders, or changes private repository visibility. It pauses publication while site code is being edited and checks again after a commit. Failed publications can retry on the next build change, login, or manual sync; existing downloads remain available.
 
-GitHub cannot read folders on an offline PC. The local sync resumes after login; GitHub Actions separately refreshes already published release metadata every day.
+GitHub cannot read folders on an offline PC. The local sync catches up at login. GitHub Actions deploys repository pushes and release changes, with no scheduled rebuilds.
 
 ## Complete and development builds
 

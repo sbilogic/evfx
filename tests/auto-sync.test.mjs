@@ -10,7 +10,7 @@ import { loadJson,saveJson } from '../scripts/sync-files.mjs';
 test('auto sync waits for stable files, publishes changes once, and stays idle afterward',async()=>{
   const base=await mkdtemp(join(tmpdir(),'evfx-auto-')),root=join(base,'collection','EVFX-Site');
   await mkdir(root,{recursive:true});
-  const config={roots:[{id:'collection',path:'..'},{id:'dev',path:'../..'}],excludedIds:['smart-denoise','match-grain'],settleSeconds:30,intervalSeconds:60};
+  const config={roots:[{id:'collection',path:'..'},{id:'dev',path:'../..'}],excludedIds:['smart-denoise','match-grain'],settleSeconds:30};
   await saveJson(join(root,'sync.config.json'),config);
   await saveJson(join(root,'catalog.json'),{repository:'example/evfx',title:'EVFX',tools:[]});await saveJson(join(root,'sources.json'),{});
   const releaseDir=join(base,'EVFX Probe','release');await mkdir(releaseDir,{recursive:true});

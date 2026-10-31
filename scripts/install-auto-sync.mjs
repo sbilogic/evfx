@@ -16,7 +16,7 @@ if(process.argv.includes('--uninstall')){
   const config=await loadJson(join(root,'sync.config.json'));config.enabled=false;
   await saveJson(join(root,'sync.config.json'),config);
   if(existing)await unlink(path);
-  console.log('Auto sync disabled. The running helper exits after its current check and interval.');
+  console.log('Auto sync disabled. The running watcher closes when it observes the configuration change.');
 }else{
   const find=name=>{
     const result=spawnSync('where.exe',[name],{encoding:'utf8',windowsHide:true});

@@ -8,7 +8,7 @@ import { discoverLocalPlugins,compareVersions,versionFromName } from '../scripts
 export async function fixture(){
   const base=await mkdtemp(join(tmpdir(),'evfx-discovery-'));
   const root=join(base,'collection','EVFX-Site');await mkdir(root,{recursive:true});
-  const config={roots:[{id:'collection',path:'..'},{id:'dev',path:'../..'}],excludedIds:['smart-denoise','match-grain'],settleSeconds:30,intervalSeconds:60};
+  const config={roots:[{id:'collection',path:'..'},{id:'dev',path:'../..'}],excludedIds:['smart-denoise','match-grain'],settleSeconds:30};
   const catalog={repository:'example/evfx',title:'EVFX',tools:[]};
   const cleanup=()=>{assert.equal(dirname(resolve(base)),resolve(tmpdir()));assert.match(basename(base),/^evfx-discovery-/);return rm(base,{recursive:true,force:true});};
   return {base,root,config,catalog,sources:{},cleanup};
