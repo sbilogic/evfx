@@ -43,7 +43,9 @@ To publish a subset, use `--only=smart-grain,blurry`. Public copy, requirements,
 
 `support.json` holds the public creator/payment URL and an optional monthly-support URL. The header and bottom of the catalog show a plain **Support EVFX** link once the main URL is configured. Monthly support appears only when its own URL is provided. Links open the payment provider directly; there are no embedded widgets, third-party scripts, download gates, or prompts.
 
-An unset URL renders no payment link. Create the creator account and complete its payout setup first, then add the verified public page URL. `node scripts/check.mjs` validates the configuration. The signup username alone is not treated as a working payment destination.
+`.github/FUNDING.yml` points the repository's Sponsor button to the same creator page.
+
+An unset URL renders no support link. Set the verified public creator-page URL; the signup username alone is not sufficient. The payment provider requires payout setup before the page can receive payments. `node scripts/check.mjs` validates the link configuration.
 
 ## Automatic hosting updates
 
