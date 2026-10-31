@@ -4,6 +4,7 @@
     "publishedAt": "2026-10-31T00:41:30Z",
     "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/smart-grain-v2.2.3-af150566b8",
     "tag": "smart-grain-v2.2.3-af150566b8",
+    "prerelease": false,
     "downloads": [
       {
         "name": "EVFXSmartGrainV2-v2.2.3-Windows.zip",
@@ -19,6 +20,7 @@
     "publishedAt": "2026-10-31T00:41:33Z",
     "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/smart-denoise-v1.0.2-78a2ac0dd7",
     "tag": "smart-denoise-v1.0.2-78a2ac0dd7",
+    "prerelease": false,
     "downloads": [
       {
         "name": "EVFXSmartDenoise-v1.0.2-Windows.zip",
@@ -34,6 +36,7 @@
     "publishedAt": "2026-10-31T00:41:37Z",
     "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/blurry-v2.1.0-865611ea0b",
     "tag": "blurry-v2.1.0-865611ea0b",
+    "prerelease": false,
     "downloads": [
       {
         "name": "EVFXBlurry-2.1.0-Windows.zip",
@@ -49,6 +52,7 @@
     "publishedAt": "2026-10-31T00:41:41Z",
     "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/crop-ae-v0.1.2-665298049e",
     "tag": "crop-ae-v0.1.2-665298049e",
+    "prerelease": true,
     "downloads": [
       {
         "name": "EVFXCrop-0.1.2-Windows.zip",
@@ -64,6 +68,7 @@
     "publishedAt": "2026-10-31T00:41:44Z",
     "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/pixel-picker-v1.1.0-fbc4b929df",
     "tag": "pixel-picker-v1.1.0-fbc4b929df",
+    "prerelease": true,
     "downloads": [
       {
         "name": "EVFX-pixel-picker-1.1.0.zip",
@@ -79,6 +84,7 @@
     "publishedAt": "2026-10-31T00:41:47Z",
     "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/auto-levels-v2.0.0-fe42881538",
     "tag": "auto-levels-v2.0.0-fe42881538",
+    "prerelease": true,
     "downloads": [
       {
         "name": "EVFX-auto-levels-2.0.0.zip",
@@ -94,6 +100,7 @@
     "publishedAt": "2026-10-31T00:41:51Z",
     "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/multilayer-exr-v1.0.4-91759a560d",
     "tag": "multilayer-exr-v1.0.4-91759a560d",
+    "prerelease": true,
     "downloads": [
       {
         "name": "EVFX_Multilayer_EXR_for_After_Effects_Setup_v1.0.4.exe",
@@ -109,6 +116,7 @@
     "publishedAt": "2026-10-31T00:41:55Z",
     "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/null-tracker-v2.0.0-9d9f0d251f",
     "tag": "null-tracker-v2.0.0-9d9f0d251f",
+    "prerelease": true,
     "downloads": [
       {
         "name": "EVFX-null-tracker-2.0.0.zip",
@@ -124,6 +132,7 @@
     "publishedAt": "2026-10-31T00:41:58Z",
     "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/project-cleaner-v1.0.0-922fcc601a",
     "tag": "project-cleaner-v1.0.0-922fcc601a",
+    "prerelease": false,
     "downloads": [
       {
         "name": "EVFX-project-cleaner-1.0.0.zip",
@@ -139,6 +148,7 @@
     "publishedAt": "2026-10-31T00:42:01Z",
     "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/selective-fx-snapshot-9ea5d70d7e",
     "tag": "selective-fx-snapshot-9ea5d70d7e",
+    "prerelease": true,
     "downloads": [
       {
         "name": "EVFX-selective-fx-snapshot.zip",
@@ -154,6 +164,7 @@
     "publishedAt": "2026-10-31T00:42:06Z",
     "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/crop-blender-v0.2.0-c73569f80b",
     "tag": "crop-blender-v0.2.0-c73569f80b",
+    "prerelease": true,
     "downloads": [
       {
         "name": "evfx_crop-0.2.0.zip",
@@ -169,6 +180,7 @@
     "publishedAt": "2026-10-31T00:42:54Z",
     "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/sequencer-v0.8.2-66dff7613e",
     "tag": "sequencer-v0.8.2-66dff7613e",
+    "prerelease": false,
     "downloads": [
       {
         "name": "EVFX-Sequencer-0.8.2-Windows-x64-Setup.exe",
@@ -191,6 +203,7 @@
     "publishedAt": "2026-10-31T00:42:58Z",
     "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/menu-snapshot-bb04c29611",
     "tag": "menu-snapshot-bb04c29611",
+    "prerelease": false,
     "downloads": [
       {
         "name": "EVFX-menu-snapshot.zip",
@@ -206,6 +219,7 @@
     "publishedAt": "2026-10-31T00:43:03Z",
     "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/corridor-key-v0.15.0-63e8b49beb",
     "tag": "corridor-key-v0.15.0-63e8b49beb",
+    "prerelease": true,
     "downloads": [
       {
         "name": "EVFX-Corridor-Key-2.0-0.15.0-Windows-x64-Setup.exe",
@@ -221,6 +235,7 @@
     "publishedAt": "2026-10-31T00:43:07Z",
     "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/shot-qc-v0.2.0-227dabd192",
     "tag": "shot-qc-v0.2.0-227dabd192",
+    "prerelease": true,
     "downloads": [
       {
         "name": "EVFX-shot-qc-0.2.0.zip",
@@ -236,6 +251,7 @@
     "publishedAt": "2026-10-31T00:43:10Z",
     "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/match-grain-v0.2.0-c6bda64cd3",
     "tag": "match-grain-v0.2.0-c6bda64cd3",
+    "prerelease": true,
     "downloads": [
       {
         "name": "EVFX-match-grain-0.2.0.zip",
