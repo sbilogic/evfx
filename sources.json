@@ -1,0 +1,18 @@
+{
+  "smart-grain": { "directory": "EVFXSmartGrain/release", "pattern": "^EVFXSmartGrainV2-v(\\d+\\.\\d+\\.\\d+)-Windows\\.zip$" },
+  "smart-denoise": { "directory": "EVFXSmartGrain/denoise/release", "pattern": "^EVFXSmartDenoise-v(\\d+\\.\\d+\\.\\d+)-Windows\\.zip$" },
+  "blurry": { "directory": "EVFX Blurry/release", "pattern": "^EVFXBlurry-(\\d+\\.\\d+\\.\\d+)-Windows\\.zip$" },
+  "crop-ae": { "directory": "EVFX Crop/release", "pattern": "^EVFXCrop-(\\d+\\.\\d+\\.\\d+)-Windows\\.zip$" },
+  "pixel-picker": { "version": "1.1.0", "files": ["EVFX-PixelPicker/build-aex-version-fix/Release/PixelPicker.aex"] },
+  "auto-levels": { "version": "2.0.0", "files": ["EVFX Auto Levels/plugin/build/Release/EVFX_AutoLevels.aex"] },
+  "multilayer-exr": { "directory": "EVFX Multilayer EXR for AE/dist", "pattern": "^EVFX_Multilayer_EXR_for_After_Effects_Setup_v(\\d+\\.\\d+\\.\\d+)\\.exe$" },
+  "null-tracker": { "version": "2.0.0", "files": ["EVFX 3d Null Tracker/EVFX_3D_Null_Tracker.jsx"] },
+  "project-cleaner": { "version": "1.0.0", "files": ["EVFX AE Project Cleaner/EVFX AE Project Cleaner.jsx"] },
+  "selective-fx": { "version": null, "files": ["EVFX Pick and Choose Adjustment Layer/EVFX_SelectiveFX.jsx"] },
+  "crop-blender": { "directory": "evfx crop for blender/dist", "pattern": "^evfx_crop-(\\d+\\.\\d+\\.\\d+)\\.zip$" },
+  "sequencer": { "directory": "EVFX Sequencer/release", "pattern": "^EVFX-Sequencer-(\\d+\\.\\d+\\.\\d+)-Windows-x64-Setup\\.exe$", "extras": ["EVFX-Sequencer-{version}-Windows-x64-Portable.zip"] },
+  "menu": { "version": null, "bundleRoot": "EVFX Menu", "files": ["evfx.py", "Install.cmd", "Uninstall.cmd", "evfx_menu", "bin"] },
+  "corridor-key": { "directory": "EVFX Corridor Key 2.0/dist/standalone", "pattern": "^EVFX-Corridor-Key-2\\.0-(\\d+\\.\\d+\\.\\d+)-Windows-x64-Setup\\.exe$" },
+  "shot-qc": { "version": "0.2.0", "files": ["EVFX-AE-Collection/plugins/EVFXShotQC/build/dist/EVFXShotQC.aex"] },
+  "match-grain": { "version": "0.2.0", "files": ["EVFX-AE-Collection/plugins/EVFXMatchGrain/build/dist/EVFXMatchGrain.aex"] }
+}

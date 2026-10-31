@@ -1,0 +1,14 @@
+{
+  "name": "evfx-collection-site",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=22" },
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "check": "node scripts/check.mjs",
+    "preview": "node scripts/serve.mjs",
+    "refresh": "node scripts/refresh.mjs",
+    "publish": "node scripts/publish.mjs"
+  }
+}

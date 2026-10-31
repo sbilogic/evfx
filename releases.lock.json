@@ -1,0 +1,249 @@
+{
+  "smart-grain": {
+    "version": "2.2.3",
+    "publishedAt": "2026-10-31T00:41:30Z",
+    "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/smart-grain-v2.2.3-af150566b8",
+    "tag": "smart-grain-v2.2.3-af150566b8",
+    "downloads": [
+      {
+        "name": "EVFXSmartGrainV2-v2.2.3-Windows.zip",
+        "url": "https://github.com/sbilogic/evfx/releases/download/smart-grain-v2.2.3-af150566b8/EVFXSmartGrainV2-v2.2.3-Windows.zip",
+        "bytes": 121725,
+        "sha256": "48be09ebab7f7d22080539488d5534335283f94aa0019e316cc0a760aec7eb72",
+        "primary": true
+      }
+    ]
+  },
+  "smart-denoise": {
+    "version": "1.0.2",
+    "publishedAt": "2026-10-31T00:41:33Z",
+    "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/smart-denoise-v1.0.2-78a2ac0dd7",
+    "tag": "smart-denoise-v1.0.2-78a2ac0dd7",
+    "downloads": [
+      {
+        "name": "EVFXSmartDenoise-v1.0.2-Windows.zip",
+        "url": "https://github.com/sbilogic/evfx/releases/download/smart-denoise-v1.0.2-78a2ac0dd7/EVFXSmartDenoise-v1.0.2-Windows.zip",
+        "bytes": 112295,
+        "sha256": "312c52ada31cce12795e4c98ded28c7d48cb1bc4ce488cf015ab1d795fa2821a",
+        "primary": true
+      }
+    ]
+  },
+  "blurry": {
+    "version": "2.1.0",
+    "publishedAt": "2026-10-31T00:41:37Z",
+    "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/blurry-v2.1.0-865611ea0b",
+    "tag": "blurry-v2.1.0-865611ea0b",
+    "downloads": [
+      {
+        "name": "EVFXBlurry-2.1.0-Windows.zip",
+        "url": "https://github.com/sbilogic/evfx/releases/download/blurry-v2.1.0-865611ea0b/EVFXBlurry-2.1.0-Windows.zip",
+        "bytes": 223865,
+        "sha256": "2bf8ddcbd93b6db4a48cd4c2fee216a234c70ae5505d0a85737478a639fa3a83",
+        "primary": true
+      }
+    ]
+  },
+  "crop-ae": {
+    "version": "0.1.2",
+    "publishedAt": "2026-10-31T00:41:41Z",
+    "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/crop-ae-v0.1.2-665298049e",
+    "tag": "crop-ae-v0.1.2-665298049e",
+    "downloads": [
+      {
+        "name": "EVFXCrop-0.1.2-Windows.zip",
+        "url": "https://github.com/sbilogic/evfx/releases/download/crop-ae-v0.1.2-665298049e/EVFXCrop-0.1.2-Windows.zip",
+        "bytes": 259365,
+        "sha256": "89bb9bbb8edc1eb91e778332a28a63be8d0c305990b47047b6e92a3453b7cca0",
+        "primary": true
+      }
+    ]
+  },
+  "pixel-picker": {
+    "version": "1.1.0",
+    "publishedAt": "2026-10-31T00:41:44Z",
+    "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/pixel-picker-v1.1.0-fbc4b929df",
+    "tag": "pixel-picker-v1.1.0-fbc4b929df",
+    "downloads": [
+      {
+        "name": "EVFX-pixel-picker-1.1.0.zip",
+        "url": "https://github.com/sbilogic/evfx/releases/download/pixel-picker-v1.1.0-fbc4b929df/EVFX-pixel-picker-1.1.0.zip",
+        "bytes": 52669,
+        "sha256": "f7e52747d0db3816974564bd12e58b60e19ccfb7ff18d885c46f061cfc1e9f6d",
+        "primary": true
+      }
+    ]
+  },
+  "auto-levels": {
+    "version": "2.0.0",
+    "publishedAt": "2026-10-31T00:41:47Z",
+    "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/auto-levels-v2.0.0-fe42881538",
+    "tag": "auto-levels-v2.0.0-fe42881538",
+    "downloads": [
+      {
+        "name": "EVFX-auto-levels-2.0.0.zip",
+        "url": "https://github.com/sbilogic/evfx/releases/download/auto-levels-v2.0.0-fe42881538/EVFX-auto-levels-2.0.0.zip",
+        "bytes": 34964,
+        "sha256": "0fe6341b73f5b5f80d57c9cb1f786204a2be1260f398c65d50402b056fb4e9d3",
+        "primary": true
+      }
+    ]
+  },
+  "multilayer-exr": {
+    "version": "1.0.4",
+    "publishedAt": "2026-10-31T00:41:51Z",
+    "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/multilayer-exr-v1.0.4-91759a560d",
+    "tag": "multilayer-exr-v1.0.4-91759a560d",
+    "downloads": [
+      {
+        "name": "EVFX_Multilayer_EXR_for_After_Effects_Setup_v1.0.4.exe",
+        "url": "https://github.com/sbilogic/evfx/releases/download/multilayer-exr-v1.0.4-91759a560d/EVFX_Multilayer_EXR_for_After_Effects_Setup_v1.0.4.exe",
+        "bytes": 123392,
+        "sha256": "e5b82d4dc0c0a32362748a562fa0b15e9fe75e6333579f6a302db9a6cf34b1f8",
+        "primary": true
+      }
+    ]
+  },
+  "null-tracker": {
+    "version": "2.0.0",
+    "publishedAt": "2026-10-31T00:41:55Z",
+    "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/null-tracker-v2.0.0-9d9f0d251f",
+    "tag": "null-tracker-v2.0.0-9d9f0d251f",
+    "downloads": [
+      {
+        "name": "EVFX-null-tracker-2.0.0.zip",
+        "url": "https://github.com/sbilogic/evfx/releases/download/null-tracker-v2.0.0-9d9f0d251f/EVFX-null-tracker-2.0.0.zip",
+        "bytes": 19232,
+        "sha256": "d70a7f72bae31eba5e8fb94f9aac52d72d1e85812d0e316b502511f73a629e68",
+        "primary": true
+      }
+    ]
+  },
+  "project-cleaner": {
+    "version": "1.0.0",
+    "publishedAt": "2026-10-31T00:41:58Z",
+    "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/project-cleaner-v1.0.0-922fcc601a",
+    "tag": "project-cleaner-v1.0.0-922fcc601a",
+    "downloads": [
+      {
+        "name": "EVFX-project-cleaner-1.0.0.zip",
+        "url": "https://github.com/sbilogic/evfx/releases/download/project-cleaner-v1.0.0-922fcc601a/EVFX-project-cleaner-1.0.0.zip",
+        "bytes": 6625,
+        "sha256": "6ff15c3f704816b35c771702194d7b4fb88297b7e512e4b230f4afe0633c1d1b",
+        "primary": true
+      }
+    ]
+  },
+  "selective-fx": {
+    "version": null,
+    "publishedAt": "2026-10-31T00:42:01Z",
+    "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/selective-fx-snapshot-9ea5d70d7e",
+    "tag": "selective-fx-snapshot-9ea5d70d7e",
+    "downloads": [
+      {
+        "name": "EVFX-selective-fx-snapshot.zip",
+        "url": "https://github.com/sbilogic/evfx/releases/download/selective-fx-snapshot-9ea5d70d7e/EVFX-selective-fx-snapshot.zip",
+        "bytes": 6702,
+        "sha256": "09a36ad0331b36d800b9fc358483486ef34b77ae00975a338a08a0ac297f5d36",
+        "primary": true
+      }
+    ]
+  },
+  "crop-blender": {
+    "version": "0.2.0",
+    "publishedAt": "2026-10-31T00:42:06Z",
+    "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/crop-blender-v0.2.0-c73569f80b",
+    "tag": "crop-blender-v0.2.0-c73569f80b",
+    "downloads": [
+      {
+        "name": "evfx_crop-0.2.0.zip",
+        "url": "https://github.com/sbilogic/evfx/releases/download/crop-blender-v0.2.0-c73569f80b/evfx_crop-0.2.0.zip",
+        "bytes": 46679,
+        "sha256": "5008eb408e6b3578d07bca8ebf2c818ee97113ddf8c794c54b17c3f5f525b01b",
+        "primary": true
+      }
+    ]
+  },
+  "sequencer": {
+    "version": "0.8.2",
+    "publishedAt": "2026-10-31T00:42:54Z",
+    "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/sequencer-v0.8.2-66dff7613e",
+    "tag": "sequencer-v0.8.2-66dff7613e",
+    "downloads": [
+      {
+        "name": "EVFX-Sequencer-0.8.2-Windows-x64-Setup.exe",
+        "url": "https://github.com/sbilogic/evfx/releases/download/sequencer-v0.8.2-66dff7613e/EVFX-Sequencer-0.8.2-Windows-x64-Setup.exe",
+        "bytes": 177991168,
+        "sha256": "7eaaeb3f00839bdb20dff2156ebc2616e712e10c9e2aa1d4e26be59e2b04ffd1",
+        "primary": true
+      },
+      {
+        "name": "EVFX-Sequencer-0.8.2-Windows-x64-Portable.zip",
+        "url": "https://github.com/sbilogic/evfx/releases/download/sequencer-v0.8.2-66dff7613e/EVFX-Sequencer-0.8.2-Windows-x64-Portable.zip",
+        "bytes": 177898857,
+        "sha256": "e5d9073558853056118caad5aecdc31834de6f0e37bd19512400e95d6c1c392b",
+        "primary": false
+      }
+    ]
+  },
+  "menu": {
+    "version": null,
+    "publishedAt": "2026-10-31T00:42:58Z",
+    "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/menu-snapshot-bb04c29611",
+    "tag": "menu-snapshot-bb04c29611",
+    "downloads": [
+      {
+        "name": "EVFX-menu-snapshot.zip",
+        "url": "https://github.com/sbilogic/evfx/releases/download/menu-snapshot-bb04c29611/EVFX-menu-snapshot.zip",
+        "bytes": 194925,
+        "sha256": "49844778142bb9d834d7de9969d367a82442a451c2de8a53bb30aeac6fe0437c",
+        "primary": true
+      }
+    ]
+  },
+  "corridor-key": {
+    "version": "0.15.0",
+    "publishedAt": "2026-10-31T00:43:03Z",
+    "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/corridor-key-v0.15.0-63e8b49beb",
+    "tag": "corridor-key-v0.15.0-63e8b49beb",
+    "downloads": [
+      {
+        "name": "EVFX-Corridor-Key-2.0-0.15.0-Windows-x64-Setup.exe",
+        "url": "https://github.com/sbilogic/evfx/releases/download/corridor-key-v0.15.0-63e8b49beb/EVFX-Corridor-Key-2.0-0.15.0-Windows-x64-Setup.exe",
+        "bytes": 18547193,
+        "sha256": "381aee756db5ea175f605cf992f4411552cd5c77c17c19f0ba333db2f33c520e",
+        "primary": true
+      }
+    ]
+  },
+  "shot-qc": {
+    "version": "0.2.0",
+    "publishedAt": "2026-10-31T00:43:07Z",
+    "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/shot-qc-v0.2.0-227dabd192",
+    "tag": "shot-qc-v0.2.0-227dabd192",
+    "downloads": [
+      {
+        "name": "EVFX-shot-qc-0.2.0.zip",
+        "url": "https://github.com/sbilogic/evfx/releases/download/shot-qc-v0.2.0-227dabd192/EVFX-shot-qc-0.2.0.zip",
+        "bytes": 8291,
+        "sha256": "0311cb0962953f298db14e944d4551e39d25f09732a27bb9ebd976981d3bb1da",
+        "primary": true
+      }
+    ]
+  },
+  "match-grain": {
+    "version": "0.2.0",
+    "publishedAt": "2026-10-31T00:43:10Z",
+    "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/match-grain-v0.2.0-c6bda64cd3",
+    "tag": "match-grain-v0.2.0-c6bda64cd3",
+    "downloads": [
+      {
+        "name": "EVFX-match-grain-0.2.0.zip",
+        "url": "https://github.com/sbilogic/evfx/releases/download/match-grain-v0.2.0-c6bda64cd3/EVFX-match-grain-0.2.0.zip",
+        "bytes": 35518,
+        "sha256": "89656738246b0e3e277bbeb8253803c6717688f86bd180fa63e64a4654599820",
+        "primary": true
+      }
+    ]
+  }
+}
