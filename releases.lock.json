@@ -346,17 +346,17 @@
     }
   },
   "corridor-key": {
-    "version": "0.15.3",
-    "publishedAt": "2026-10-31T13:59:17Z",
-    "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/corridor-key-v0.15.3-2fe66d3e58",
-    "tag": "corridor-key-v0.15.3-2fe66d3e58",
+    "version": "0.16.0",
+    "publishedAt": "2026-10-31T15:10:56Z",
+    "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/corridor-key-v0.16.0-4a88b90364",
+    "tag": "corridor-key-v0.16.0-4a88b90364",
     "prerelease": true,
     "downloads": [
       {
-        "name": "EVFX-Corridor-Key-2.0-0.15.3-Windows-x64-Setup.exe",
-        "url": "https://github.com/sbilogic/evfx/releases/download/corridor-key-v0.15.3-2fe66d3e58/EVFX-Corridor-Key-2.0-0.15.3-Windows-x64-Setup.exe",
-        "bytes": 18575115,
-        "sha256": "77688a65268bf8fda54d1b3485630b5bea9ae824b530ef3100b055eb83313b5c",
+        "name": "EVFX-Corridor-Key-2.0-0.16.0-Windows-x64-Setup.exe",
+        "url": "https://github.com/sbilogic/evfx/releases/download/corridor-key-v0.16.0-4a88b90364/EVFX-Corridor-Key-2.0-0.16.0-Windows-x64-Setup.exe",
+        "bytes": 18576477,
+        "sha256": "09a5a26eb4e43afdccc3f1fb8d8f9cb4efe601538a767cdd22ae55b1e8120f48",
         "primary": true
       }
     ]
