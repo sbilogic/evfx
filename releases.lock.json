@@ -105,38 +105,44 @@
   },
   "pixel-picker": {
     "version": "2.1.0",
-    "build": 1,
-    "aeVersion": 1082881,
+    "build": 2,
+    "aeVersion": 1082882,
     "binary": {
       "name": "EVFX_PixelPicker.aex",
-      "sha256": "1b3a042a81976fdc0695f7f5c40e67093096a0c43283b7310faf6bae93eea735"
+      "sha256": "7fd883b478f441b8db919a901d994c158d9f0f95080183670d8ae71ff5baa5dc"
     },
-    "publishedAt": "2026-10-31T21:31:25Z",
-    "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/pixel-picker-v2.1.0-5d35400dbd",
-    "tag": "pixel-picker-v2.1.0-5d35400dbd",
+    "publishedAt": "2026-10-31T21:44:03Z",
+    "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/pixel-picker-v2.1.0-a09fd97287",
+    "tag": "pixel-picker-v2.1.0-a09fd97287",
     "prerelease": true,
     "downloads": [
       {
         "name": "EVFX-pixel-picker-2.1.0.zip",
-        "url": "https://github.com/sbilogic/evfx/releases/download/pixel-picker-v2.1.0-5d35400dbd/EVFX-pixel-picker-2.1.0.zip",
+        "url": "https://github.com/sbilogic/evfx/releases/download/pixel-picker-v2.1.0-a09fd97287/EVFX-pixel-picker-2.1.0.zip",
         "bytes": 49383,
-        "sha256": "6c1bff73482a41d5ece3fbaf951eb21b8e2af4a75b96916ec27bea5e0c060787",
+        "sha256": "9c59edecb811aabcd6d7b65070afb036eeef4b9b2691addfd4444204f8d835b8",
         "primary": true
       }
     ]
   },
   "auto-levels": {
-    "version": "2.0.0",
-    "publishedAt": "2026-10-31T00:41:47Z",
-    "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/auto-levels-v2.0.0-fe42881538",
-    "tag": "auto-levels-v2.0.0-fe42881538",
+    "version": "2.0.0-dev1",
+    "build": 1,
+    "aeVersion": 1048577,
+    "binary": {
+      "name": "EVFX_AutoLevels.aex",
+      "sha256": "2c1084acbd6dbd36dbcd391b721927f55c437d666438a21dcd770a2234e553d8"
+    },
+    "publishedAt": "2026-10-31T21:44:06Z",
+    "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/auto-levels-v2.0.0-dev1-85476d0a59",
+    "tag": "auto-levels-v2.0.0-dev1-85476d0a59",
     "prerelease": true,
     "downloads": [
       {
-        "name": "EVFX-auto-levels-2.0.0.zip",
-        "url": "https://github.com/sbilogic/evfx/releases/download/auto-levels-v2.0.0-fe42881538/EVFX-auto-levels-2.0.0.zip",
-        "bytes": 34964,
-        "sha256": "0fe6341b73f5b5f80d57c9cb1f786204a2be1260f398c65d50402b056fb4e9d3",
+        "name": "EVFX-auto-levels-2.0.0-dev1.zip",
+        "url": "https://github.com/sbilogic/evfx/releases/download/auto-levels-v2.0.0-dev1-85476d0a59/EVFX-auto-levels-2.0.0-dev1.zip",
+        "bytes": 34969,
+        "sha256": "2b27d56003c374a00be27a662b3cd5dcd26d15bead9c3b4e8c41f1c47c55a560",
         "primary": true
       }
     ]
@@ -368,17 +374,23 @@
     ]
   },
   "shot-qc": {
-    "version": "0.2.0",
-    "publishedAt": "2026-10-31T00:43:07Z",
-    "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/shot-qc-v0.2.0-227dabd192",
-    "tag": "shot-qc-v0.2.0-227dabd192",
+    "version": "0.4.0-dev1",
+    "build": 1,
+    "aeVersion": 131073,
+    "binary": {
+      "name": "EVFXShotQC.aex",
+      "sha256": "9e1a137cae904e43b7410458bf44466cb0176fbfe2a0038fcf6772afdc371727"
+    },
+    "publishedAt": "2026-10-31T21:44:09Z",
+    "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/shot-qc-v0.4.0-dev1-7f6da9c299",
+    "tag": "shot-qc-v0.4.0-dev1-7f6da9c299",
     "prerelease": true,
     "downloads": [
       {
-        "name": "EVFX-shot-qc-0.2.0.zip",
-        "url": "https://github.com/sbilogic/evfx/releases/download/shot-qc-v0.2.0-227dabd192/EVFX-shot-qc-0.2.0.zip",
-        "bytes": 8291,
-        "sha256": "0311cb0962953f298db14e944d4551e39d25f09732a27bb9ebd976981d3bb1da",
+        "name": "EVFX-shot-qc-0.4.0-dev1.zip",
+        "url": "https://github.com/sbilogic/evfx/releases/download/shot-qc-v0.4.0-dev1-7f6da9c299/EVFX-shot-qc-0.4.0-dev1.zip",
+        "bytes": 8295,
+        "sha256": "96437782e87e15f8a8aa689c7133fdec169c5bd934c8199c46281f2f56df03c2",
         "primary": true
       }
     ]

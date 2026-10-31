@@ -30,8 +30,8 @@
     "files": [
       "evfx-pixelpicker-redesign-593091/build-aex/Release/EVFX_PixelPicker.aex"
     ],
-    "build": 1,
-    "aeVersion": 1082881
+    "build": 2,
+    "aeVersion": 1082882
   },
   "auto-levels": {
     "base": "collection",
