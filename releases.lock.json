@@ -5,6 +5,12 @@
     "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/smart-grain-v2.2.3-af150566b8",
     "tag": "smart-grain-v2.2.3-af150566b8",
     "prerelease": false,
+    "review": {
+      "state": "complete",
+      "runtimeVerified": true,
+      "sha256": "48be09ebab7f7d22080539488d5534335283f94aa0019e316cc0a760aec7eb72",
+      "evidence": "EVFXSmartGrain/docs/smartfx-bounds-validation.md: current 2.2.3 AEX and live AE opening/render checks."
+    },
     "downloads": [
       {
         "name": "EVFXSmartGrainV2-v2.2.3-Windows.zip",
@@ -13,7 +19,29 @@
         "sha256": "48be09ebab7f7d22080539488d5534335283f94aa0019e316cc0a760aec7eb72",
         "primary": true
       }
-    ]
+    ],
+    "complete": {
+      "version": "2.2.3",
+      "publishedAt": "2026-10-31T00:41:30Z",
+      "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/smart-grain-v2.2.3-af150566b8",
+      "tag": "smart-grain-v2.2.3-af150566b8",
+      "prerelease": false,
+      "review": {
+        "state": "complete",
+        "runtimeVerified": true,
+        "sha256": "48be09ebab7f7d22080539488d5534335283f94aa0019e316cc0a760aec7eb72",
+        "evidence": "EVFXSmartGrain/docs/smartfx-bounds-validation.md: current 2.2.3 AEX and live AE opening/render checks."
+      },
+      "downloads": [
+        {
+          "name": "EVFXSmartGrainV2-v2.2.3-Windows.zip",
+          "url": "https://github.com/sbilogic/evfx/releases/download/smart-grain-v2.2.3-af150566b8/EVFXSmartGrainV2-v2.2.3-Windows.zip",
+          "bytes": 121725,
+          "sha256": "48be09ebab7f7d22080539488d5534335283f94aa0019e316cc0a760aec7eb72",
+          "primary": true
+        }
+      ]
+    }
   },
   "blurry": {
     "version": "2.1.0",
@@ -21,6 +49,12 @@
     "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/blurry-v2.1.0-865611ea0b",
     "tag": "blurry-v2.1.0-865611ea0b",
     "prerelease": false,
+    "review": {
+      "state": "complete",
+      "runtimeVerified": true,
+      "sha256": "2bf8ddcbd93b6db4a48cd4c2fee216a234c70ae5505d0a85737478a639fa3a83",
+      "evidence": "EVFX Blurry/docs/RELEASE_NOTES.md: core/adapter regression suites and AE 2026 smoke checks; documented scope limits."
+    },
     "downloads": [
       {
         "name": "EVFXBlurry-2.1.0-Windows.zip",
@@ -29,7 +63,29 @@
         "sha256": "2bf8ddcbd93b6db4a48cd4c2fee216a234c70ae5505d0a85737478a639fa3a83",
         "primary": true
       }
-    ]
+    ],
+    "complete": {
+      "version": "2.1.0",
+      "publishedAt": "2026-10-31T00:41:37Z",
+      "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/blurry-v2.1.0-865611ea0b",
+      "tag": "blurry-v2.1.0-865611ea0b",
+      "prerelease": false,
+      "review": {
+        "state": "complete",
+        "runtimeVerified": true,
+        "sha256": "2bf8ddcbd93b6db4a48cd4c2fee216a234c70ae5505d0a85737478a639fa3a83",
+        "evidence": "EVFX Blurry/docs/RELEASE_NOTES.md: core/adapter regression suites and AE 2026 smoke checks; documented scope limits."
+      },
+      "downloads": [
+        {
+          "name": "EVFXBlurry-2.1.0-Windows.zip",
+          "url": "https://github.com/sbilogic/evfx/releases/download/blurry-v2.1.0-865611ea0b/EVFXBlurry-2.1.0-Windows.zip",
+          "bytes": 223865,
+          "sha256": "2bf8ddcbd93b6db4a48cd4c2fee216a234c70ae5505d0a85737478a639fa3a83",
+          "primary": true
+        }
+      ]
+    }
   },
   "crop-ae": {
     "version": "0.1.2",
@@ -117,6 +173,12 @@
     "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/project-cleaner-v1.0.0-922fcc601a",
     "tag": "project-cleaner-v1.0.0-922fcc601a",
     "prerelease": false,
+    "review": {
+      "state": "complete",
+      "runtimeVerified": true,
+      "sha256": "6ff15c3f704816b35c771702194d7b4fb88297b7e512e4b230f4afe0633c1d1b",
+      "evidence": "EVFX AE Project Cleaner/docs/validation.md: 26 contract, 21 live GUI and 5 interactive color checks."
+    },
     "downloads": [
       {
         "name": "EVFX-project-cleaner-1.0.0.zip",
@@ -125,7 +187,29 @@
         "sha256": "6ff15c3f704816b35c771702194d7b4fb88297b7e512e4b230f4afe0633c1d1b",
         "primary": true
       }
-    ]
+    ],
+    "complete": {
+      "version": "1.0.0",
+      "publishedAt": "2026-10-31T00:41:58Z",
+      "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/project-cleaner-v1.0.0-922fcc601a",
+      "tag": "project-cleaner-v1.0.0-922fcc601a",
+      "prerelease": false,
+      "review": {
+        "state": "complete",
+        "runtimeVerified": true,
+        "sha256": "6ff15c3f704816b35c771702194d7b4fb88297b7e512e4b230f4afe0633c1d1b",
+        "evidence": "EVFX AE Project Cleaner/docs/validation.md: 26 contract, 21 live GUI and 5 interactive color checks."
+      },
+      "downloads": [
+        {
+          "name": "EVFX-project-cleaner-1.0.0.zip",
+          "url": "https://github.com/sbilogic/evfx/releases/download/project-cleaner-v1.0.0-922fcc601a/EVFX-project-cleaner-1.0.0.zip",
+          "bytes": 6625,
+          "sha256": "6ff15c3f704816b35c771702194d7b4fb88297b7e512e4b230f4afe0633c1d1b",
+          "primary": true
+        }
+      ]
+    }
   },
   "selective-fx": {
     "version": null,
@@ -165,6 +249,12 @@
     "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/sequencer-v0.8.2-66dff7613e",
     "tag": "sequencer-v0.8.2-66dff7613e",
     "prerelease": false,
+    "review": {
+      "state": "complete",
+      "runtimeVerified": true,
+      "sha256": "7eaaeb3f00839bdb20dff2156ebc2616e712e10c9e2aa1d4e26be59e2b04ffd1",
+      "evidence": "EVFX Sequencer/VALIDATION.md: 0.8.2 tests, native workflow and final distribution checksums."
+    },
     "downloads": [
       {
         "name": "EVFX-Sequencer-0.8.2-Windows-x64-Setup.exe",
@@ -180,7 +270,36 @@
         "sha256": "e5d9073558853056118caad5aecdc31834de6f0e37bd19512400e95d6c1c392b",
         "primary": false
       }
-    ]
+    ],
+    "complete": {
+      "version": "0.8.2",
+      "publishedAt": "2026-10-31T00:42:54Z",
+      "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/sequencer-v0.8.2-66dff7613e",
+      "tag": "sequencer-v0.8.2-66dff7613e",
+      "prerelease": false,
+      "review": {
+        "state": "complete",
+        "runtimeVerified": true,
+        "sha256": "7eaaeb3f00839bdb20dff2156ebc2616e712e10c9e2aa1d4e26be59e2b04ffd1",
+        "evidence": "EVFX Sequencer/VALIDATION.md: 0.8.2 tests, native workflow and final distribution checksums."
+      },
+      "downloads": [
+        {
+          "name": "EVFX-Sequencer-0.8.2-Windows-x64-Setup.exe",
+          "url": "https://github.com/sbilogic/evfx/releases/download/sequencer-v0.8.2-66dff7613e/EVFX-Sequencer-0.8.2-Windows-x64-Setup.exe",
+          "bytes": 177991168,
+          "sha256": "7eaaeb3f00839bdb20dff2156ebc2616e712e10c9e2aa1d4e26be59e2b04ffd1",
+          "primary": true
+        },
+        {
+          "name": "EVFX-Sequencer-0.8.2-Windows-x64-Portable.zip",
+          "url": "https://github.com/sbilogic/evfx/releases/download/sequencer-v0.8.2-66dff7613e/EVFX-Sequencer-0.8.2-Windows-x64-Portable.zip",
+          "bytes": 177898857,
+          "sha256": "e5d9073558853056118caad5aecdc31834de6f0e37bd19512400e95d6c1c392b",
+          "primary": false
+        }
+      ]
+    }
   },
   "menu": {
     "version": null,
@@ -188,6 +307,12 @@
     "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/menu-snapshot-bb04c29611",
     "tag": "menu-snapshot-bb04c29611",
     "prerelease": false,
+    "review": {
+      "state": "complete",
+      "runtimeVerified": true,
+      "sha256": "49844778142bb9d834d7de9969d367a82442a451c2de8a53bb30aeac6fe0437c",
+      "evidence": "EVFX Menu/README.md and bin/validation.json: tested processing formats and bundled encoder verification; supported input limits remain explicit."
+    },
     "downloads": [
       {
         "name": "EVFX-menu-snapshot.zip",
@@ -196,7 +321,29 @@
         "sha256": "49844778142bb9d834d7de9969d367a82442a451c2de8a53bb30aeac6fe0437c",
         "primary": true
       }
-    ]
+    ],
+    "complete": {
+      "version": null,
+      "publishedAt": "2026-10-31T00:42:58Z",
+      "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/menu-snapshot-bb04c29611",
+      "tag": "menu-snapshot-bb04c29611",
+      "prerelease": false,
+      "review": {
+        "state": "complete",
+        "runtimeVerified": true,
+        "sha256": "49844778142bb9d834d7de9969d367a82442a451c2de8a53bb30aeac6fe0437c",
+        "evidence": "EVFX Menu/README.md and bin/validation.json: tested processing formats and bundled encoder verification; supported input limits remain explicit."
+      },
+      "downloads": [
+        {
+          "name": "EVFX-menu-snapshot.zip",
+          "url": "https://github.com/sbilogic/evfx/releases/download/menu-snapshot-bb04c29611/EVFX-menu-snapshot.zip",
+          "bytes": 194925,
+          "sha256": "49844778142bb9d834d7de9969d367a82442a451c2de8a53bb30aeac6fe0437c",
+          "primary": true
+        }
+      ]
+    }
   },
   "corridor-key": {
     "version": "0.15.0",
@@ -226,6 +373,38 @@
         "url": "https://github.com/sbilogic/evfx/releases/download/shot-qc-v0.2.0-227dabd192/EVFX-shot-qc-0.2.0.zip",
         "bytes": 8291,
         "sha256": "0311cb0962953f298db14e944d4551e39d25f09732a27bb9ebd976981d3bb1da",
+        "primary": true
+      }
+    ]
+  },
+  "choke-it": {
+    "version": "1.2.0",
+    "publishedAt": "2026-10-31T02:13:14Z",
+    "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/choke-it-v1.2.0-d53f9942f2",
+    "tag": "choke-it-v1.2.0-d53f9942f2",
+    "prerelease": true,
+    "downloads": [
+      {
+        "name": "EVFX-Choke-It-1.2.0-Windows.zip",
+        "url": "https://github.com/sbilogic/evfx/releases/download/choke-it-v1.2.0-d53f9942f2/EVFX-Choke-It-1.2.0-Windows.zip",
+        "bytes": 221954,
+        "sha256": "d957cf53c1fb99773e5168aadbbe0f2d389051bc0010f2b16c84b8f7dd00e43f",
+        "primary": true
+      }
+    ]
+  },
+  "flares": {
+    "version": "0.4.0-dev17",
+    "publishedAt": "2026-10-31T02:14:20Z",
+    "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/flares-v0.4.0-dev17-2e3b311d09",
+    "tag": "flares-v0.4.0-dev17-2e3b311d09",
+    "prerelease": true,
+    "downloads": [
+      {
+        "name": "EVFX-Flares-0.4.0-dev17-Windows-x64.zip",
+        "url": "https://github.com/sbilogic/evfx/releases/download/flares-v0.4.0-dev17-2e3b311d09/EVFX-Flares-0.4.0-dev17-Windows-x64.zip",
+        "bytes": 305278714,
+        "sha256": "83a793be8ed63f0eaba99d4ffa52cd5b88946d38dd1326f7b3baf03de9c67fcb",
         "primary": true
       }
     ]
