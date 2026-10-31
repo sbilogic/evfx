@@ -22,7 +22,7 @@ export function getReadiness(tool, release) {
     return {state:'reviewed'};
   }
   const label=labels[review.state]||labels.unverified;
-  const newerBuild=release&&review.releaseTag!==release.tag;
+  const newerBuild=release&&review.releaseTag&&review.releaseTag!==release.tag;
   return {state:labels[review.state]?review.state:'unverified',...label,
     note:`${review.note||'Runtime readiness has not been verified.'}${newerBuild?' This newer build has not had its readiness rechecked.':''}`};
 }
