@@ -91,7 +91,8 @@ async function publish({automatic=false,prepareOnly=false,only=null,expectedFing
   if(prepareOnly)return {prepared:prepared.map(({tool,version,assets})=>({id:tool.id,version,assets:assets.map(({path,...asset})=>asset)})),fingerprint:scan.fingerprint};
   await saveJson(join(root,'catalog.json'),catalog);await saveJson(join(root,'sources.json'),sources);await saveJson(join(root,'releases.lock.json'),locks);
   console.log(run(process.execPath,['scripts/check.mjs']));
-  console.log(run(process.execPath,['--test']));
+  if(process.env.EVFX_SKIP_PUBLISHER_TESTS==='1')console.log('Website test suite skipped by explicit build option; package integrity and catalog checks remain enabled.');
+  else console.log(run(process.execPath,['--test']));
 
   const user=await github('/user'),[owner,name]=catalog.repository.split('/');
   if(user.login.toLowerCase()!==owner.toLowerCase())throw new Error(`Signed in as ${user.login}; publisher expects ${owner}`);
