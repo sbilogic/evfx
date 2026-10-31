@@ -67,14 +67,22 @@ async function nativeFiles(project){
   return found.sort((a,b)=>b.mtime-a.mtime);
 }
 
-async function binaryVersion(path){
-  if(!/\.aex$/i.test(path))return null;
-  const data=await readFile(path);
+export function aexMetadata(data){
+  // Adobe's Windows PiPL property: vendor 8BIM, key eVER, id, length, value.
+  const pipl=data.indexOf(Buffer.from('MIB8REVe'));
+  if(pipl>=0&&pipl+20<=data.length&&data.readUInt32LE(pipl+12)===4){
+    const aeVersion=data.readUInt32LE(pipl+16);
+    const major=((aeVersion>>>19)&7)|(((aeVersion>>>26)&15)<<3),minor=(aeVersion>>>15)&15,patch=(aeVersion>>>11)&15,stage=(aeVersion>>>9)&3,build=aeVersion&511;
+    if(aeVersion)return {version:`${major}.${minor}.${patch}${stage===3?'':`-${['dev','alpha','beta'][stage]}${build}`}`,build,aeVersion};
+  }
   const index=data.indexOf(Buffer.from([0xbd,0x04,0xef,0xfe]));
   if(index<0||index+16>data.length)return null;
   const ms=data.readUInt32LE(index+8),ls=data.readUInt32LE(index+12);
   const result=[ms>>>16,ms&65535,ls>>>16].join('.');
-  return result==='0.0.0'?null:result;
+  return result==='0.0.0'?null:{version:result};
+}
+async function binaryVersion(path){
+  return /\.aex$/i.test(path)?aexMetadata(await readFile(path))?.version??null:null;
 }
 
 async function sourceVersion(project,path,fallback){
@@ -122,6 +130,7 @@ export async function findLocalProjects(siteRoot,config){
     const directory=resolve(siteRoot,root.path);
     for(const entry of await entries(directory)){
       if(!entry.isDirectory()||entry.isSymbolicLink()||!/^evfx/i.test(entry.name))continue;
+      if(root.projects&&!root.projects.includes(entry.name))continue;
       const project=join(directory,entry.name);
       if(resolve(project)===resolve(siteRoot)||entry.name==='EVFX Collection')continue;
       const children=await entries(join(project,'plugins'));
@@ -187,6 +196,11 @@ export async function discoverLocalPlugins(siteRoot,{catalog,sources,config}){
       }else if(!existing){continue;}
     }
     if(!source)continue;
+    const aex=source.files?.find(file=>/\.aex$/i.test(file));
+    if(aex&&!source.bundleRoot){
+      const metadata=aexMetadata(await readFile(sourcePath(siteRoot,config,source,aex)));
+      if(metadata?.aeVersion){source.build=metadata.build;source.aeVersion=metadata.aeVersion;}
+    }
     // A descriptor can declare an exact, runtime-verified complete package.
     if(descriptor?.readiness?.state==='complete'&&descriptor.readiness.runtimeVerified===true&&/^[a-f0-9]{64}$/i.test(descriptor.readiness.sha256||'')){
       source.review={...descriptor.readiness,evidence:`${project.project}/evfx-release.json`};

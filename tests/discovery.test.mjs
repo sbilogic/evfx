@@ -98,3 +98,19 @@ test('a completed native build replaces a stale ZIP while retaining its package 
     await assert.rejects(recordCompletedBuild(f.root,project,zip),/must be an AEX/);
   }finally{await f.cleanup();}
 });
+
+test('an explicitly selected PixelPicker worktree replaces the legacy folder and ignores other worktrees',async()=>{
+  const f=await fixture();try{
+    const canonical=join(f.root,'..','EVFX-PixelPicker'),worktrees=join(canonical,'.claude','worktrees'),selected='evfx-pixelpicker-redesign',project=join(worktrees,selected);
+    await mkdir(join(canonical,'build-aex','Release'),{recursive:true});await writeFile(join(canonical,'build-aex','Release','PixelPicker.aex'),'legacy');
+    await mkdir(join(project,'build-aex','Release'),{recursive:true});await mkdir(join(worktrees,'evfx-old-experiment'),{recursive:true});
+    const data=Buffer.alloc(22);data.write('MZMIB8REVe');data.writeUInt32LE(4,14);data.writeUInt32LE(1082881,18);
+    await writeFile(join(project,'build-aex','Release','EVFX_PixelPicker.aex'),data);
+    f.config.roots.push({id:'active',path:'../EVFX-PixelPicker/.claude/worktrees',projects:[selected]});
+    f.catalog.tools.push({id:'pixel-picker',name:'PixelPicker',readiness:{state:'unverified'}});
+    f.sources['pixel-picker']={base:'active',project:selected,version:'1.1.0',files:[`${selected}/build-aex/Release/EVFX_PixelPicker.aex`]};
+    const result=await discoverLocalPlugins(f.root,f),source=result.sources['pixel-picker'];
+    assert.equal(result.catalog.tools.length,1);assert.equal(source.version,'2.1.0');assert.equal(source.build,1);assert.equal(source.aeVersion,1082881);
+    assert.equal(source.base,'active');assert.equal(source.files[0],`${selected}/build-aex/Release/EVFX_PixelPicker.aex`);
+  }finally{await f.cleanup();}
+});

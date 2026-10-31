@@ -16,6 +16,8 @@ Native builds report their actual AEX output. If a previously packaged ZIP is ol
 
 `sync.config.json` lists roots relative to this checkout: the EVFX Collection folder and its parent Dev folder. Only immediate EVFX-prefixed projects and the collection's plugin subfolders are inspected. Release/dist packages and native Release AEX/JSX files are supported. Source/reference archives, generated dependency trees and empty projects are excluded. Smart Denoise and Match Grain are explicitly excluded and cannot be rediscovered.
 
+An active worktree can be configured as a root with a `projects` allow-list. PixelPicker follows its selected redesign worktree rather than its legacy main folder. Native AE versions and build numbers come from the compiled PiPL resource; release metadata records the AEX hash separately from the ZIP hash.
+
 Each one-shot sync discovers new plugins and updated builds in both roots. New plugins get their name and description from the project folder and README. Existing curated descriptions stay in place unless project release metadata supplies a replacement. `catalog.json`, `sources.json` and `releases.lock.json` are generated; new plugin/version entries do not require website edits. Folders are inspected only when a connected build or manual sync runs.
 
 The helper streams uploads, verifies SHA-256 digests, validates ZIP integrity, and reuses prior checks for identical files. It never builds a plugin, launches an installer or AE, uploads whole project folders, or changes private repository visibility. It skips publication while site code is being edited. Failed or deferred publications can retry on the next connected build or manual sync; existing downloads remain available.

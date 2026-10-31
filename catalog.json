@@ -68,16 +68,16 @@
       "kind": "Native plugin",
       "art": "picker",
       "description": "Sample up to eight colours and generate gradients.",
-      "detail": "Up to eight colour samplers with masked and radial sampling, expression-friendly readouts, and Live, Held, or Custom colour sources. Generate smooth, mesh, cell, linear, radial, and angular gradients from your palette.",
+      "detail": "Up to eight Live, Frozen or Custom colour samplers, smooth and ordered gradients, and tracked-null sampler layouts.",
       "requirements": "Windows x64 · After Effects · 8 / 16 / 32 bpc",
-      "install": "Close After Effects. Copy PixelPicker.aex to Adobe’s shared MediaCore plug-ins folder, then restart AE. The ZIP includes the exact installation path and a short guide.",
+      "install": "Close After Effects. Copy EVFX_PixelPicker.aex to the shared Adobe MediaCore plug-ins folder, then restart AE. Keep only one copy of this build.",
       "status": "release",
       "readiness": {
         "state": "unverified",
-        "releaseTag": "pixel-picker-v1.1.0-fbc4b929df",
-        "reviewedAt": "2026-10-31",
-        "evidence": "EVFX-PixelPicker/docs/QA-RESULTS.md: 2026-10-30 version repair and unobserved host loading.",
-        "note": "AE loading and runtime behaviour remain unverified after the version repair."
+        "releaseTag": null,
+        "reviewedAt": "2026-11-01",
+        "evidence": "Active PixelPicker worktree: docs/HANDOFF.md and docs/QA-RESULTS.md; exact installed AEX hash verified.",
+        "note": "Interactive sampler handles, overlay responsiveness and Follow Null refresh still need verification."
       }
     },
     {

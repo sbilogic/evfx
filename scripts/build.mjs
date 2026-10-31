@@ -14,7 +14,7 @@ const bytes = n => n >= 1e6 ? `${(n/1e6).toFixed(1)} MB` : `${Math.max(1,Math.ro
 
 function toolRow(tool,index,release,variant,hasComplete) {
   const asset = release?.downloads.find(d=>d.primary) ?? release?.downloads[0];
-  const version = release?.version ? `v${release.version}` : tool.status==='lab' ? 'In development' : 'Snapshot';
+  const version = release?.version ? `v${release.version}${release.build!==undefined?` (build ${release.build})`:''}` : tool.status==='lab' ? 'In development' : 'Snapshot';
   const readiness=getReadiness(tool,release);
   const hasWarning=readiness.state!=='reviewed';
   const rowId=variant==='development'&&hasComplete?`${tool.id}-development`:tool.id;
@@ -31,7 +31,7 @@ function toolRow(tool,index,release,variant,hasComplete) {
     <p class="tool-description">${escape(tool.description)}</p>
     <div class="tool-action">${action}</div>
     ${warning}
-    ${asset?`<details class="tool-notes"><summary>Install & requirements<span class="sr-only"> — EVFX ${escape(tool.name)}</span></summary><div class="notes-content"><p class="requirements">${escape(tool.requirements)}</p><p>${escape(tool.install)}</p><a class="release-link" href="${escape(release.releaseUrl)}">Release notes${release.downloads.length>1?' & portable ZIP':''} ↗</a><div class="checksum">SHA-256 <code>${escape(asset.sha256)}</code></div></div></details>`:''}
+    ${asset?`<details class="tool-notes"><summary>Install & requirements<span class="sr-only"> — EVFX ${escape(tool.name)}</span></summary><div class="notes-content"><p class="requirements">${escape(tool.requirements)}</p><p>${escape(tool.install)}</p><a class="release-link" href="${escape(release.releaseUrl)}">Release notes${release.downloads.length>1?' & portable ZIP':''} ↗</a><div class="checksum">${release.binary?'ZIP ':''}SHA-256 <code>${escape(asset.sha256)}</code></div>${release.binary?`<div class="checksum">${escape(release.binary.name)} SHA-256 <code>${escape(release.binary.sha256)}</code></div>`:''}</div></details>`:''}
   </article>`;
 }
 

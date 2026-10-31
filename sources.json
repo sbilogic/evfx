@@ -24,20 +24,24 @@
     ]
   },
   "pixel-picker": {
-    "base": "collection",
-    "project": "EVFX-PixelPicker",
-    "version": "1.1.0",
+    "base": "pixel-picker-active",
+    "project": "evfx-pixelpicker-redesign-593091",
+    "version": "2.1.0",
     "files": [
-      "EVFX-PixelPicker/build-aex-version-fix/Release/PixelPicker.aex"
-    ]
+      "evfx-pixelpicker-redesign-593091/build-aex/Release/EVFX_PixelPicker.aex"
+    ],
+    "build": 1,
+    "aeVersion": 1082881
   },
   "auto-levels": {
     "base": "collection",
     "project": "EVFX Auto Levels",
-    "version": "2.0.0",
+    "version": "2.0.0-dev1",
     "files": [
       "EVFX Auto Levels/plugin/build/Release/EVFX_AutoLevels.aex"
-    ]
+    ],
+    "build": 1,
+    "aeVersion": 1048577
   },
   "multilayer-exr": {
     "base": "collection",
@@ -112,10 +116,12 @@
   "shot-qc": {
     "base": "collection",
     "project": "EVFX-AE-Collection/plugins/EVFXShotQC",
-    "version": "0.2.0",
+    "version": "0.4.0-dev1",
     "files": [
       "EVFX-AE-Collection/plugins/EVFXShotQC/build/dist/EVFXShotQC.aex"
-    ]
+    ],
+    "build": 1,
+    "aeVersion": 131073
   },
   "choke-it": {
     "base": "dev",

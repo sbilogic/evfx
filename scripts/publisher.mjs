@@ -80,7 +80,10 @@ async function publish({automatic=false,prepareOnly=false,only=null,expectedFing
       tool.status='release';
       tool.readiness={state:'reviewed',releaseTag:tag,reviewedAt:new Date().toISOString().slice(0,10),evidence:source.review.evidence};
     }
-    prepared.push({tool,version,assets,tag,validatedSource});
+    const native=source.files?.find(file=>/\.aex$/i.test(file));
+    const identity={...(source.build!==undefined?{build:source.build}:{}),...(source.aeVersion?{aeVersion:source.aeVersion}:{})};
+    if(native&&!source.bundleRoot)identity.binary={name:basename(native),sha256:await hashFile(sourcePath(root,config,source,native))};
+    prepared.push({tool,version,assets,tag,validatedSource,identity});
     console.log(`Prepared ${tool.id} ${version||'snapshot'}`);
   }
   // Reject a build that changed while its payload was being prepared.
@@ -101,15 +104,15 @@ async function publish({automatic=false,prepareOnly=false,only=null,expectedFing
   const remote=run(git,['remote','get-url','origin']);
   if(!remote.toLowerCase().endsWith(`github.com/${catalog.repository.toLowerCase()}.git`))throw new Error('Unexpected site Git remote.');
   let releaseChanged=false;
-  for(const {tool,version,assets,tag,validatedSource} of prepared){
+  for(const {tool,version,assets,tag,validatedSource,identity} of prepared){
     const previous=locks[tool.id];
     const complete=previous?.complete||(previous&&getReadiness(tool,previous).state==='reviewed'?previous:null);
     let release=await github(`/repos/${catalog.repository}/releases/tags/${tag}`,{allow404:true});
     const ready=getReadiness(tool,{tag,version,prerelease:false}).state==='reviewed'&&!version?.includes('-')&&(!release?.prerelease||validatedSource);
-    const metadata={id:tool.id,version,files:assets.map(({path,...asset})=>asset),...(ready?{readiness:{state:'complete',runtimeVerified:true,sha256:assets[0].sha256,evidence:tool.readiness.evidence}}:{})};
-    const notes=warningMarkdown(tool,{tag,version,prerelease:!ready})+`${tool.detail}\n\n### Requirements\n${tool.requirements}\n\n### Installation\n${tool.install}\n\n### SHA-256\n${assets.map(a=>`- \`${a.name}\`: \`${a.sha256}\``).join('\n')}\n\n<!-- evfx-release\n${JSON.stringify(metadata)}\n-->`;
+    const metadata={id:tool.id,version,...identity,files:assets.map(({path,...asset})=>asset),...(ready?{readiness:{state:'complete',runtimeVerified:true,sha256:assets[0].sha256,evidence:tool.readiness.evidence}}:{})};
+    const notes=warningMarkdown(tool,{tag,version,prerelease:!ready})+`${tool.detail}\n\n${identity.build!==undefined?`Version ${version} (build ${identity.build}).${identity.aeVersion?` After Effects version: ${identity.aeVersion}.`:''}\n\n`:''}### Requirements\n${tool.requirements}\n\n### Installation\n${tool.install}\n\n### SHA-256\n${assets.map(a=>`- \`${a.name}\`: \`${a.sha256}\``).join('\n')}${identity.binary?`\n- AEX \`${identity.binary.name}\`: \`${identity.binary.sha256}\``:''}\n\n<!-- evfx-release\n${JSON.stringify(metadata)}\n-->`;
     if(!release){
-      release=await github(`/repos/${catalog.repository}/releases`,{method:'POST',body:{tag_name:tag,target_commitish:'main',name:`EVFX ${tool.name} — ${version||'snapshot'}`,body:notes,draft:true,prerelease:!ready,make_latest:'false'}});releaseChanged=true;
+      release=await github(`/repos/${catalog.repository}/releases`,{method:'POST',body:{tag_name:tag,target_commitish:'main',name:`EVFX ${tool.name} — ${version||'snapshot'}${identity.build!==undefined?` (build ${identity.build})`:''}`,body:notes,draft:true,prerelease:!ready,make_latest:'false'}});releaseChanged=true;
     }else if(release.body!==notes||release.prerelease!==!ready){
       release=await github(`/repos/${catalog.repository}/releases/${release.id}`,{method:'PATCH',body:{body:notes,prerelease:!ready,make_latest:'false'}});releaseChanged=true;
     }

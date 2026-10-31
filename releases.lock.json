@@ -104,17 +104,23 @@
     ]
   },
   "pixel-picker": {
-    "version": "1.1.0",
-    "publishedAt": "2026-10-31T00:41:44Z",
-    "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/pixel-picker-v1.1.0-fbc4b929df",
-    "tag": "pixel-picker-v1.1.0-fbc4b929df",
+    "version": "2.1.0",
+    "build": 1,
+    "aeVersion": 1082881,
+    "binary": {
+      "name": "EVFX_PixelPicker.aex",
+      "sha256": "1b3a042a81976fdc0695f7f5c40e67093096a0c43283b7310faf6bae93eea735"
+    },
+    "publishedAt": "2026-10-31T21:31:25Z",
+    "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/pixel-picker-v2.1.0-5d35400dbd",
+    "tag": "pixel-picker-v2.1.0-5d35400dbd",
     "prerelease": true,
     "downloads": [
       {
-        "name": "EVFX-pixel-picker-1.1.0.zip",
-        "url": "https://github.com/sbilogic/evfx/releases/download/pixel-picker-v1.1.0-fbc4b929df/EVFX-pixel-picker-1.1.0.zip",
-        "bytes": 52669,
-        "sha256": "f7e52747d0db3816974564bd12e58b60e19ccfb7ff18d885c46f061cfc1e9f6d",
+        "name": "EVFX-pixel-picker-2.1.0.zip",
+        "url": "https://github.com/sbilogic/evfx/releases/download/pixel-picker-v2.1.0-5d35400dbd/EVFX-pixel-picker-2.1.0.zip",
+        "bytes": 49383,
+        "sha256": "6c1bff73482a41d5ece3fbaf951eb21b8e2af4a75b96916ec27bea5e0c060787",
         "primary": true
       }
     ]
