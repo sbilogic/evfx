@@ -35,7 +35,7 @@ To publish a subset, use `--only=smart-grain,blurry`. Public copy, requirements,
 
 GitHub Actions rebuilds and deploys on pushes and release changes. A daily reconciliation also refreshes release metadata, so the live page does not rely on an open local computer. The workflow uses GitHub’s built-in token and public-repository runners. It only publishes the small `dist/` folder.
 
-Release downloads are resolved at build time. `refresh.mjs` reads each release’s `evfx-release` manifest, verifies asset presence, byte size, and available SHA-256 digests, then selects the newest published release per tool. Unmarked releases are ignored. Prereleases are accepted only for explicitly preview or legacy tools. To update a tool from GitHub directly, publish a release with a matching manifest; the local publisher writes these automatically. No personal access token is needed in repository secrets.
+Release downloads are resolved at build time. `refresh.mjs` reads each release’s `evfx-release` manifest, verifies asset presence, byte size, and available SHA-256 digests, then selects the highest semantic version per tool, using publication time for revised builds and unversioned snapshots. Unmarked releases are ignored. Prereleases are accepted only for explicitly preview or legacy tools. To update a tool from GitHub directly, publish a release with a matching manifest; the local publisher writes these automatically. No personal access token is needed in repository secrets.
 
 ## Preview and check
 
