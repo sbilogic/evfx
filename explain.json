@@ -1,0 +1,72 @@
+{
+  "smart-grain": {
+    "steps": [
+      ["Residual", "Subtracts the denoised plate from the original, per pixel and per RGB channel. The signed difference is the captured grain."],
+      ["Detect edits", "Compares your finished comp with the denoised plate in RGB and alpha. Pixels that differ are marked changed. Edges expand and feather by a width taken from the measured grain size. A Change Matte can replace detection."],
+      ["Match", "Match Grain measures the residual on the parked frame and up to four nearby frames (±6, ±12). Edges, cuts and held frames are skipped. It records the grain's RGB frequency spectrum and cross-channel relationship, in up to three tone bands."],
+      ["Synthesize", "Generates new grain with that spectrum, scaled to image brightness. Next to an edit, it is conditioned on the surrounding real grain so the seam stays continuous. Supported NVIDIA GPUs run synthesis in CUDA; otherwise it runs on the CPU."],
+      ["Merge", "Unchanged pixels get the original residual back exactly. Changed pixels get generated grain. Alpha comes from the comp."]
+    ],
+    "limits": [
+      "The residual also holds any detail the denoiser removed.",
+      "Matching samples a nearby-frame window. Match each shot separately.",
+      "A grade applied before Smart Grain marks every pixel as changed. Grade after it.",
+      "Detection is per frame, without motion compensation."
+    ]
+  },
+  "blurry": {
+    "steps": [
+      ["Blur size", "Without a depth map, every pixel uses Blur Diameter. With one, a thin-lens model turns depth, focal length, f-stop and focus distance into a blur diameter per pixel."],
+      ["Gather", "At half resolution, each pixel averages samples spread across the aperture shape at its blur size. Blades, anamorphic stretch and cat-eye change that shape."],
+      ["Highlights", "Bright points are found separately and drawn at full resolution as discs in the aperture shape, so bokeh stays crisp."],
+      ["Upsample", "The half-resolution result returns to full size through a depth- and blur-aware filter that keeps foreground edges clean. Highlight discs are added on top."],
+      ["Lens surface", "A Custom Bokeh layer replaces the aperture silhouette. A Dirt layer modulates light transmission across the lens."]
+    ],
+    "limits": [
+      "CPU only.",
+      "One depth image cannot reveal hidden background, so foreground occlusion is approximate.",
+      "Light averages in AE's working space. Use a linear working space for physically correct bokeh.",
+      "3D, perspective or collapsed layers need precomposing."
+    ]
+  },
+  "project-cleaner": {
+    "steps": [
+      ["Scan", "Groups footage items that share the same disk path, file size, dimensions, pixel aspect, duration, frame rate, interpretation and proxy."],
+      ["Back up", "Saves the project, copies it to a timestamped .aep beside the original and verifies the copy before continuing."],
+      ["Consolidate", "Runs After Effects' own Consolidate All Footage. AE repoints every layer, in every comp, to one surviving item."],
+      ["Verify", "Compares the removed items and layer sources with the scan. Any unexpected change is undone automatically."]
+    ],
+    "limits": [
+      "Copies of a file in different folders stay separate.",
+      "AE may keep candidates apart when their colour interpretation differs.",
+      "Expressions that reference Project-panel item indexes can change meaning.",
+      "Team Projects must be saved as local copies first."
+    ]
+  },
+  "sequencer": {
+    "steps": [
+      ["Find the sequence", "Opening one frame loads every file in its folder that shares the same name pattern. Missing frame numbers are reported."],
+      ["Cache", "Background threads decode frames ahead of the playhead, in the play direction, into a RAM budget sized from free memory. EXR stays float32. Only the selected EXR layer is unpacked."],
+      ["Display", "Frames are uploaded to the GPU. Exposure, OCIO view or LUT, gamma and saturation run as shaders, so changing the view never re-decodes."],
+      ["Notes", "Pins, boxes and strokes save to a .notes JSON file beside the media, with the source file's SHA-256. Notes from a different render under the same name are rejected."]
+    ],
+    "limits": [
+      "SDR display output only.",
+      "Deep EXR and Cryptomatte picking are not supported.",
+      "Movies decode through the bundled FFmpeg."
+    ]
+  },
+  "menu": {
+    "steps": [
+      ["Probe", "ffprobe reads codec, bit depth, frame rate and colour tags. Unsupported layouts stop before processing."],
+      ["Process", "FFmpeg works in the plate's own YUV samples, with no RGB conversion. Downres halves the size with Lanczos. Denoise is a frequency-domain Wiener filter (FFTDNoiz) across the previous, current and next frame."],
+      ["Encode", "12-bit ProRes 4444 and XQ go through a bundled CPU encoder. Other codecs are re-encoded by FFmpeg with the source codec and profile."],
+      ["Check", "Audio, timecode, reel name and metadata are copied untouched. Size, format and timing are verified; a mismatch deletes the output. The source is never overwritten."]
+    ],
+    "limits": [
+      "No motion compensation. Strong can soften fine detail in motion.",
+      "Movies only; no image sequences.",
+      "ProRes with alpha and interlaced plates are rejected."
+    ]
+  }
+}

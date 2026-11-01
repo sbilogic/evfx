@@ -11,7 +11,7 @@ createServer(async(req,res)=>{
     // Serve at the same /evfx/ base path as GitHub Pages, as well as /.
     if(path==='/evfx') {res.writeHead(302,{Location:'/evfx/'});res.end();return;}
     if(path.startsWith('/evfx/'))path=path.slice(5);
-    if(path==='/')path='/index.html';
+    if(path.endsWith('/'))path+='index.html';
     const file=resolve(root,`.${path}`);
     if(!file.startsWith(root+sep)){res.writeHead(403);res.end();return;}
     const body=await readFile(file);

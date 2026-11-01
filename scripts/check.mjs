@@ -43,7 +43,13 @@ for(const tool of catalog.tools){
 }
 for(const id of Object.keys(releases))assert(ids.has(id),`Unknown tool in release lock: ${id}`);
 for(const id of Object.keys(sources))assert(ids.has(id),`Unknown distribution source: ${id}`);
-for(const file of ['index.html','style.css','app.js','favicon.svg'])assert((await readFile(join(root,'src',file))).length>0);
+const explain=await load('explain.json');
+for(const [id,page] of Object.entries(explain)){
+  assert(ids.has(id),`Unknown tool in explain.json: ${id}`);
+  assert(page.steps?.length&&page.steps.every(s=>s.length===2&&s[0]&&s[1]),`${id} needs titled steps`);
+  assert(Array.isArray(page.limits),`${id} needs a limits list`);
+}
+for(const file of ['index.html','tool.html','style.css','app.js','favicon.svg'])assert((await readFile(join(root,'src',file))).length>0);
 const src=await readFile(join(root,'src/index.html'),'utf8');
 assert(!/https?:\/\/[^" ]+\.(?:js|css|woff2?)/.test(src),'Site must not depend on external runtime assets');
 assert(src.includes('name="viewport"'));

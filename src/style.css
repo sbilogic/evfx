@@ -22,7 +22,7 @@
 /* plates */
 .grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:56px 28px}
 .tool{display:flex;flex-direction:column;min-width:0}
-.art{position:relative;aspect-ratio:4/3;background:var(--field);overflow:hidden;margin-bottom:16px}
+.art{display:block;position:relative;aspect-ratio:4/3;background:var(--field);overflow:hidden;margin-bottom:16px}
 .art svg{position:absolute;inset:12% 0;width:100%;height:76%;transition:transform .9s cubic-bezier(.2,.7,.2,1)}
 .tool:hover .art svg{transform:scale(1.08) rotate(-4deg)}
 .no{position:absolute;left:12px;top:10px;font:10px var(--mono);color:var(--muted)}
@@ -52,6 +52,32 @@
 .foot{display:flex;justify-content:space-between;gap:16px;margin-top:96px;padding:18px 0 28px;border-top:1px solid var(--ink);font:10px var(--mono);color:var(--muted)}
 .foot a:hover{color:var(--orange)}
 
+.tool h2 a:hover{color:var(--orange)}
+.how{width:fit-content;font-size:12px;margin:-4px 0 14px;border-bottom:1px solid var(--line);padding-bottom:1px}
+.how:hover{color:var(--orange);border-color:var(--orange)}
+
+/* detail pages */
+.bar{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:22px 0;border-bottom:1px solid var(--ink);font-size:12px}
+.bar nav{display:flex;gap:24px}
+.back{font-size:22px;font-weight:800;letter-spacing:-.06em}
+.bar a:hover{color:var(--orange)}
+.detail{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:40px 56px;padding-top:48px;align-items:end}
+.detail-art{position:relative;aspect-ratio:1;background:var(--field);overflow:hidden}
+.detail-art svg{position:absolute;inset:14%;width:72%;height:72%}
+.detail h1{font-size:clamp(56px,8.5vw,136px);line-height:.88;font-weight:400;letter-spacing:-.065em;margin:0 0 18px}
+.detail-head .desc{font-size:17px;max-width:30ch;margin-bottom:28px}
+.detail-head .line{margin-top:0}
+.flow,.limits{grid-column:1/-1}
+.flow h2,.limits h2{font:11px var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:400;margin:40px 0 20px}
+.flow ol{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:36px 28px;counter-reset:step}
+.flow li{counter-increment:step;position:relative;border-top:1px solid var(--ink);padding-top:14px}
+.flow li:before{content:counter(step);display:block;font:italic 72px/1 var(--serif);color:var(--orange);letter-spacing:-.04em;margin-bottom:10px}
+.flow li:after{content:'';position:absolute;left:0;top:-4px;width:7px;height:7px;border-radius:50%;background:var(--ink)}
+.flow h3{font-size:19px;font-weight:400;letter-spacing:-.03em;margin:0 0 8px}
+.flow p{font-size:13px;line-height:1.55;color:#45483d;margin:0;max-width:40ch}
+.limits ul{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
+.limits li{font:12px/1.5 var(--mono);color:var(--muted);padding:10px 0;border-bottom:1px solid var(--line)}
+
 @media(max-width:1000px){.wrap{width:calc(100% - 56px)}.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:48px 22px}.hero-art{width:52vw}}
-@media(max-width:620px){.wrap{width:calc(100% - 32px)}.top{grid-template-columns:1fr;padding-top:16px}.top nav{grid-column:1;grid-row:1;justify-content:flex-end;font-size:11px;gap:18px;margin-bottom:28px}.mark{grid-row:2;font-size:34vw}.hosts{display:none}.hero-art{width:78vw;top:24px;right:-14%}.grid{grid-template-columns:1fr;gap:44px}.tool h2{font-size:26px}.views{gap:22px}.views button{font-size:14px}}
+@media(max-width:620px){.wrap{width:calc(100% - 32px)}.detail{grid-template-columns:1fr;gap:28px;padding-top:28px}.detail-art{aspect-ratio:4/3}.bar nav{gap:14px;font-size:11px}.flow li:before{font-size:56px}.top{grid-template-columns:1fr;padding-top:16px}.top nav{grid-column:1;grid-row:1;justify-content:flex-end;font-size:11px;gap:18px;margin-bottom:28px}.mark{grid-row:2;font-size:34vw}.hosts{display:none}.hero-art{width:78vw;top:24px;right:-14%}.grid{grid-template-columns:1fr;gap:44px}.tool h2{font-size:26px}.views{gap:22px}.views button{font-size:14px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{transition:none!important;animation:none!important}}

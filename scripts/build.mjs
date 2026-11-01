@@ -1,4 +1,4 @@
-import { readFile, writeFile, mkdir, copyFile, readdir } from 'node:fs/promises';
+import { readFile, writeFile, mkdir, copyFile, readdir, rm } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import { join, dirname } from 'node:path';
 import { gzipSync } from 'node:zlib';
@@ -8,62 +8,82 @@ import { renderSupport } from './support.mjs';
 
 export const root = dirname(dirname(fileURLToPath(import.meta.url)));
 export const escape = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const [catalog, releases, supportConfig] = await Promise.all(['catalog.json','releases.lock.json','support.json'].map(async f=>JSON.parse(await readFile(join(root,f),'utf8'))));
+const [catalog, releases, supportConfig, explain] = await Promise.all(['catalog.json','releases.lock.json','support.json','explain.json'].map(async f=>JSON.parse(await readFile(join(root,f),'utf8'))));
 const support=renderSupport(supportConfig);
 const bytes = n => n >= 1e6 ? `${(n/1e6).toFixed(1)} MB` : `${Math.max(1,Math.round(n/1000))} KB`;
+const site = 'https://sbilogic.github.io/evfx/';
 
-function toolRow(tool,release,variant,hasComplete) {
+// Meta, download and install notes, shared by the grid and the detail pages.
+function download(tool,release,warningId) {
   const asset = release?.downloads.find(d=>d.primary) ?? release?.downloads[0];
   const version = release?.version ? `v${release.version}${release.build!==undefined?` b${release.build}`:''}` : '';
+  const meta=[tool.host,version,asset&&`${asset.name.endsWith('.exe')?'Setup':'ZIP'} ${bytes(asset.bytes)}`].filter(Boolean).map(escape).join(' · ');
+  const action = asset
+    ? `<a class="download" href="${escape(asset.url)}" aria-label="Download EVFX ${escape(tool.name)} ${escape(version)}"${warningId?` aria-describedby="${warningId}"`:''}>Download<span aria-hidden="true"> ↓</span></a>`
+    : `<span class="no-download">No download</span>`;
+  const notes = asset?`<details class="notes"><summary>Install<span class="sr-only"> EVFX ${escape(tool.name)}</span></summary><p class="req">${escape(tool.requirements)}</p><p>${escape(tool.install)}</p><p><a href="${escape(release.releaseUrl)}">Release${release.downloads.length>1?' & portable ZIP':''} ↗</a></p><p class="sha">${release.binary?'ZIP ':''}SHA-256 <code>${escape(asset.sha256)}</code>${release.binary?`<br>${escape(release.binary.name)} <code>${escape(release.binary.sha256)}</code>`:''}</p></details>`:'';
+  return `<div class="line"><span class="meta">${meta}</span>${action}</div>${notes}`;
+}
+
+function toolRow(tool,release,variant,hasComplete) {
   const readiness=getReadiness(tool,release);
   const hasWarning=readiness.state!=='reviewed';
   const rowId=variant==='development'&&hasComplete?`${tool.id}-development`:tool.id;
   const warningId=`${rowId}-warning`;
-  const meta=[tool.host,version,asset&&`${asset.name.endsWith('.exe')?'Setup':'ZIP'} ${bytes(asset.bytes)}`].filter(Boolean).map(escape).join(' · ');
-  const action = asset
-    ? `<a class="download" href="${escape(asset.url)}" aria-label="Download EVFX ${escape(tool.name)} ${escape(version)}"${hasWarning?` aria-describedby="${warningId}"`:''}>Download<span aria-hidden="true"> ↓</span></a>`
-    : `<span class="no-download">No download</span>`;
-  const notes = asset?`<details class="notes"><summary>Install<span class="sr-only"> EVFX ${escape(tool.name)}</span></summary><p class="req">${escape(tool.requirements)}</p><p>${escape(tool.install)}</p><p><a href="${escape(release.releaseUrl)}">Release${release.downloads.length>1?' & portable ZIP':''} ↗</a></p><p class="sha">${release.binary?'ZIP ':''}SHA-256 <code>${escape(asset.sha256)}</code>${release.binary?`<br>${escape(release.binary.name)} <code>${escape(release.binary.sha256)}</code>`:''}</p></details>`:'';
+  const page=variant==='complete'&&explain[tool.id]?`./${tool.id}/`:null;
+  const art=`${toolArt(tool.art)}<span class="no" aria-hidden="true"></span>${hasWarning?`<span class="flag">⚠ ${escape(readiness.badge)}</span>`:''}`;
   return `<article id="${rowId}" class="tool${hasWarning?' is-dev':''}" data-product="${tool.id}" data-variant="${variant}"${variant==='development'?' hidden':''}>
-    <div class="art">${toolArt(tool.art)}<span class="no" aria-hidden="true"></span>${hasWarning?`<span class="flag">⚠ ${escape(readiness.badge)}</span>`:''}</div>
-    <h2>${escape(tool.name)}</h2>
+    ${page?`<a class="art" href="${page}" tabindex="-1" aria-hidden="true">${art}</a>`:`<div class="art">${art}</div>`}
+    <h2>${page?`<a href="${page}">${escape(tool.name)}</a>`:escape(tool.name)}</h2>
     <p class="desc">${escape(tool.description)}</p>
+    ${page?`<a class="how" href="${page}">How it works <span aria-hidden="true">→</span></a>`:''}
     ${hasWarning?`<p id="${warningId}" class="warn"><span class="sr-only">${escape(readiness.title)}: </span>${escape(readiness.note)}</p>`:''}
-    <div class="line"><span class="meta">${meta}</span>${action}</div>
-    ${notes}
+    ${download(tool,release,hasWarning&&warningId)}
   </article>`;
 }
 
+function detailPage(template,tool,release) {
+  const {steps,limits}=explain[tool.id];
+  const body=`<article class="detail">
+    <div class="detail-art" aria-hidden="true">${toolArt(tool.art)}</div>
+    <div class="detail-head"><h1>${escape(tool.name)}</h1><p class="desc">${escape(tool.description)}</p>${download(tool,release)}</div>
+    <section class="flow" aria-labelledby="flow-title"><h2 id="flow-title">How it works</h2><ol>${steps.map(([title,text])=>`<li><h3>${escape(title)}</h3><p>${escape(text)}</p></li>`).join('')}</ol></section>
+    <section class="limits" aria-labelledby="limits-title"><h2 id="limits-title">Limits</h2><ul>${limits.map(l=>`<li>${escape(l)}</li>`).join('')}</ul></section>
+  </article>`;
+  return template.replaceAll('{{NAME}}',escape(tool.name)).replaceAll('{{DESCRIPTION}}',escape(tool.description))
+    .replaceAll('{{URL}}',`${site}${tool.id}/`).replace('{{BODY}}',body);
+}
+
 let html = await readFile(join(root,'src/index.html'),'utf8');
-const rows=[];
+const pageTemplate = await readFile(join(root,'src/tool.html'),'utf8');
+const rows=[], pages=[];
 let completeCount=0,devCount=0;
-const completeCategories=new Set();
-for(const [index,tool] of catalog.tools.entries()){
+for(const tool of catalog.tools){
   const latest=releases[tool.id];
   const complete=latest?.complete||(latest&&getReadiness(tool,latest).state==='reviewed'?latest:null);
-  if(complete){rows.push(toolRow(tool,complete,'complete',true));completeCount++;completeCategories.add(tool.category);}
+  if(complete){rows.push(toolRow(tool,complete,'complete',true));completeCount++;if(explain[tool.id])pages.push([tool,complete]);}
   if(!complete||latest.tag!==complete.tag){rows.push(toolRow(tool,latest,'development',!!complete));devCount++;}
 }
-const categoryLabels=new Map(catalog.tools.map(t=>[t.category,t.host]));
+const year=new Date().getFullYear();
 const replacements = {
   TITLE:escape(catalog.title), COUNT:completeCount, DEV_COUNT:devCount,
-  DOWNLOAD_COUNT:catalog.tools.filter(t=>t.status!=='lab').length,
-  WARNING_COUNT:catalog.tools.filter(t=>getReadiness(t,releases[t.id]).state!=='reviewed').length,
-  YEAR: new Date().getFullYear(), HERO_ART:heroArt(),
-  TOOLS:rows.join('\n'),
-  APP_FILTERS:[...categoryLabels].map(([id,label])=>`<button type="button" data-filter="${escape(id)}" aria-pressed="false"${completeCategories.has(id)?'':' hidden'}>${escape(label)}</button>`).join(''),
-  SUPPORT_NAV:support.nav, SUPPORT_SECTION:support.section
+  YEAR:year, HERO_ART:heroArt(), TOOLS:rows.join('\n'), SUPPORT_NAV:support.nav
 };
-for(const [key,value] of Object.entries(replacements)) html=html.replaceAll(`{{${key}}}`,String(value));
-html=html.replace(/>\s+</g,'><').trim();
+const fill=text=>{for(const [key,value] of Object.entries(replacements)) text=text.replaceAll(`{{${key}}}`,String(value));return text.replace(/>\s+</g,'><').trim();};
+await rm(join(root,'dist'),{recursive:true,force:true});
 await mkdir(join(root,'dist'),{recursive:true});
-await writeFile(join(root,'dist/index.html'),html);
+await writeFile(join(root,'dist/index.html'),fill(html));
+for(const [tool,release] of pages){
+  await mkdir(join(root,'dist',tool.id),{recursive:true});
+  await writeFile(join(root,'dist',tool.id,'index.html'),fill(detailPage(pageTemplate,tool,release)));
+}
 for(const file of ['style.css','app.js','favicon.svg']) await copyFile(join(root,'src',file),join(root,'dist',file));
 await writeFile(join(root,'dist/.nojekyll'),'');
-await writeFile(join(root,'dist/robots.txt'),'User-agent: *\nAllow: /\nSitemap: https://sbilogic.github.io/evfx/sitemap.xml\n');
-await writeFile(join(root,'dist/sitemap.xml'),'<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>https://sbilogic.github.io/evfx/</loc></url></urlset>');
+await writeFile(join(root,'dist/robots.txt'),`User-agent: *\nAllow: /\nSitemap: ${site}sitemap.xml\n`);
+await writeFile(join(root,'dist/sitemap.xml'),`<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${['',...pages.map(([t])=>`${t.id}/`)].map(p=>`<url><loc>${site}${p}</loc></url>`).join('')}</urlset>`);
 let raw=0,gzip=0;
-for(const file of await readdir(join(root,'dist'))) {
-  const data=await readFile(join(root,'dist',file)); raw+=data.length; gzip+=gzipSync(data).length;
+for(const file of await readdir(join(root,'dist'),{recursive:true,withFileTypes:true})) {
+  if(!file.isFile())continue;
+  const data=await readFile(join(file.parentPath,file.name)); raw+=data.length; gzip+=gzipSync(data).length;
 }
-console.log(`Built ${catalog.tools.length} tools · ${(raw/1000).toFixed(1)} KB raw / ${(gzip/1000).toFixed(1)} KB gzip · zero dependencies`);
+console.log(`Built ${catalog.tools.length} tools, ${pages.length} detail pages · ${(raw/1000).toFixed(1)} KB raw / ${(gzip/1000).toFixed(1)} KB gzip · zero dependencies`);
