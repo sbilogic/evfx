@@ -44,17 +44,23 @@
     }
   },
   "blurry": {
-    "version": "2.6.4",
-    "publishedAt": "2026-11-01T05:00:20Z",
-    "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/blurry-v2.6.4-450ce51ab0",
-    "tag": "blurry-v2.6.4-450ce51ab0",
+    "version": "2.6.5",
+    "build": 1,
+    "aeVersion": 1256961,
+    "binary": {
+      "name": "EVFXBlurry.aex",
+      "sha256": "3ac8acbd1df00795938eab26c18279f610677e51fe36184c490716f30c739266"
+    },
+    "publishedAt": "2026-11-01T05:17:37Z",
+    "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/blurry-v2.6.5-3a6c61689c",
+    "tag": "blurry-v2.6.5-3a6c61689c",
     "prerelease": true,
     "downloads": [
       {
-        "name": "EVFXBlurry-2.6.4-Windows.zip",
-        "url": "https://github.com/sbilogic/evfx/releases/download/blurry-v2.6.4-450ce51ab0/EVFXBlurry-2.6.4-Windows.zip",
-        "bytes": 333666,
-        "sha256": "eb0f76263819ca5962fa30eda0567640e2d2c712bc7d7cdb7809fb79702d7dfa",
+        "name": "EVFX-blurry-2.6.5.zip",
+        "url": "https://github.com/sbilogic/evfx/releases/download/blurry-v2.6.5-3a6c61689c/EVFX-blurry-2.6.5.zip",
+        "bytes": 325224,
+        "sha256": "7a8890689a535e9bb51d6f56b2c0e2ebae66836b9fbc7b1cd924fdefedb9780e",
         "primary": true
       }
     ],
