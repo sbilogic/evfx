@@ -338,6 +338,27 @@
         "evidence": "EVFX Flares: automatically discovered distribution",
         "note": "Development build. Features and runtime stability may be incomplete."
       }
+    },
+    {
+      "id": "utility-collection",
+      "name": "Utility Collection",
+      "host": "After Effects",
+      "category": "ae",
+      "kind": "Plugin",
+      "art": "screen",
+      "description": "Small, quick After Effects utilities in one ScriptUI panel",
+      "detail": "Small, quick After Effects utilities in one ScriptUI panel",
+      "requirements": "Windows x64 · After Effects",
+      "install": "Extract the ZIP and follow the included installation instructions.",
+      "status": "preview",
+      "autoDiscovered": true,
+      "readiness": {
+        "state": "unverified",
+        "releaseTag": null,
+        "reviewedAt": "2026-11-01",
+        "evidence": "EVFX Utility Collection: automatically discovered distribution",
+        "note": "Newly discovered build; runtime readiness has not been verified."
+      }
     }
   ]
 }

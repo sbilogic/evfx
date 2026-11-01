@@ -10,10 +10,13 @@
   "blurry": {
     "base": "collection",
     "project": "EVFX Blurry",
-    "version": "2.2.1",
-    "artifacts": [
-      "EVFX Blurry/release/EVFXBlurry-2.2.1-Windows.zip"
-    ]
+    "version": "2.3.0",
+    "files": [
+      "EVFX Blurry/build-v2/dist/EVFXBlurry.aex"
+    ],
+    "templateArtifact": "EVFX Blurry/release/EVFXBlurry-2.2.1-Windows.zip",
+    "build": 1,
+    "aeVersion": 1148417
   },
   "crop-ae": {
     "base": "collection",
@@ -137,6 +140,14 @@
     "version": "0.4.0-dev17",
     "artifacts": [
       "EVFX Flares/dist/EVFX-Flares-0.4.0-dev17-Windows-x64.zip"
+    ]
+  },
+  "utility-collection": {
+    "base": "collection",
+    "project": "EVFX Utility Collection",
+    "version": "1.0.0",
+    "files": [
+      "EVFX Utility Collection/EVFX Utility Collection.jsx"
     ]
   }
 }
