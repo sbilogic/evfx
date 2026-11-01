@@ -26,7 +26,7 @@ GitHub Actions deploys repository pushes and release changes, with no scheduled 
 
 ## Complete and development builds
 
-The site defaults to complete, reviewed builds. **Show development** includes the newest incomplete, experimental and unverified builds with visible warnings. If a newer build is unverified, the last reviewed download stays in the default view.
+The site defaults to complete, reviewed builds. The **Development** view lists the newest incomplete, experimental and unverified builds, each with a visible warning. If a newer build is unverified, the last reviewed download stays in the default view.
 
 A version number or ZIP filename does not establish completeness. Existing reviews apply to exact release tags. A plugin's normal test/package process can write `evfx-release.json` at the project root:
 
@@ -67,7 +67,7 @@ node scripts/build.mjs
 node scripts/serve.mjs
 ```
 
-Open http://127.0.0.1:4173/evfx/ . All paths support a GitHub project-site base path. The build reports raw and gzip size. Complete downloads work without JavaScript; filters and development builds need JavaScript.
+Open http://127.0.0.1:4173/evfx/ . All paths support a GitHub project-site base path. The build reports raw and gzip size. Complete downloads work without JavaScript; the Development view needs JavaScript.
 
 GitHub Actions checks and deploys pushes and release changes. Metadata is resolved at build time, including a separate last-complete download. The browser makes no GitHub API calls. Credentials stay in process memory and never enter the site, release notes, or repository.
 
