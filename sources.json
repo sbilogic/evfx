@@ -10,13 +10,13 @@
   "blurry": {
     "base": "collection",
     "project": "EVFX Blurry",
-    "version": "2.6.2",
+    "version": "2.6.3",
     "files": [
       "EVFX Blurry/build-v2/dist/EVFXBlurry.aex"
     ],
     "templateArtifact": "EVFX Blurry/release/EVFXBlurry-2.6.1-Windows.zip",
     "build": 1,
-    "aeVersion": 1250817
+    "aeVersion": 1252865
   },
   "crop-ae": {
     "base": "collection",
