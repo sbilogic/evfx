@@ -44,17 +44,23 @@
     }
   },
   "blurry": {
-    "version": "2.3.0",
-    "publishedAt": "2026-11-01T02:04:23Z",
-    "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/blurry-v2.3.0-99e59a2905",
-    "tag": "blurry-v2.3.0-99e59a2905",
+    "version": "2.4.0",
+    "build": 1,
+    "aeVersion": 1181185,
+    "binary": {
+      "name": "EVFXBlurry.aex",
+      "sha256": "be1270b4c340fcd6a3582f7fe9237ef8ff3c0994b4f10edfd70ed440cdd45be2"
+    },
+    "publishedAt": "2026-11-01T02:22:42Z",
+    "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/blurry-v2.4.0-ef9d3f0fd2",
+    "tag": "blurry-v2.4.0-ef9d3f0fd2",
     "prerelease": true,
     "downloads": [
       {
-        "name": "EVFXBlurry-2.3.0-Windows.zip",
-        "url": "https://github.com/sbilogic/evfx/releases/download/blurry-v2.3.0-99e59a2905/EVFXBlurry-2.3.0-Windows.zip",
-        "bytes": 258762,
-        "sha256": "1bc71f92d58b5bd293c10a05e011382064929181494e30f6b614780e8f4d4bc0",
+        "name": "EVFX-blurry-2.4.0.zip",
+        "url": "https://github.com/sbilogic/evfx/releases/download/blurry-v2.4.0-ef9d3f0fd2/EVFX-blurry-2.4.0.zip",
+        "bytes": 291519,
+        "sha256": "592d1327dc27b2fd7ded2a64c4f30071c7d8051279c56d511b8ef0fe1757a1f4",
         "primary": true
       }
     ],
@@ -423,16 +429,16 @@
   },
   "utility-collection": {
     "version": "1.0.0",
-    "publishedAt": "2026-11-01T02:14:20Z",
-    "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/utility-collection-v1.0.0-3d0808b39c",
-    "tag": "utility-collection-v1.0.0-3d0808b39c",
+    "publishedAt": "2026-11-01T02:22:45Z",
+    "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/utility-collection-v1.0.0-48ecd805f6",
+    "tag": "utility-collection-v1.0.0-48ecd805f6",
     "prerelease": true,
     "downloads": [
       {
         "name": "EVFX-utility-collection-1.0.0.zip",
-        "url": "https://github.com/sbilogic/evfx/releases/download/utility-collection-v1.0.0-3d0808b39c/EVFX-utility-collection-1.0.0.zip",
-        "bytes": 6942,
-        "sha256": "1bcb518ecffa66dcb262ff7f4c6c7cde52d0e1d82ae33818e0ba805346afbf89",
+        "url": "https://github.com/sbilogic/evfx/releases/download/utility-collection-v1.0.0-48ecd805f6/EVFX-utility-collection-1.0.0.zip",
+        "bytes": 7047,
+        "sha256": "5ba8ba3c76b9809f8c1516370d2c21186829daf8f534baf0bba950fd543ea712",
         "primary": true
       }
     ]
