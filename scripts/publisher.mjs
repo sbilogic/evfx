@@ -20,9 +20,12 @@ const run=(command,args,options={})=>{
   if(result.status!==0)throw new Error(`${basename(command)} ${args[0]} failed: ${result.stderr||result.error?.message||result.stdout}`);
   return result.stdout.trim();
 };
+// run() trims output, so the first entry may have lost its leading status space (" M x" -> "M x").
+export function editedSourcePaths(status){
+  return status.split('\0').filter(Boolean).map(line=>line.replace(/^[ MTADRCU?!]{1,2} /,'')).filter(path=>!generated.has(path));
+}
 export function siteIsBeingEdited(){
-  const dirty=run(git,['status','--porcelain=v1','-z']).split('\0').filter(Boolean);
-  return dirty.some(line=>!generated.has(line.slice(3)));
+  return editedSourcePaths(run(git,['status','--porcelain=v1','-z'])).length>0;
 }
 
 async function publish({automatic=false,prepareOnly=false,only=null,expectedFingerprint=null}={}){
