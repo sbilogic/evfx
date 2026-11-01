@@ -346,10 +346,10 @@
       "category": "ae",
       "kind": "ScriptUI panel",
       "art": "screen",
-      "description": "Quick AE utilities in one panel. First up: convert Corner Pin to CC Power Pin with keyframes, easing and expressions intact.",
-      "detail": "Quick AE utilities in one panel. First up: convert Corner Pin to CC Power Pin with keyframes, easing and expressions intact.",
+      "description": "Quick AE utilities in one panel: Corner Pin to Power Pin, one-click crop to content (no prerender), and duplicate-footage cleanup.",
+      "detail": "Quick AE utilities in one panel: Corner Pin to Power Pin, one-click crop to content (no prerender), and duplicate-footage cleanup.",
       "requirements": "After Effects GUI · JSX script",
-      "install": "Choose File → Scripts → Run Script File and select the JSX. For a dockable panel, copy it to Scripts/ScriptUI Panels and restart AE. Open a comp, select Corner Pin effects or layers, and click Convert to Power Pin.",
+      "install": "Choose File → Scripts → Run Script File and select the JSX. For a dockable panel, copy it to Scripts/ScriptUI Panels and restart AE. Each utility has its own tab: Power Pin, Crop and Cleaner.",
       "status": "preview",
       "autoDiscovered": true,
       "readiness": {
