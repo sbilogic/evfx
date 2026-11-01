@@ -11,12 +11,9 @@
     "base": "collection",
     "project": "EVFX Blurry",
     "version": "2.5.0",
-    "files": [
-      "EVFX Blurry/build-v2/dist/EVFXBlurry.aex"
-    ],
-    "templateArtifact": "EVFX Blurry/release/EVFXBlurry-2.4.0-Windows.zip",
-    "build": 1,
-    "aeVersion": 1213953
+    "artifacts": [
+      "EVFX Blurry/release/EVFXBlurry-2.5.0-Windows.zip"
+    ]
   },
   "crop-ae": {
     "base": "collection",
