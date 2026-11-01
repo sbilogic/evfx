@@ -31,7 +31,7 @@
       "description": "Depth-aware defocus, custom bokeh and optical aberrations.",
       "detail": "Optical defocus with or without a depth map. Shape the aperture, stretch anamorphic bokeh, add chromatic aberration, or work with custom bokeh and obstruction textures. Rendering runs on the CPU.",
       "requirements": "Windows x64 · After Effects · 8 / 16 / 32 bpc",
-      "install": "Extract the entire ZIP, close AE, and run Install.cmd. The package includes its OpenMP runtime. Restart AE and apply EVFX Blurry v2. Without a depth layer, start with Lens Blur (No Depth Map) → Blur Diameter. Click Composition Frame → Link / Refresh for composition optics on supported 2D layers.",
+      "install": "Extract the entire ZIP, close AE, and run Install.cmd. The package includes its OpenMP runtime. Restart AE and apply EVFX Blurry v2. Start with Lens Blur (No Depth Map) > Blur Diameter. Supported 2D composition-space links initialize automatically; Link / Refresh is an optional repair action.",
       "status": "release",
       "readiness": {
         "state": "reviewed",
