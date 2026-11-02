@@ -143,11 +143,11 @@
         "note": "This combined build has no recorded AE runtime review. Test its utilities on a backup project."
       },
       "aliases": [
-        "project-cleaner",
         "corner-pin-to-power-pin",
         "power-pin",
         "crop-to-content",
         "anchor-point",
+        "project-cleaner",
         "ae-project-cleaner"
       ],
       "collectionAliases": [

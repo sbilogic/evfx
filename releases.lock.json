@@ -400,18 +400,51 @@
   },
   "utility-collection": {
     "version": "1.2.0",
-    "publishedAt": "2026-11-02T00:16:52Z",
-    "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/utility-collection-v1.2.0-c619dd8084",
-    "tag": "utility-collection-v1.2.0-c619dd8084",
+    "collection": {
+      "schema": 1,
+      "artifact": "EVFX Utility Collection.jsx",
+      "sha256": "1154bf24cba6fb79840b35673882caa1c158a1fd3fa2905497fcf888cdc234d0",
+      "members": [
+        {
+          "id": "corner-pin-to-power-pin",
+          "name": "Corner Pin to Power Pin",
+          "tab": "Power Pin",
+          "replaces": [
+            "power-pin"
+          ]
+        },
+        {
+          "id": "crop-to-content",
+          "name": "Crop to Content",
+          "tab": "Crop"
+        },
+        {
+          "id": "anchor-point",
+          "name": "Anchor Point",
+          "tab": "Anchor"
+        },
+        {
+          "id": "project-cleaner",
+          "name": "Project Cleaner",
+          "tab": "Cleaner",
+          "replaces": [
+            "ae-project-cleaner"
+          ]
+        }
+      ]
+    },
+    "publishedAt": "2026-11-02T00:41:20Z",
+    "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/utility-collection-v1.2.0-e97a069f12",
+    "tag": "utility-collection-v1.2.0-e97a069f12",
     "prerelease": true,
     "downloads": [
       {
         "name": "EVFX-utility-collection-1.2.0.zip",
-        "url": "https://github.com/sbilogic/evfx/releases/download/utility-collection-v1.2.0-c619dd8084/EVFX-utility-collection-1.2.0.zip",
-        "bytes": 18829,
-        "sha256": "1a782a6be823901e827bf47709e61e3ddb63394755a9c045993299b79568fc28",
+        "url": "https://github.com/sbilogic/evfx/releases/download/utility-collection-v1.2.0-e97a069f12/EVFX-utility-collection-1.2.0.zip",
+        "bytes": 18816,
+        "sha256": "68ae72704210e9de727f3cf6e0fb8d077ba5d453daccad122de17585084753df",
         "primary": true,
-        "uploadedAt": "2026-11-02T00:16:51Z"
+        "uploadedAt": "2026-11-02T00:41:16Z"
       }
     ]
   }
