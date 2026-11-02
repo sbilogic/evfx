@@ -41,26 +41,6 @@
       }
     },
     {
-      "id": "crop-ae",
-      "name": "Crop",
-      "host": "After Effects",
-      "category": "ae",
-      "kind": "Plugin + panel",
-      "art": "crop",
-      "description": "Crop layers from rendered alpha; preview and prerender.",
-      "detail": "Crops from rendered alpha with editable previews, duration and mask crops, and recoverable prerenders. A native effect and dockable panel keep the crop workflow inside After Effects.",
-      "requirements": "Windows x64 · After Effects",
-      "install": "Extract the ZIP and follow the included README and installer instructions. Restart After Effects, then open EVFX Crop from the Window menu or the installed layer menu.",
-      "status": "release",
-      "readiness": {
-        "state": "incomplete",
-        "releaseTag": "crop-ae-v0.1.2-665298049e",
-        "reviewedAt": "2026-10-31",
-        "evidence": "EVFX Crop/docs/VERIFICATION.md: Limits; open feature tickets and pending dock review.",
-        "note": "Incomplete: translation, mask bypass/deletion and alpha expansion. Dock restoration still needs visual verification."
-      }
-    },
-    {
       "id": "pixel-picker",
       "name": "PixelPicker",
       "host": "After Effects",
@@ -98,6 +78,92 @@
         "reviewedAt": "2026-10-31",
         "evidence": "EVFX Auto Levels/README.md and docs/plugin_build_guide.md: build/use instructions; no completed host-acceptance report found.",
         "note": "No recorded AE runtime test. Check reference sampling and renders on a test project."
+      }
+    },
+    {
+      "id": "choke-it",
+      "name": "Choke It",
+      "host": "After Effects",
+      "category": "ae",
+      "kind": "Plugin",
+      "art": "screen",
+      "description": "RGBA blur, directional choke/grow, and optional matte shading.",
+      "detail": "RGBA blur, directional choke/grow, and optional matte shading.",
+      "requirements": "Windows x64 · After Effects",
+      "install": "Extract the ZIP and follow the included installation instructions.",
+      "status": "preview",
+      "autoDiscovered": true,
+      "readiness": {
+        "state": "unverified",
+        "releaseTag": null,
+        "reviewedAt": "2026-10-31",
+        "evidence": "EVFX Choke It: automatically discovered distribution",
+        "note": "Newly discovered build; runtime readiness has not been verified."
+      }
+    },
+    {
+      "id": "flares",
+      "name": "Flares",
+      "host": "After Effects",
+      "category": "ae",
+      "kind": "Plugin",
+      "art": "screen",
+      "description": "100 named signatures plus 12 templates, five styles and GPU rendering.",
+      "detail": "100 named signatures plus 12 templates, five styles and GPU rendering.",
+      "requirements": "Windows x64 · After Effects",
+      "install": "Extract the ZIP and follow the included installation instructions.",
+      "status": "preview",
+      "autoDiscovered": true,
+      "readiness": {
+        "state": "experimental",
+        "releaseTag": null,
+        "reviewedAt": "2026-10-31",
+        "evidence": "EVFX Flares: automatically discovered distribution",
+        "note": "Development build. Features and runtime stability may be incomplete."
+      }
+    },
+    {
+      "id": "utility-collection",
+      "name": "Utility Collection",
+      "host": "After Effects",
+      "category": "ae",
+      "kind": "ScriptUI panel",
+      "art": "utilities",
+      "description": "Power Pin conversion, crop to content, anchor positioning and Project Cleaner in one panel.",
+      "detail": "Power Pin conversion, crop to content, anchor positioning and Project Cleaner in one panel.",
+      "requirements": "After Effects GUI · JSX script",
+      "install": "Run EVFX Utility Collection.jsx through File > Scripts > Run Script File. For a dockable panel, copy it to Scripts/ScriptUI Panels and restart AE. Open Utility Collection from Window; use the Power Pin, Crop, Anchor and Cleaner tabs.",
+      "status": "preview",
+      "autoDiscovered": true,
+      "readiness": {
+        "state": "unverified",
+        "releaseTag": null,
+        "reviewedAt": "2026-11-02",
+        "evidence": "EVFX Utility Collection/README.md and integration scripts; no matching runtime review receipt.",
+        "note": "This combined build has no recorded AE runtime review. Test its utilities on a backup project."
+      },
+      "aliases": [
+        "project-cleaner"
+      ]
+    },
+    {
+      "id": "crop-ae",
+      "name": "Crop",
+      "host": "After Effects",
+      "category": "ae",
+      "kind": "Plugin + panel",
+      "art": "crop",
+      "description": "Crop layers from rendered alpha; preview and prerender.",
+      "detail": "Crops from rendered alpha with editable previews, duration and mask crops, and recoverable prerenders. A native effect and dockable panel keep the crop workflow inside After Effects.",
+      "requirements": "Windows x64 · After Effects",
+      "install": "Extract the ZIP and follow the included README and installer instructions. Restart After Effects, then open EVFX Crop from the Window menu or the installed layer menu.",
+      "status": "release",
+      "readiness": {
+        "state": "incomplete",
+        "releaseTag": "crop-ae-v0.1.2-665298049e",
+        "reviewedAt": "2026-10-31",
+        "evidence": "EVFX Crop/docs/VERIFICATION.md: Limits; open feature tickets and pending dock review.",
+        "note": "Incomplete: translation, mask bypass/deletion and alpha expansion. Dock restoration still needs visual verification."
       }
     },
     {
@@ -141,25 +207,6 @@
       }
     },
     {
-      "id": "project-cleaner",
-      "name": "Project Cleaner",
-      "host": "After Effects",
-      "category": "ae",
-      "kind": "ScriptUI panel",
-      "art": "clean",
-      "description": "Consolidate duplicate footage imports across compositions.",
-      "detail": "Finds repeated imports of the same disk file and consolidates compatible footage items throughout nested comps. Preview the candidates, keep the default project backup, and review the result with one-step Undo available. Media on disk stays intact.",
-      "requirements": "After Effects GUI · Local project · JSX script",
-      "install": "Choose File → Scripts → Run Script File and select the JSX. For a dockable panel, install it in Scripts/ScriptUI Panels and restart AE. Scan the project before cleaning; leave backup enabled.",
-      "status": "release",
-      "readiness": {
-        "state": "reviewed",
-        "releaseTag": "project-cleaner-v1.0.0-922fcc601a",
-        "reviewedAt": "2026-10-31",
-        "evidence": "EVFX AE Project Cleaner/docs/validation.md: 26 contract, 21 live GUI and 5 interactive color checks."
-      }
-    },
-    {
       "id": "selective-fx",
       "name": "Selective FX",
       "host": "After Effects",
@@ -177,6 +224,26 @@
         "reviewedAt": "2026-10-31",
         "evidence": "EVFX Pick and Choose Adjustment Layer/EVFX_SelectiveFX.jsx: standalone script; no accompanying validation report.",
         "note": "Unversioned script; effect links have no recorded runtime test."
+      }
+    },
+    {
+      "id": "shot-qc",
+      "name": "Shot QC",
+      "host": "After Effects",
+      "category": "ae",
+      "kind": "Native plugin",
+      "art": "qc",
+      "description": "Store shot status, reviewer and notes inside an AE project.",
+      "detail": "Stores a shot’s QC status, shot ID, reviewer, and notes in an After Effects effect instance. Includes a passed checkbox and optional preview overlay. An early development build for trying the workflow.",
+      "requirements": "Windows x64 · After Effects · Development build",
+      "install": "Close AE and copy EVFXShotQC.aex into Adobe’s shared MediaCore plug-ins folder. Restart AE and search for EVFX Shot QC. Keep a backup when evaluating development builds.",
+      "status": "preview",
+      "readiness": {
+        "state": "experimental",
+        "releaseTag": "shot-qc-v0.2.0-227dabd192",
+        "reviewedAt": "2026-10-31",
+        "evidence": "EVFX-AE-Collection/plugins/EVFXShotQC/README.md: MVP and external import/sync listed as a next step.",
+        "note": "Experimental: JSON import/sync is unfinished; runtime stability is unverified."
       }
     },
     {
@@ -258,26 +325,6 @@
       }
     },
     {
-      "id": "shot-qc",
-      "name": "Shot QC",
-      "host": "After Effects",
-      "category": "ae",
-      "kind": "Native plugin",
-      "art": "qc",
-      "description": "Store shot status, reviewer and notes inside an AE project.",
-      "detail": "Stores a shot’s QC status, shot ID, reviewer, and notes in an After Effects effect instance. Includes a passed checkbox and optional preview overlay. An early development build for trying the workflow.",
-      "requirements": "Windows x64 · After Effects · Development build",
-      "install": "Close AE and copy EVFXShotQC.aex into Adobe’s shared MediaCore plug-ins folder. Restart AE and search for EVFX Shot QC. Keep a backup when evaluating development builds.",
-      "status": "preview",
-      "readiness": {
-        "state": "experimental",
-        "releaseTag": "shot-qc-v0.2.0-227dabd192",
-        "reviewedAt": "2026-10-31",
-        "evidence": "EVFX-AE-Collection/plugins/EVFXShotQC/README.md: MVP and external import/sync listed as a next step.",
-        "note": "Experimental: JSON import/sync is unfinished; runtime stability is unverified."
-      }
-    },
-    {
       "id": "onlyscreens",
       "name": "OnlyScreens",
       "host": "Windows",
@@ -295,69 +342,6 @@
         "reviewedAt": "2026-10-31",
         "evidence": "EVFX OnlyScreens project contains research and tracker experiments; no packaged release available.",
         "note": "Incomplete research project. No installable release."
-      }
-    },
-    {
-      "id": "choke-it",
-      "name": "Choke It",
-      "host": "After Effects",
-      "category": "ae",
-      "kind": "Plugin",
-      "art": "screen",
-      "description": "RGBA blur, directional choke/grow, and optional matte shading.",
-      "detail": "RGBA blur, directional choke/grow, and optional matte shading.",
-      "requirements": "Windows x64 · After Effects",
-      "install": "Extract the ZIP and follow the included installation instructions.",
-      "status": "preview",
-      "autoDiscovered": true,
-      "readiness": {
-        "state": "unverified",
-        "releaseTag": null,
-        "reviewedAt": "2026-10-31",
-        "evidence": "EVFX Choke It: automatically discovered distribution",
-        "note": "Newly discovered build; runtime readiness has not been verified."
-      }
-    },
-    {
-      "id": "flares",
-      "name": "Flares",
-      "host": "After Effects",
-      "category": "ae",
-      "kind": "Plugin",
-      "art": "screen",
-      "description": "100 named signatures plus 12 templates, five styles and GPU rendering.",
-      "detail": "100 named signatures plus 12 templates, five styles and GPU rendering.",
-      "requirements": "Windows x64 · After Effects",
-      "install": "Extract the ZIP and follow the included installation instructions.",
-      "status": "preview",
-      "autoDiscovered": true,
-      "readiness": {
-        "state": "experimental",
-        "releaseTag": null,
-        "reviewedAt": "2026-10-31",
-        "evidence": "EVFX Flares: automatically discovered distribution",
-        "note": "Development build. Features and runtime stability may be incomplete."
-      }
-    },
-    {
-      "id": "utility-collection",
-      "name": "Utility Collection",
-      "host": "After Effects",
-      "category": "ae",
-      "kind": "ScriptUI panel",
-      "art": "screen",
-      "description": "Quick AE utilities in one panel: Corner Pin to Power Pin, one-click crop to content (no prerender), and duplicate-footage cleanup.",
-      "detail": "Quick AE utilities in one panel: Corner Pin to Power Pin, one-click crop to content (no prerender), and duplicate-footage cleanup.",
-      "requirements": "After Effects GUI · JSX script",
-      "install": "Choose File → Scripts → Run Script File and select the JSX. For a dockable panel, copy it to Scripts/ScriptUI Panels and restart AE. Each utility has its own tab: Power Pin, Crop and Cleaner.",
-      "status": "preview",
-      "autoDiscovered": true,
-      "readiness": {
-        "state": "unverified",
-        "releaseTag": null,
-        "reviewedAt": "2026-11-01",
-        "evidence": "EVFX Utility Collection: automatically discovered distribution",
-        "note": "Newly discovered build; runtime readiness has not been verified."
       }
     }
   ]

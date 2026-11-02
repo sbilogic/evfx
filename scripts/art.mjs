@@ -13,6 +13,7 @@ export function toolArt(type) {
     case 'layers': return shell(lines(5,i=>`<path d="m12 ${26+i*7} 28-16 28 16-28 16Z" fill="${i===2?'#d94d28':'#e8e7dc'}" stroke="#24271f" stroke-width=".8"/>`));
     case 'orbit': return shell(circle(40,40,7,'#d94d28')+'<g stroke="#24271f" stroke-width=".7"><ellipse cx="40" cy="40" rx="33" ry="13" transform="rotate(-35 40 40)"/><ellipse cx="40" cy="40" rx="33" ry="13" transform="rotate(35 40 40)"/><ellipse cx="40" cy="40" rx="13" ry="33"/></g>');
     case 'clean': return shell(lines(4,i=>`<rect x="${16+i*8}" y="${13+i*8}" width="30" height="30" fill="${i===3?'#d94d28':'#e8e7dc'}" stroke="#24271f" stroke-width=".7"/>`));
+    case 'utilities': return shell('<rect x="12" y="12" width="24" height="24" fill="#d94d28"/><rect x="44" y="12" width="24" height="24" stroke="#24271f"/><rect x="12" y="44" width="24" height="24" stroke="#24271f"/><circle cx="56" cy="56" r="12" fill="#b9c968"/>'+line(24,44,24,68)+line(12,56,36,56));
     case 'select': return shell(lines(3,i=>circle(20+i*20,40,8,i===1?'#d94d28':'#e8e7dc',`stroke="#24271f" stroke-width=".7"`))+line(20,26,40,13)+line(40,13,60,26)+line(40,13,40,26));
     case 'frame': return shell('<path d="M11 18h58v44H11zM21 10h38v60H21z" stroke="#24271f" stroke-width=".8"/>'+circle(40,40,14,'#d94d28'));
     case 'sequence': return shell(lines(4,i=>`<rect x="${9+i*15}" y="${32-i*4}" width="13" height="${19+i*8}" fill="${i===2?'#d94d28':'#24271f'}"/>`));

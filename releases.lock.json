@@ -182,52 +182,6 @@
       }
     ]
   },
-  "project-cleaner": {
-    "version": "1.0.0",
-    "publishedAt": "2026-10-31T00:41:58Z",
-    "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/project-cleaner-v1.0.0-922fcc601a",
-    "tag": "project-cleaner-v1.0.0-922fcc601a",
-    "prerelease": false,
-    "review": {
-      "state": "complete",
-      "runtimeVerified": true,
-      "sha256": "6ff15c3f704816b35c771702194d7b4fb88297b7e512e4b230f4afe0633c1d1b",
-      "evidence": "EVFX AE Project Cleaner/docs/validation.md: 26 contract, 21 live GUI and 5 interactive color checks."
-    },
-    "downloads": [
-      {
-        "name": "EVFX-project-cleaner-1.0.0.zip",
-        "url": "https://github.com/sbilogic/evfx/releases/download/project-cleaner-v1.0.0-922fcc601a/EVFX-project-cleaner-1.0.0.zip",
-        "bytes": 6625,
-        "sha256": "6ff15c3f704816b35c771702194d7b4fb88297b7e512e4b230f4afe0633c1d1b",
-        "primary": true,
-        "uploadedAt": "2026-10-31T00:41:57Z"
-      }
-    ],
-    "complete": {
-      "version": "1.0.0",
-      "publishedAt": "2026-10-31T00:41:58Z",
-      "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/project-cleaner-v1.0.0-922fcc601a",
-      "tag": "project-cleaner-v1.0.0-922fcc601a",
-      "prerelease": false,
-      "review": {
-        "state": "complete",
-        "runtimeVerified": true,
-        "sha256": "6ff15c3f704816b35c771702194d7b4fb88297b7e512e4b230f4afe0633c1d1b",
-        "evidence": "EVFX AE Project Cleaner/docs/validation.md: 26 contract, 21 live GUI and 5 interactive color checks."
-      },
-      "downloads": [
-        {
-          "name": "EVFX-project-cleaner-1.0.0.zip",
-          "url": "https://github.com/sbilogic/evfx/releases/download/project-cleaner-v1.0.0-922fcc601a/EVFX-project-cleaner-1.0.0.zip",
-          "bytes": 6625,
-          "sha256": "6ff15c3f704816b35c771702194d7b4fb88297b7e512e4b230f4afe0633c1d1b",
-          "primary": true,
-          "uploadedAt": "2026-10-31T00:41:57Z"
-        }
-      ]
-    }
-  },
   "selective-fx": {
     "version": null,
     "publishedAt": "2026-10-31T00:42:01Z",
@@ -445,19 +399,19 @@
     ]
   },
   "utility-collection": {
-    "version": "1.1.1",
-    "publishedAt": "2026-11-01T03:26:15Z",
-    "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/utility-collection-v1.1.1-79fcdb4545",
-    "tag": "utility-collection-v1.1.1-79fcdb4545",
+    "version": "1.2.0",
+    "publishedAt": "2026-11-02T00:16:52Z",
+    "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/utility-collection-v1.2.0-c619dd8084",
+    "tag": "utility-collection-v1.2.0-c619dd8084",
     "prerelease": true,
     "downloads": [
       {
-        "name": "EVFX-utility-collection-1.1.1.zip",
-        "url": "https://github.com/sbilogic/evfx/releases/download/utility-collection-v1.1.1-79fcdb4545/EVFX-utility-collection-1.1.1.zip",
-        "bytes": 16215,
-        "sha256": "98668681fcb6d58aef9390dbef14cbe0af682e0a8d8886278e6ce5a30008bf44",
+        "name": "EVFX-utility-collection-1.2.0.zip",
+        "url": "https://github.com/sbilogic/evfx/releases/download/utility-collection-v1.2.0-c619dd8084/EVFX-utility-collection-1.2.0.zip",
+        "bytes": 18829,
+        "sha256": "1a782a6be823901e827bf47709e61e3ddb63394755a9c045993299b79568fc28",
         "primary": true,
-        "uploadedAt": "2026-11-01T03:26:14Z"
+        "uploadedAt": "2026-11-02T00:16:51Z"
       }
     ]
   }

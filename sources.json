@@ -59,14 +59,6 @@
       "EVFX 3d Null Tracker/EVFX_3D_Null_Tracker.jsx"
     ]
   },
-  "project-cleaner": {
-    "base": "collection",
-    "project": "EVFX AE Project Cleaner",
-    "version": "1.0.0",
-    "files": [
-      "EVFX AE Project Cleaner/EVFX AE Project Cleaner.jsx"
-    ]
-  },
   "selective-fx": {
     "base": "collection",
     "project": "EVFX Pick and Choose Adjustment Layer",
@@ -142,7 +134,7 @@
   "utility-collection": {
     "base": "collection",
     "project": "EVFX Utility Collection",
-    "version": "1.1.1",
+    "version": "1.2.0",
     "files": [
       "EVFX Utility Collection/EVFX Utility Collection.jsx"
     ]

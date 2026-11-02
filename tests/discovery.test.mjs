@@ -53,6 +53,23 @@ test('Smart Denoise and Match Grain cannot be rediscovered',async()=>{
     assert.deepEqual(result.catalog.tools.map(t=>t.id),['smart-grain']);
   }finally{await f.cleanup();}
 });
+
+test('Project Cleaner stays consolidated in Utility Collection across future discovery runs',async()=>{
+  const f=await fixture();try{
+    f.config.excludedIds.push('project-cleaner','ae-project-cleaner');
+    f.catalog.tools.push({id:'project-cleaner',name:'Project Cleaner'});
+    f.sources['project-cleaner']={base:'dev',project:'EVFX AE Project Cleaner',version:'1.0.0'};
+    await addPackage(f,'EVFX AE Project Cleaner');
+    await addPackage(f,'EVFX Project Cleaner');
+    await addPackage(f,'EVFX Utility Collection','1.2.0');
+    let result=await discoverLocalPlugins(f.root,f);
+    result=await discoverLocalPlugins(f.root,{...f,catalog:result.catalog,sources:result.sources});
+    assert.deepEqual(result.catalog.tools.map(t=>t.id),['utility-collection']);
+    assert.equal(result.sources['project-cleaner'],undefined);
+    assert.equal(result.sources['ae-project-cleaner'],undefined);
+    assert.equal(result.sources['utility-collection'].version,'1.2.0');
+  }finally{await f.cleanup();}
+});
 test('generated directories and empty project folders do not become downloads',async()=>{
   const f=await fixture();try{
     await mkdir(join(f.base,'EVFX Empty','node_modules','EVFX Fake','release'),{recursive:true});

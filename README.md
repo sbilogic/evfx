@@ -45,6 +45,8 @@ The declaration must match the uploaded package, or the single AEX/JSX payload b
 
 ## Detail pages
 
+The library is grouped by host. Utility Collection contains Power Pin conversion, Crop to Content, Anchor Point and Project Cleaner. The standalone Cleaner listing is retired; its old page and hash link lead to Utility Collection. Both Cleaner folder-name variants stay excluded from discovery. Its source folder remains a shared build input for Utility Collection. Native Crop remains separate for manual bounds, mask crops and prerenders.
+
 Each released tool listed in `explain.json` gets a page at `/evfx/<id>/` with its processing steps and limits. Keep the text to what the tool actually does, sourced from the project's own docs. Development builds have no page.
 
 ## Local controls

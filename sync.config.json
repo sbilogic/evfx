@@ -18,7 +18,9 @@
   ],
   "excludedIds": [
     "smart-denoise",
-    "match-grain"
+    "match-grain",
+    "project-cleaner",
+    "ae-project-cleaner"
   ],
   "settleSeconds": 30,
   "enabled": false,

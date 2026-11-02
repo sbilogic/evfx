@@ -26,11 +26,10 @@
     <div class="views" role="group" aria-label="Builds">
       <button type="button" data-view="complete" aria-pressed="true">Released <sup>{{COUNT}}</sup></button>
       <button type="button" data-view="development" aria-pressed="false" hidden>Development <sup>{{DEV_COUNT}}</sup></button>
-      <span class="hosts">After Effects · Blender · Windows</span>
     </div>
     <p id="dev-banner" class="dev-banner" role="note" hidden><b>⚠ Development builds</b> are unfinished or untested. They may crash or change between builds. Use a test project and keep backups.</p>
     <p id="results-count" class="sr-only" role="status" aria-live="polite"></p>
-    <div class="grid">{{TOOLS}}</div>
+    {{TOOLS}}
     <noscript><p class="noscript">Development builds need JavaScript.</p></noscript>
   </main>
   <footer class="foot wrap"><span>© {{YEAR}} Sahil Bloch</span><a href="https://github.com/sbilogic/evfx">Source ↗</a></footer>

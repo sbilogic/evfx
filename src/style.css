@@ -9,7 +9,6 @@
 .hero-art svg{display:block;width:100%;height:auto}
 .top nav{grid-column:2;grid-row:1;align-self:start;display:flex;gap:24px;font-size:12px;position:relative;z-index:2}
 .top nav a{background:var(--paper);padding:5px 8px}.top nav a:hover{color:var(--orange)}
-.hosts{margin-left:auto;align-self:center;font:11px var(--mono);color:var(--muted)}
 
 /* view switch */
 .views{display:flex;flex-wrap:wrap;gap:28px;padding:22px 0 18px}
@@ -20,6 +19,8 @@
 .dev-banner{margin:0 0 22px;padding:14px 18px;background:var(--warning-bg);color:var(--warning);border-left:4px solid var(--warning);font-size:13px;line-height:1.55}
 
 /* plates */
+.library-group{margin-top:24px}.library-group+.library-group{margin-top:56px}
+.library-label{font:11px/1.5 var(--mono);font-weight:400;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin:0 0 20px}
 .grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:56px 28px}
 .tool{display:flex;flex-direction:column;min-width:0}
 .art{display:block;position:relative;aspect-ratio:4/3;background:var(--field);overflow:hidden;margin-bottom:16px}
@@ -28,7 +29,7 @@
 .no{position:absolute;left:12px;top:10px;font:10px var(--mono);color:var(--muted)}
 .is-dev .art:after{content:'';position:absolute;inset:0;background:repeating-linear-gradient(-45deg,transparent 0 14px,rgba(138,45,20,.13) 14px 16px);pointer-events:none}
 .flag{position:absolute;right:0;top:0;z-index:1;background:var(--warning);color:#fff;font:700 10px/1 var(--mono);letter-spacing:.06em;text-transform:uppercase;padding:8px 10px}
-.tool h2{font-size:30px;line-height:1;font-weight:400;letter-spacing:-.045em;margin:0 0 8px}
+.tool h3{font-size:30px;line-height:1;font-weight:400;letter-spacing:-.045em;margin:0 0 8px}
 .desc{font-size:14px;line-height:1.45;margin:0 0 12px;color:#45483d;max-width:36ch}
 .warn{font-size:12px;line-height:1.5;margin:0 0 12px;color:var(--warning);padding-left:10px;border-left:2px solid var(--warning)}
 .line{margin-top:auto;display:flex;justify-content:space-between;align-items:baseline;gap:14px;border-top:1px solid var(--ink);padding-top:10px}
@@ -54,7 +55,7 @@
 .foot{display:flex;justify-content:space-between;gap:16px;margin-top:96px;padding:18px 0 28px;border-top:1px solid var(--ink);font:10px var(--mono);color:var(--muted)}
 .foot a:hover{color:var(--orange)}
 
-.tool h2 a:hover{color:var(--orange)}
+.tool h3 a:hover{color:var(--orange)}
 .how{width:fit-content;font-size:12px;margin:-4px 0 14px;border-bottom:1px solid var(--line);padding-bottom:1px}
 .how:hover{color:var(--orange);border-color:var(--orange)}
 
@@ -81,5 +82,5 @@
 .limits li{font:12px/1.5 var(--mono);color:var(--muted);padding:10px 0;border-bottom:1px solid var(--line)}
 
 @media(max-width:1000px){.wrap{width:calc(100% - 56px)}.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:48px 22px}.hero-art{width:52vw}}
-@media(max-width:620px){.wrap{width:calc(100% - 32px)}.detail{grid-template-columns:1fr;gap:28px;padding-top:28px}.detail-art{aspect-ratio:4/3}.bar nav{gap:14px;font-size:11px}.flow li:before{font-size:56px}.top{grid-template-columns:1fr;padding-top:16px}.top nav{grid-column:1;grid-row:1;justify-content:flex-end;font-size:11px;gap:18px;margin-bottom:28px}.mark{grid-row:2;font-size:34vw}.hosts{display:none}.hero-art{width:78vw;top:24px;right:-14%}.grid{grid-template-columns:1fr;gap:44px}.tool h2{font-size:26px}.views{gap:22px}.views button{font-size:14px}}
+@media(max-width:620px){.wrap{width:calc(100% - 32px)}.detail{grid-template-columns:1fr;gap:28px;padding-top:28px}.detail-art{aspect-ratio:4/3}.bar nav{gap:14px;font-size:11px}.flow li:before{font-size:56px}.top{grid-template-columns:1fr;padding-top:16px}.top nav{grid-column:1;grid-row:1;justify-content:flex-end;font-size:11px;gap:18px;margin-bottom:28px}.mark{grid-row:2;font-size:34vw}.hero-art{width:78vw;top:24px;right:-14%}.grid{grid-template-columns:1fr;gap:44px}.tool h3{font-size:26px}.views{gap:22px}.views button{font-size:14px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{transition:none!important;animation:none!important}}

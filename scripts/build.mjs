@@ -37,10 +37,11 @@ function toolRow(tool,release,variant,hasComplete) {
   const rowId=variant==='development'&&hasComplete?`${tool.id}-development`:tool.id;
   const warningId=`${rowId}-warning`;
   const page=variant==='complete'&&explain[tool.id]?`./${tool.id}/`:null;
+  const aliases=tool.aliases?.length?` data-aliases="${escape(tool.aliases.join(' '))}"`:'';
   const art=`${toolArt(tool.art)}<span class="no" aria-hidden="true"></span>${hasWarning?`<span class="flag">⚠ ${escape(readiness.badge)}</span>`:''}`;
-  return `<article id="${rowId}" class="tool${hasWarning?' is-dev':''}" data-product="${tool.id}" data-variant="${variant}"${variant==='development'?' hidden':''}>
+  return `<article id="${rowId}" class="tool${hasWarning?' is-dev':''}" data-product="${tool.id}" data-variant="${variant}"${aliases}${variant==='development'?' hidden':''}>
     ${page?`<a class="art" href="${page}" tabindex="-1" aria-hidden="true">${art}</a>`:`<div class="art">${art}</div>`}
-    <h2>${page?`<a href="${page}">${escape(tool.name)}</a>`:escape(tool.name)}</h2>
+    <h3>${page?`<a href="${page}">${escape(tool.name)}</a>`:escape(tool.name)}</h3>
     <p class="desc">${escape(tool.description)}</p>
     ${page?`<a class="how" href="${page}">How it works <span aria-hidden="true">→</span></a>`:''}
     ${hasWarning?`<p id="${warningId}" class="warn"><span class="sr-only">${escape(readiness.title)}: </span>${escape(readiness.note)}</p>`:''}
@@ -62,18 +63,20 @@ function detailPage(template,tool,release) {
 
 let html = await readFile(join(root,'src/index.html'),'utf8');
 const pageTemplate = await readFile(join(root,'src/tool.html'),'utf8');
-const rows=[], pages=[];
+const groups=new Map(),pages=[];
 let completeCount=0,devCount=0;
 for(const tool of catalog.tools){
   const latest=releases[tool.id];
   const complete=latest?.complete||(latest&&getReadiness(tool,latest).state==='reviewed'?latest:null);
-  if(complete){rows.push(toolRow(tool,complete,'complete',true));completeCount++;if(explain[tool.id])pages.push([tool,complete]);}
-  if(!complete||latest.tag!==complete.tag){rows.push(toolRow(tool,latest,'development',!!complete));devCount++;}
+  if(!groups.has(tool.category))groups.set(tool.category,{host:tool.host,rows:[],complete:0});
+  const group=groups.get(tool.category);
+  if(complete){group.rows.push(toolRow(tool,complete,'complete',true));group.complete++;completeCount++;if(explain[tool.id])pages.push([tool,complete]);}
+  if(!complete||latest.tag!==complete.tag){group.rows.push(toolRow(tool,latest,'development',!!complete));devCount++;}
 }
 const year=new Date().getFullYear();
 const replacements = {
   TITLE:escape(catalog.title), COUNT:completeCount, DEV_COUNT:devCount,
-  YEAR:year, HERO_ART:heroArt(), TOOLS:rows.join('\n'), SUPPORT_NAV:support.nav,
+  YEAR:year, HERO_ART:heroArt(), TOOLS:[...groups].map(([category,group])=>`<section class="library-group" data-category-group="${category}" aria-labelledby="host-${category}"${group.complete?'':' hidden'}><h2 id="host-${category}" class="library-label">${escape(group.host)}</h2><div class="grid">${group.rows.join('\n')}</div></section>`).join('\n'), SUPPORT_NAV:support.nav,
   STYLE_VERSION:styleVersion, APP_VERSION:appVersion
 };
 const fill=text=>{for(const [key,value] of Object.entries(replacements)) text=text.replaceAll(`{{${key}}}`,String(value));return text.replace(/>\s+</g,'><').trim();};
@@ -83,6 +86,11 @@ await writeFile(join(root,'dist/index.html'),fill(html));
 for(const [tool,release] of pages){
   await mkdir(join(root,'dist',tool.id),{recursive:true});
   await writeFile(join(root,'dist',tool.id,'index.html'),fill(detailPage(pageTemplate,tool,release)));
+}
+for(const tool of catalog.tools)for(const alias of tool.aliases||[]){
+  await mkdir(join(root,'dist',alias),{recursive:true});
+  const destination=`../#${tool.id}`;
+  await writeFile(join(root,'dist',alias,'index.html'),`<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta http-equiv="refresh" content="0;url=${destination}"><link rel="canonical" href="${site}#${tool.id}"><title>EVFX ${escape(tool.name)}</title></head><body><a href="${destination}">Continue to ${escape(tool.name)}</a></body></html>`);
 }
 for(const file of ['style.css','app.js','favicon.svg']) await copyFile(join(root,'src',file),join(root,'dist',file));
 await writeFile(join(root,'dist/.nojekyll'),'');

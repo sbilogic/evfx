@@ -21,6 +21,9 @@ if (buttons.length) {
       tool.hidden = tool.dataset.variant !== view;
       if (!tool.hidden) tool.querySelector('.no').textContent = String(++visible).padStart(2, '0');
     }
+    for (const group of document.querySelectorAll('[data-category-group]')) {
+      group.hidden = !group.querySelector('.tool:not([hidden])');
+    }
     for (const button of buttons) {
       button.hidden = false;
       button.setAttribute('aria-pressed', String(button.dataset.view === view));
@@ -31,7 +34,7 @@ if (buttons.length) {
   for (const button of buttons) button.addEventListener('click', () => show(button.dataset.view));
   function applyHash() {
     let id; try { id = decodeURIComponent(location.hash.slice(1)); } catch { return; }
-    const target = document.getElementById(id);
+    const target = document.getElementById(id) || tools.find(tool => tool.dataset.aliases?.split(' ').includes(id));
     if (target?.dataset.variant) { show(target.dataset.variant); target.scrollIntoView(); }
   }
   window.addEventListener('pageshow', () => { show(view); applyHash(); });

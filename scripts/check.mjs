@@ -43,6 +43,12 @@ for(const tool of catalog.tools){
 }
 for(const id of Object.keys(releases))assert(ids.has(id),`Unknown tool in release lock: ${id}`);
 for(const id of Object.keys(sources))assert(ids.has(id),`Unknown distribution source: ${id}`);
+const aliases=new Set();
+for(const tool of catalog.tools)for(const alias of tool.aliases||[]){
+  assert.match(alias,/^[a-z][a-z0-9-]+$/);
+  assert(!ids.has(alias)&&!aliases.has(alias),`Conflicting legacy URL: ${alias}`);
+  aliases.add(alias);
+}
 const explain=await load('explain.json');
 for(const [id,page] of Object.entries(explain)){
   assert(ids.has(id),`Unknown tool in explain.json: ${id}`);

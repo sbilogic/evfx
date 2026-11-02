@@ -29,20 +29,6 @@
       "3D, perspective or collapsed layers need precomposing."
     ]
   },
-  "project-cleaner": {
-    "steps": [
-      ["Scan", "Groups footage items that share the same disk path, file size, dimensions, pixel aspect, duration, frame rate, interpretation and proxy."],
-      ["Back up", "Saves the project, copies it to a timestamped .aep beside the original and verifies the copy before continuing."],
-      ["Consolidate", "Runs After Effects' own Consolidate All Footage. AE repoints every layer, in every comp, to one surviving item."],
-      ["Verify", "Compares the removed items and layer sources with the scan. Any unexpected change is undone automatically."]
-    ],
-    "limits": [
-      "Copies of a file in different folders stay separate.",
-      "AE may keep candidates apart when their colour interpretation differs.",
-      "Expressions that reference Project-panel item indexes can change meaning.",
-      "Team Projects must be saved as local copies first."
-    ]
-  },
   "sequencer": {
     "steps": [
       ["Find the sequence", "Opening one frame loads every file in its folder that shares the same name pattern. Missing frame numbers are reported."],
