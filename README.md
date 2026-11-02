@@ -77,6 +77,8 @@ GitHub Actions checks and deploys pushes and release changes. Metadata is resolv
 
 Each download shows its GitHub asset upload date and time, including the timezone. The browser formats it in the visitor's local timezone; without JavaScript, the static UTC time remains visible. Older metadata without an asset timestamp is labelled Published using the release date. Site rebuilds and release-note edits do not reset upload times.
 
+CSS and JavaScript URLs include content hashes so new display code loads after a deployment while unchanged assets stay cached.
+
 ## Support
 
 `support.json` points header and footer support actions to the public creator page. Monthly support appears only if its own URL is configured. `.github/FUNDING.yml` configures the repository Sponsor button. These are direct links, with no embedded widgets or download gates. The creator's payout setup is required before the support page can receive payments.

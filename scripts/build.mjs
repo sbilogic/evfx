@@ -2,6 +2,7 @@ import { readFile, writeFile, mkdir, copyFile, readdir, rm } from 'node:fs/promi
 import { fileURLToPath } from 'node:url';
 import { join, dirname } from 'node:path';
 import { gzipSync } from 'node:zlib';
+import { createHash } from 'node:crypto';
 import { toolArt, heroArt } from './art.mjs';
 import { getReadiness } from './readiness.mjs';
 import { renderSupport } from './support.mjs';
@@ -10,6 +11,7 @@ export const root = dirname(dirname(fileURLToPath(import.meta.url)));
 export const escape = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const [catalog, releases, supportConfig, explain] = await Promise.all(['catalog.json','releases.lock.json','support.json','explain.json'].map(async f=>JSON.parse(await readFile(join(root,f),'utf8'))));
 const support=renderSupport(supportConfig);
+const [styleVersion,appVersion]=await Promise.all(['style.css','app.js'].map(async file=>createHash('sha256').update(await readFile(join(root,'src',file))).digest('hex').slice(0,10)));
 const bytes = n => n >= 1e6 ? `${(n/1e6).toFixed(1)} MB` : `${Math.max(1,Math.round(n/1000))} KB`;
 const site = 'https://sbilogic.github.io/evfx/';
 const utcTime = new Intl.DateTimeFormat('en-GB',{day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit',hourCycle:'h23',timeZone:'UTC',timeZoneName:'short'});
@@ -71,7 +73,8 @@ for(const tool of catalog.tools){
 const year=new Date().getFullYear();
 const replacements = {
   TITLE:escape(catalog.title), COUNT:completeCount, DEV_COUNT:devCount,
-  YEAR:year, HERO_ART:heroArt(), TOOLS:rows.join('\n'), SUPPORT_NAV:support.nav
+  YEAR:year, HERO_ART:heroArt(), TOOLS:rows.join('\n'), SUPPORT_NAV:support.nav,
+  STYLE_VERSION:styleVersion, APP_VERSION:appVersion
 };
 const fill=text=>{for(const [key,value] of Object.entries(replacements)) text=text.replaceAll(`{{${key}}}`,String(value));return text.replace(/>\s+</g,'><').trim();};
 await rm(join(root,'dist'),{recursive:true,force:true});
