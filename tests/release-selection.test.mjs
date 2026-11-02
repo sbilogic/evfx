@@ -18,6 +18,19 @@ test('a stable-looking filename alone cannot make an update complete',()=>{
   const lock=selectReleases(catalog,[release('1.0.0'),release('2.0.0')]);
   assert.equal(lock.sample.complete.version,'1.0.0');
 });
+
+test('latest and reviewed downloads retain their own upload times despite later metadata edits',()=>{
+  const old=release('1.0.0'),latest=release('2.0.0',{prerelease:true});
+  old.assets[0].created_at='2026-10-30T18:25:03Z';
+  latest.assets[0].created_at='2026-11-01T06:51:25Z';
+  latest.assets[0].updated_at='2026-11-02T12:00:00Z';
+  const lock=selectReleases(catalog,[old,latest]);
+  assert.equal(lock.sample.downloads[0].uploadedAt,'2026-11-01T06:51:25Z');
+  assert.equal(lock.sample.complete.downloads[0].uploadedAt,'2026-10-30T18:25:03Z');
+  assert.equal(lock.sample.publishedAt,latest.published_at);
+  const withoutAssetDate=selectReleases(catalog,[release('1.0.0')]);
+  assert.equal(withoutAssetDate.sample.downloads[0].uploadedAt,undefined);
+});
 test('an explicit complete declaration needs runtime verification and the matching artifact hash',()=>{
   const ready={state:'complete',runtimeVerified:true,sha256:sha};
   const lock=selectReleases(catalog,[release('1.0.0'),release('2.0.0',{readiness:ready})]);

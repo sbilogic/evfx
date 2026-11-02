@@ -12,17 +12,21 @@ const [catalog, releases, supportConfig, explain] = await Promise.all(['catalog.
 const support=renderSupport(supportConfig);
 const bytes = n => n >= 1e6 ? `${(n/1e6).toFixed(1)} MB` : `${Math.max(1,Math.round(n/1000))} KB`;
 const site = 'https://sbilogic.github.io/evfx/';
+const utcTime = new Intl.DateTimeFormat('en-GB',{day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit',hourCycle:'h23',timeZone:'UTC',timeZoneName:'short'});
 
 // Meta, download and install notes, shared by the grid and the detail pages.
 function download(tool,release,warningId) {
   const asset = release?.downloads.find(d=>d.primary) ?? release?.downloads[0];
   const version = release?.version ? `v${release.version}${release.build!==undefined?` b${release.build}`:''}` : '';
   const meta=[tool.host,version,asset&&`${asset.name.endsWith('.exe')?'Setup':'ZIP'} ${bytes(asset.bytes)}`].filter(Boolean).map(escape).join(' · ');
+  const timestamp=asset?.uploadedAt||release?.publishedAt;
+  const date=new Date(timestamp);
+  const uploaded=asset&&Number.isFinite(date.getTime())?`<span class="upload-time">${asset.uploadedAt?'Uploaded':'Published'} <time datetime="${escape(timestamp)}" title="${escape(date.toUTCString())}">${escape(utcTime.format(date))}</time></span>`:'';
   const action = asset
     ? `<a class="download" href="${escape(asset.url)}" aria-label="Download EVFX ${escape(tool.name)} ${escape(version)}"${warningId?` aria-describedby="${warningId}"`:''}>Download<span aria-hidden="true"> ↓</span></a>`
     : `<span class="no-download">No download</span>`;
   const notes = asset?`<details class="notes"><summary>Install<span class="sr-only"> EVFX ${escape(tool.name)}</span></summary><p class="req">${escape(tool.requirements)}</p><p>${escape(tool.install)}</p><p><a href="${escape(release.releaseUrl)}">Release${release.downloads.length>1?' & portable ZIP':''} ↗</a></p><p class="sha">${release.binary?'ZIP ':''}SHA-256 <code>${escape(asset.sha256)}</code>${release.binary?`<br>${escape(release.binary.name)} <code>${escape(release.binary.sha256)}</code>`:''}</p></details>`:'';
-  return `<div class="line"><span class="meta">${meta}</span>${action}</div>${notes}`;
+  return `<div class="line"><span class="release-meta"><span class="meta">${meta}</span>${uploaded}</span>${action}</div>${notes}`;
 }
 
 function toolRow(tool,release,variant,hasComplete) {

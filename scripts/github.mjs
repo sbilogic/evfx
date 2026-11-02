@@ -59,7 +59,7 @@ export function lockFromRelease(release,meta){
     if(asset.size!==file.bytes)throw new Error(`Release ${release.tag_name}: asset size differs from its manifest`);
     if(asset.digest&&asset.digest!==`sha256:${file.sha256}`)throw new Error(`Release ${release.tag_name}: SHA-256 mismatch`);
     if(!/^[a-f0-9]{64}$/.test(file.sha256))throw new Error('Invalid asset checksum');
-    return {name:asset.name,url:asset.browser_download_url,bytes:asset.size,sha256:file.sha256,primary:!!file.primary};
+    return {name:asset.name,url:asset.browser_download_url,bytes:asset.size,sha256:file.sha256,primary:!!file.primary,...(asset.created_at?{uploadedAt:asset.created_at}:{})};
   });
   return {version:meta.version??null,...(meta.build!==undefined?{build:meta.build}:{}),...(meta.aeVersion?{aeVersion:meta.aeVersion}:{}),...(meta.binary?{binary:meta.binary}:{}),publishedAt:release.published_at,releaseUrl:release.html_url,tag:release.tag_name,prerelease:!!release.prerelease,...(meta.readiness?{review:meta.readiness}:{}),downloads};
 }
