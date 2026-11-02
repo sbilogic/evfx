@@ -49,6 +49,8 @@ The library is grouped by host. Utility Collection discovers its tools from the 
 
 Published releases retain their own member lists, so the site describes the tools included in the actual download. Adding source and a panel tab, then running the normal collection build, updates the list, legacy redirects and duplicate suppression together. Unbuilt or mismatched manifests defer publication. Retired tools' existing explanation data can remain archived behind their redirects.
 
+Renames and removals replace the current included-tool list on the next normal build. The build automatically carries former identities in an optional `collection.retired` alias list, used only for redirects and duplicate suppression. Removed names never appear as included tools, even if old standalone distributions remain on disk. Re-adding a name reclaims it automatically; an empty collection says it contains no tools. Native plugins remain independent of both active and retired script aliases.
+
 Each released tool listed in `explain.json` gets a page at `/evfx/<id>/` with its processing steps and limits. Keep the text to what the tool actually does, sourced from the project's own docs. Development builds have no page.
 
 ## Local controls

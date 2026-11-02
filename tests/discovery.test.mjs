@@ -55,7 +55,7 @@ test('Smart Denoise and Match Grain cannot be rediscovered',async()=>{
   }finally{await f.cleanup();}
 });
 
-test('a completed collection build absorbs a newly added tool and its old name without hiding native Crop',async()=>{
+test('completed collection builds update additions and removals without hiding native Crop',async()=>{
   const f=await fixture();try{
     await addPackage(f,'EVFX New Utility');
     await addPackage(f,'EVFX Old Utility');
@@ -85,6 +85,18 @@ test('a completed collection build absorbs a newly added tool and its old name w
     assert.deepEqual(next.catalog.tools.map(t=>t.id).sort(),['crop','utility-collection']);
     assert.equal(next.catalog.tools.find(t=>t.id==='utility-collection').description,'New Utility · Crop to Content · Next Utility');
     assert(next.catalog.tools.find(t=>t.id==='utility-collection').aliases.includes('next-utility'));
+    collection.members.shift();
+    collection.retired=['new-utility','old-utility'];
+    const removedPayload=payload+'\nremoved tool';
+    collection.sha256=createHash('sha256').update(removedPayload).digest('hex');
+    await writeFile(join(project,'Utility.jsx'),removedPayload);
+    await writeFile(join(project,'evfx-release.json'),JSON.stringify({collection}));
+    const removed=await discoverLocalPlugins(f.root,{...f,catalog:next.catalog,sources:next.sources});
+    assert.deepEqual(removed.issues,[]);
+    assert.deepEqual(removed.catalog.tools.map(t=>t.id).sort(),['crop','utility-collection']);
+    const current=removed.catalog.tools.find(t=>t.id==='utility-collection');
+    assert.equal(current.description,'Crop to Content · Next Utility');
+    assert(current.aliases.includes('new-utility'));assert(current.aliases.includes('old-utility'));
   }finally{await f.cleanup();}
 });
 
@@ -98,6 +110,25 @@ test('a collection manifest for an unbuilt payload cannot absorb standalone tool
     assert(result.issues.some(issue=>issue.includes('does not match the completed build')));
     assert(result.catalog.tools.some(tool=>tool.id==='new-utility'));
     assert.equal(result.sources['utility-collection'].collection,undefined);
+  }finally{await f.cleanup();}
+});
+
+test('invalid retirement aliases defer discovery instead of claiming standalone tools',async()=>{
+  const f=await fixture();try{
+    await addPackage(f,'EVFX Old Utility');
+    const project=join(f.base,'EVFX Utility Collection');await mkdir(project);
+    const payload='// EVFX Utility Collection 1.3.0\ncompleted JSX';
+    await writeFile(join(project,'Utility.jsx'),payload);
+    for(const retired of ['old-utility',['../old-utility'],['current'],['old-utility','old-utility']]){
+      await writeFile(join(project,'evfx-release.json'),JSON.stringify({collection:{
+        schema:1,artifact:'Utility.jsx',sha256:createHash('sha256').update(payload).digest('hex'),
+        members:[{id:'current',name:'Current',tab:'Current'}],retired
+      }}));
+      const scan=await discoverLocalPlugins(f.root,f);
+      assert(scan.issues.length>0);
+      assert(scan.catalog.tools.some(tool=>tool.id==='old-utility'));
+      assert.equal(scan.sources['utility-collection'].collection,undefined);
+    }
   }finally{await f.cleanup();}
 });
 
@@ -115,9 +146,8 @@ test('automatically inferred script names cannot hide full native plugins with r
     await writeFile(join(project,'Utility.jsx'),payload);
     await writeFile(join(project,'evfx-release.json'),JSON.stringify({collection:{schema:1,artifact:'Utility.jsx',sha256:createHash('sha256').update(payload).digest('hex'),members:[
       {id:'crop-to-content',name:'Crop to Content',tab:'Crop',replaces:['crop']},
-      {id:'blurry',name:'Blurry Helper',tab:'Blurry'},
-      {id:'other-native',name:'Other Helper',tab:'Other'}
-    ]}}));
+      {id:'blurry',name:'Blurry Helper',tab:'Blurry'}
+    ],retired:['other-native']}}));
     const result=await discoverLocalPlugins(f.root,f);
     assert.deepEqual(result.catalog.tools.map(tool=>tool.id).sort(),['blurry','crop-ae','other-native','utility-collection']);
     const aliases=result.catalog.tools.find(tool=>tool.id==='utility-collection').aliases;

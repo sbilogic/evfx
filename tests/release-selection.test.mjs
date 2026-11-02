@@ -17,7 +17,7 @@ test('an unverified update preserves the last reviewed download for the complete
 
 test('GitHub refresh preserves the included tools for each actual collection version',()=>{
   const old={schema:1,artifact:'Utility.jsx',sha256:'b'.repeat(64),members:[{id:'first',name:'First',tab:'First'}]};
-  const latest={...old,sha256:'c'.repeat(64),members:[...old.members,{id:'second',name:'Second',tab:'Second'}]};
+  const latest={...old,sha256:'c'.repeat(64),members:[{id:'second',name:'Second',tab:'Second'}],retired:['first']};
   const lock=selectReleases(catalog,[release('1.0.0',{collection:old}),release('2.0.0',{prerelease:true,collection:latest})]);
   assert.deepEqual(lock.sample.collection,latest);
   assert.deepEqual(lock.sample.complete.collection,old);
