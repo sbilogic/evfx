@@ -149,7 +149,7 @@ export async function discoverLocalPlugins(siteRoot,{catalog,sources,config}){
   const excluded=new Set(config.excludedIds.map(normalize));
   catalog.tools=catalog.tools.filter(tool=>!excluded.has(normalize(tool.id)));
   for(const id of Object.keys(sources))if(excluded.has(normalize(id)))delete sources[id];
-  const projects=await findLocalProjects(siteRoot,config),observations=[],issues=[];
+  const projects=await findLocalProjects(siteRoot,config),observations=[],issues=[],nativeProjects=new Set();
   const completedBuilds=await readJson(join(siteRoot,'.local/completed-builds.json'))||{};
   const known=new Map(catalog.tools.map(tool=>[normalize(tool.name),tool.id]));
   for(const [id,source] of Object.entries(sources))known.set(normalize(basename(projectForSource(source))),id);
@@ -198,6 +198,8 @@ export async function discoverLocalPlugins(siteRoot,{catalog,sources,config}){
     }
     if(!source)continue;
     const aex=source.files?.find(file=>/\.aex$/i.test(file));
+    const cmake=source.artifacts?(await Promise.all(['CMakeLists.txt','plugin/CMakeLists.txt'].map(file=>text(join(project.absolute,file))))).join('\n'):'';
+    if(aex||/\baex\b|AE_SDK|AE_Effect|AfterEffects/i.test(cmake))nativeProjects.add(id);
     if(aex&&!source.bundleRoot){
       const metadata=aexMetadata(await readFile(sourcePath(siteRoot,config,source,aex)));
       if(metadata?.aeVersion){source.build=metadata.build;source.aeVersion=metadata.aeVersion;}
@@ -258,6 +260,8 @@ export async function discoverLocalPlugins(siteRoot,{catalog,sources,config}){
     if(descriptor){const info=await stat(join(project.absolute,'evfx-release.json'));observations.push({toolId:id,path:slash(join(project.absolute,'evfx-release.json')),size:info.size,mtime:info.mtimeMs});}
   }
   const owners=new Map();
+  const independent=new Set(catalog.tools.filter(tool=>tool.host!=='After Effects'||/native|plugin\s*\+\s*panel/i.test(tool.kind||'')||nativeProjects.has(tool.id)).map(tool=>tool.id));
+  const independentIds=new Set([...independent].map(normalize));
   for(const tool of catalog.tools){
     const collection=sources[tool.id]?.collection;
     const manualAliases=(tool.aliases||[]).filter(alias=>!tool.collectionAliases?.includes(alias));
@@ -265,7 +269,7 @@ export async function discoverLocalPlugins(siteRoot,{catalog,sources,config}){
       if(tool.collectionAliases){tool.aliases=manualAliases;delete tool.collectionAliases;}
       continue;
     }
-    const aliases=collectionIds(collection);
+    const aliases=collectionIds(collection).filter(alias=>!independentIds.has(normalize(alias)));
     tool.aliases=[...new Set([...manualAliases,...aliases])];
     tool.collectionAliases=aliases;
     tool.description=tool.detail=collectionDescription(collection);
@@ -276,6 +280,7 @@ export async function discoverLocalPlugins(siteRoot,{catalog,sources,config}){
     }
   }
   catalog.tools=catalog.tools.filter(tool=>{
+    if(independent.has(tool.id))return true;
     const owner=owners.get(normalize(tool.id))||owners.get(normalize(basename(projectForSource(sources[tool.id]||{}))));
     return !owner||owner===tool.id;
   });

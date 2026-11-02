@@ -145,18 +145,26 @@
       "aliases": [
         "corner-pin-to-power-pin",
         "power-pin",
+        "corner-pin",
         "crop-to-content",
+        "crop",
         "anchor-point",
+        "anchor",
         "project-cleaner",
-        "ae-project-cleaner"
+        "ae-project-cleaner",
+        "cleaner"
       ],
       "collectionAliases": [
         "corner-pin-to-power-pin",
         "power-pin",
+        "corner-pin",
         "crop-to-content",
+        "crop",
         "anchor-point",
+        "anchor",
         "project-cleaner",
-        "ae-project-cleaner"
+        "ae-project-cleaner",
+        "cleaner"
       ]
     },
     {

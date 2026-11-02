@@ -148,25 +148,45 @@
           "name": "Corner Pin to Power Pin",
           "tab": "Power Pin",
           "replaces": [
-            "power-pin"
+            "power-pin",
+            "corner-pin"
+          ],
+          "sourceFiles": [
+            "src/corner-pin.js"
           ]
         },
         {
           "id": "crop-to-content",
           "name": "Crop to Content",
-          "tab": "Crop"
+          "tab": "Crop",
+          "replaces": [
+            "crop"
+          ],
+          "sourceFiles": [
+            "src/crop.js"
+          ]
         },
         {
           "id": "anchor-point",
           "name": "Anchor Point",
-          "tab": "Anchor"
+          "tab": "Anchor",
+          "replaces": [
+            "anchor"
+          ],
+          "sourceFiles": [
+            "src/anchor.js"
+          ]
         },
         {
           "id": "project-cleaner",
           "name": "Project Cleaner",
           "tab": "Cleaner",
           "replaces": [
-            "ae-project-cleaner"
+            "ae-project-cleaner",
+            "cleaner"
+          ],
+          "sourceFiles": [
+            "../EVFX AE Project Cleaner/src/after-effects.js"
           ]
         }
       ]

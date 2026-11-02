@@ -45,9 +45,9 @@ The declaration must match the uploaded package, or the single AEX/JSX payload b
 
 ## Detail pages
 
-The library is grouped by host. Utility Collection's `utilities.json` registry drives its source bundle and completed-build `collection` record in `evfx-release.json`. Discovery accepts that record only when its SHA-256 matches the selected JSX. Included IDs and their explicit `replaces` aliases are automatically removed from standalone listings and redirected to the collection. No per-tool website exclusions are needed. Shared source folders stay on disk; native Crop stays independent from Crop to Content.
+The library is grouped by host. Utility Collection discovers its tools from the actual panel tabs and production source modules, including normal shared-source includes. Its build generates the completed-build `collection` record in `evfx-release.json`; no hand-maintained tool registry is used. Website discovery accepts that record only when its SHA-256 matches the selected JSX. Inferred standalone script identities and old names are consolidated under the collection with redirects. Shared source folders stay on disk; full native plugins and tools for other hosts remain independent.
 
-Published releases retain their own member lists, so the site describes the tools included in the actual download. A new registry entry and normal collection build update the list, legacy redirects and duplicate suppression together. Unbuilt or mismatched manifests defer publication. Retired tools' existing explanation data can remain archived behind their redirects.
+Published releases retain their own member lists, so the site describes the tools included in the actual download. Adding source and a panel tab, then running the normal collection build, updates the list, legacy redirects and duplicate suppression together. Unbuilt or mismatched manifests defer publication. Retired tools' existing explanation data can remain archived behind their redirects.
 
 Each released tool listed in `explain.json` gets a page at `/evfx/<id>/` with its processing steps and limits. Keep the text to what the tool actually does, sourced from the project's own docs. Development builds have no page.
 

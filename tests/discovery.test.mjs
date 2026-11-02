@@ -100,6 +100,31 @@ test('a collection manifest for an unbuilt payload cannot absorb standalone tool
     assert.equal(result.sources['utility-collection'].collection,undefined);
   }finally{await f.cleanup();}
 });
+
+test('automatically inferred script names cannot hide full native plugins with related names',async()=>{
+  const f=await fixture();try{
+    for(const [folder,id,kind] of [['EVFX Crop','crop-ae','Plugin + panel'],['EVFX Blurry','blurry','Native plugin']]){
+      const path=await addPackage(f,folder);
+      f.catalog.tools.push({id,name:folder.replace('EVFX ',''),host:'After Effects',kind});
+      f.sources[id]={base:'dev',project:folder,version:'1.0.0',artifacts:[folder+'/release/'+basename(path)]};
+    }
+    await addPackage(f,'EVFX Other Native');
+    await writeFile(join(f.base,'EVFX Other Native','CMakeLists.txt'),'project(OtherNative VERSION 1.0.0)\nset_target_properties(OtherNative PROPERTIES SUFFIX ".aex")');
+    const project=join(f.base,'EVFX Utility Collection');await mkdir(project);
+    const payload='// EVFX Utility Collection 1.3.0\ncompleted JSX';
+    await writeFile(join(project,'Utility.jsx'),payload);
+    await writeFile(join(project,'evfx-release.json'),JSON.stringify({collection:{schema:1,artifact:'Utility.jsx',sha256:createHash('sha256').update(payload).digest('hex'),members:[
+      {id:'crop-to-content',name:'Crop to Content',tab:'Crop',replaces:['crop']},
+      {id:'blurry',name:'Blurry Helper',tab:'Blurry'},
+      {id:'other-native',name:'Other Helper',tab:'Other'}
+    ]}}));
+    const result=await discoverLocalPlugins(f.root,f);
+    assert.deepEqual(result.catalog.tools.map(tool=>tool.id).sort(),['blurry','crop-ae','other-native','utility-collection']);
+    const aliases=result.catalog.tools.find(tool=>tool.id==='utility-collection').aliases;
+    assert(!aliases.includes('blurry'));assert(!aliases.includes('other-native'));
+    assert.deepEqual(result.issues,[]);
+  }finally{await f.cleanup();}
+});
 test('generated directories and empty project folders do not become downloads',async()=>{
   const f=await fixture();try{
     await mkdir(join(f.base,'EVFX Empty','node_modules','EVFX Fake','release'),{recursive:true});
