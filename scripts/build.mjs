@@ -58,7 +58,7 @@ function detailPage(template,tool,release) {
     <section class="flow" aria-labelledby="flow-title"><h2 id="flow-title">How it works</h2><ol>${steps.map(([title,text])=>`<li><h3>${escape(title)}</h3><p>${escape(text)}</p></li>`).join('')}</ol></section>
     <section class="limits" aria-labelledby="limits-title"><h2 id="limits-title">Limits</h2><ul>${limits.map(l=>`<li>${escape(l)}</li>`).join('')}</ul></section>
   </article>`;
-  return template.replaceAll('{{NAME}}',escape(tool.name)).replaceAll('{{DESCRIPTION}}',escape(tool.description))
+  return template.replaceAll('{{NAME}}',escape(tool.name)).replaceAll('{{DESCRIPTION}}',escape(release?.collection?collectionDescription(release.collection):tool.description))
     .replaceAll('{{URL}}',`${site}${tool.id}/`).replace('{{BODY}}',body);
 }
 
