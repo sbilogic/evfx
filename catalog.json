@@ -129,10 +129,10 @@
       "category": "ae",
       "kind": "ScriptUI panel",
       "art": "utilities",
-      "description": "Power Pin conversion, crop to content, anchor positioning and Project Cleaner in one panel.",
-      "detail": "Power Pin conversion, crop to content, anchor positioning and Project Cleaner in one panel.",
+      "description": "Corner Pin to Power Pin · Crop to Content · Anchor Point · Project Cleaner",
+      "detail": "Corner Pin to Power Pin · Crop to Content · Anchor Point · Project Cleaner",
       "requirements": "After Effects GUI · JSX script",
-      "install": "Run EVFX Utility Collection.jsx through File > Scripts > Run Script File. For a dockable panel, copy it to Scripts/ScriptUI Panels and restart AE. Open Utility Collection from Window; use the Power Pin, Crop, Anchor and Cleaner tabs.",
+      "install": "Run EVFX Utility Collection.jsx through File > Scripts > Run Script File. For a dockable panel, copy it to Scripts/ScriptUI Panels and restart AE. Open Utility Collection from Window. Each utility has its own tab.",
       "status": "preview",
       "autoDiscovered": true,
       "readiness": {
@@ -143,7 +143,20 @@
         "note": "This combined build has no recorded AE runtime review. Test its utilities on a backup project."
       },
       "aliases": [
-        "project-cleaner"
+        "project-cleaner",
+        "corner-pin-to-power-pin",
+        "power-pin",
+        "crop-to-content",
+        "anchor-point",
+        "ae-project-cleaner"
+      ],
+      "collectionAliases": [
+        "corner-pin-to-power-pin",
+        "power-pin",
+        "crop-to-content",
+        "anchor-point",
+        "project-cleaner",
+        "ae-project-cleaner"
       ]
     },
     {

@@ -22,7 +22,7 @@ Each one-shot sync discovers new plugins and updated builds in both roots. New p
 
 The helper streams uploads, verifies SHA-256 digests, validates ZIP integrity, and reuses prior checks for identical files. It never builds a plugin, launches an installer or AE, uploads whole project folders, or changes private repository visibility. It skips publication while site code is being edited. Failed or deferred publications can retry on the next connected build or manual sync; existing downloads remain available.
 
-GitHub Actions deploys repository pushes and release changes, with no scheduled rebuilds. Hosting the site consumes no local PC resources.
+GitHub Actions deploys repository pushes, with no scheduled rebuilds. The publisher explicitly dispatches a deployment for metadata-only release changes that need no commit, avoiding duplicate builds for the same publication. Hosting the site consumes no local PC resources.
 
 ## Complete and development builds
 
@@ -45,7 +45,9 @@ The declaration must match the uploaded package, or the single AEX/JSX payload b
 
 ## Detail pages
 
-The library is grouped by host. Utility Collection contains Power Pin conversion, Crop to Content, Anchor Point and Project Cleaner. The standalone Cleaner listing is retired; its old page and hash link lead to Utility Collection. Both Cleaner folder-name variants stay excluded from discovery. Its source folder remains a shared build input for Utility Collection. Native Crop remains separate for manual bounds, mask crops and prerenders.
+The library is grouped by host. Utility Collection's `utilities.json` registry drives its source bundle and completed-build `collection` record in `evfx-release.json`. Discovery accepts that record only when its SHA-256 matches the selected JSX. Included IDs and their explicit `replaces` aliases are automatically removed from standalone listings and redirected to the collection. No per-tool website exclusions are needed. Shared source folders stay on disk; native Crop stays independent from Crop to Content.
+
+Published releases retain their own member lists, so the site describes the tools included in the actual download. A new registry entry and normal collection build update the list, legacy redirects and duplicate suppression together. Unbuilt or mismatched manifests defer publication. Retired tools' existing explanation data can remain archived behind their redirects.
 
 Each released tool listed in `explain.json` gets a page at `/evfx/<id>/` with its processing steps and limits. Keep the text to what the tool actually does, sourced from the project's own docs. Development builds have no page.
 
@@ -75,7 +77,7 @@ node scripts/serve.mjs
 
 Open http://127.0.0.1:4173/evfx/ . All paths support a GitHub project-site base path. The build reports raw and gzip size. Complete downloads work without JavaScript; the Development view needs JavaScript.
 
-GitHub Actions checks and deploys pushes and release changes. Metadata is resolved at build time, including a separate last-complete download. The browser makes no GitHub API calls. Credentials stay in process memory and never enter the site, release notes, or repository.
+GitHub Actions checks and deploys pushes and explicit publisher dispatches. Metadata is resolved at build time, including a separate last-complete download. The browser makes no GitHub API calls. Credentials stay in process memory and never enter the site, release notes, or repository.
 
 Each download shows its GitHub asset upload date and time, including the timezone. The browser formats it in the visitor's local timezone; without JavaScript, the static UTC time remains visible. Older metadata without an asset timestamp is labelled Published using the release date. Site rebuilds and release-note edits do not reset upload times.
 

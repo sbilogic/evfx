@@ -3,8 +3,8 @@ import assert from 'node:assert/strict';
 import { selectReleases } from '../scripts/release-selection.mjs';
 const sha='a'.repeat(64);
 const catalog={tools:[{id:'sample',readiness:{state:'reviewed',releaseTag:'sample-1.0.0'}}]};
-function release(version,{prerelease=false,readiness}={}){
-  const name=`sample-${version}.zip`,meta={id:'sample',version,files:[{name,bytes:123,sha256:sha,primary:true}],...(readiness?{readiness}:{})};
+function release(version,{prerelease=false,readiness,collection}={}){
+  const name=`sample-${version}.zip`,meta={id:'sample',version,files:[{name,bytes:123,sha256:sha,primary:true}],...(readiness?{readiness}:{}),...(collection?{collection}:{})};
   return {tag_name:`sample-${version}`,published_at:'2026-10-31T00:00:00Z',draft:false,prerelease,
     body:`<!-- evfx-release\n${JSON.stringify(meta)}\n-->`,html_url:`https://github.com/example/evfx/releases/tag/sample-${version}`,
     assets:[{name,size:123,state:'uploaded',digest:`sha256:${sha}`,browser_download_url:`https://github.com/example/evfx/releases/download/sample-${version}/${name}`}]};
@@ -13,6 +13,14 @@ test('an unverified update preserves the last reviewed download for the complete
   const lock=selectReleases(catalog,[release('1.0.0'),release('2.0.0',{prerelease:true})]);
   assert.equal(lock.sample.version,'2.0.0');
   assert.equal(lock.sample.complete.version,'1.0.0');
+});
+
+test('GitHub refresh preserves the included tools for each actual collection version',()=>{
+  const old={schema:1,artifact:'Utility.jsx',sha256:'b'.repeat(64),members:[{id:'first',name:'First',tab:'First'}]};
+  const latest={...old,sha256:'c'.repeat(64),members:[...old.members,{id:'second',name:'Second',tab:'Second'}]};
+  const lock=selectReleases(catalog,[release('1.0.0',{collection:old}),release('2.0.0',{prerelease:true,collection:latest})]);
+  assert.deepEqual(lock.sample.collection,latest);
+  assert.deepEqual(lock.sample.complete.collection,old);
 });
 test('a stable-looking filename alone cannot make an update complete',()=>{
   const lock=selectReleases(catalog,[release('1.0.0'),release('2.0.0')]);

@@ -1,6 +1,7 @@
 import { readdir,readFile,stat } from 'node:fs/promises';
 import { resolve,join,relative,basename,dirname,extname,sep } from 'node:path';
 import { createHash } from 'node:crypto';
+import { validateCollection,collectionIds,collectionDescription } from './collections.mjs';
 
 const normalize=value=>String(value).replace(/^evfx[\s_-]*/i,'').replace(/[^a-z0-9]/gi,'').toLowerCase();
 const slug=value=>String(value).replace(/^evfx[\s_-]*/i,'').replace(/([a-z])([A-Z])/g,'$1-$2').replace(/[^a-z0-9]+/gi,'-').replace(/^-|-$/g,'').toLowerCase();
@@ -201,6 +202,16 @@ export async function discoverLocalPlugins(siteRoot,{catalog,sources,config}){
       const metadata=aexMetadata(await readFile(sourcePath(siteRoot,config,source,aex)));
       if(metadata?.aeVersion){source.build=metadata.build;source.aeVersion=metadata.aeVersion;}
     }
+    delete source.collection;
+    if(descriptor?.collection){
+      try{
+        const collection=validateCollection(descriptor.collection),artifact=resolve(project.absolute,collection.artifact);
+        if(collectionIds(collection).some(alias=>normalize(alias)===normalize(id)))throw new Error('A collection cannot replace itself');
+        if(!inside(project.absolute,artifact)||source.artifacts||!source.files?.some(file=>sourcePath(siteRoot,config,source,file)===artifact))throw new Error('Collection manifest does not describe the selected distribution');
+        if(createHash('sha256').update(await readFile(artifact)).digest('hex')!==collection.sha256)throw new Error('Collection manifest does not match the completed build');
+        source.collection=collection;
+      }catch(error){issues.push(`${id}: ${error.message}`);}
+    }
     // A descriptor can declare an exact, runtime-verified complete package.
     if(descriptor?.readiness?.state==='complete'&&descriptor.readiness.runtimeVerified===true&&/^[a-f0-9]{64}$/i.test(descriptor.readiness.sha256||'')){
       source.review={...descriptor.readiness,evidence:`${project.project}/evfx-release.json`};
@@ -246,6 +257,31 @@ export async function discoverLocalPlugins(siteRoot,{catalog,sources,config}){
     }
     if(descriptor){const info=await stat(join(project.absolute,'evfx-release.json'));observations.push({toolId:id,path:slash(join(project.absolute,'evfx-release.json')),size:info.size,mtime:info.mtimeMs});}
   }
+  const owners=new Map();
+  for(const tool of catalog.tools){
+    const collection=sources[tool.id]?.collection;
+    const manualAliases=(tool.aliases||[]).filter(alias=>!tool.collectionAliases?.includes(alias));
+    if(!collection){
+      if(tool.collectionAliases){tool.aliases=manualAliases;delete tool.collectionAliases;}
+      continue;
+    }
+    const aliases=collectionIds(collection);
+    tool.aliases=[...new Set([...manualAliases,...aliases])];
+    tool.collectionAliases=aliases;
+    tool.description=tool.detail=collectionDescription(collection);
+    for(const alias of aliases){
+      const key=normalize(alias),owner=owners.get(key);
+      if(owner&&owner!==tool.id)issues.push(`Collection membership conflicts: ${alias}`);
+      owners.set(key,tool.id);
+    }
+  }
+  catalog.tools=catalog.tools.filter(tool=>{
+    const owner=owners.get(normalize(tool.id))||owners.get(normalize(basename(projectForSource(sources[tool.id]||{}))));
+    return !owner||owner===tool.id;
+  });
+  const active=new Set(catalog.tools.map(tool=>tool.id));
+  for(const id of Object.keys(sources))if(!active.has(id))delete sources[id];
+  for(let i=observations.length-1;i>=0;i--)if(!active.has(observations[i].toolId))observations.splice(i,1);
   observations.sort((a,b)=>a.path.localeCompare(b.path));
   const fingerprint=createHash('sha256').update(JSON.stringify({catalog,sources,observations})).digest('hex');
   const toolFingerprints=Object.fromEntries(Object.entries(sources).map(([id,source])=>[id,createHash('sha256').update(JSON.stringify({source,tool:catalog.tools.find(t=>t.id===id),files:observations.filter(o=>o.toolId===id)})).digest('hex')]));

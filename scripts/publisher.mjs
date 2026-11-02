@@ -84,7 +84,7 @@ async function publish({automatic=false,prepareOnly=false,only=null,expectedFing
       tool.readiness={state:'reviewed',releaseTag:tag,reviewedAt:new Date().toISOString().slice(0,10),evidence:source.review.evidence};
     }
     const native=source.files?.find(file=>/\.aex$/i.test(file));
-    const identity={...(source.build!==undefined?{build:source.build}:{}),...(source.aeVersion?{aeVersion:source.aeVersion}:{})};
+    const identity={...(source.build!==undefined?{build:source.build}:{}),...(source.aeVersion?{aeVersion:source.aeVersion}:{}),...(source.collection?{collection:source.collection}:{})};
     if(native&&!source.bundleRoot)identity.binary={name:basename(native),sha256:await hashFile(sourcePath(root,config,source,native))};
     prepared.push({tool,version,assets,tag,validatedSource,identity});
     console.log(`Prepared ${tool.id} ${version||'snapshot'}`);

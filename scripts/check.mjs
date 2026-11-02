@@ -51,7 +51,7 @@ for(const tool of catalog.tools)for(const alias of tool.aliases||[]){
 }
 const explain=await load('explain.json');
 for(const [id,page] of Object.entries(explain)){
-  assert(ids.has(id),`Unknown tool in explain.json: ${id}`);
+  assert(ids.has(id)||aliases.has(id),`Unknown tool in explain.json: ${id}`);
   assert(page.steps?.length&&page.steps.every(s=>s.length===2&&s[0]&&s[1]),`${id} needs titled steps`);
   assert(Array.isArray(page.limits),`${id} needs a limits list`);
 }

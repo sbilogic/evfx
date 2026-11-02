@@ -5,6 +5,7 @@ import { tmpdir } from 'node:os';
 import { join,dirname,basename,resolve } from 'node:path';
 import { discoverLocalPlugins,compareVersions,versionFromName } from '../scripts/local-plugins.mjs';
 import { recordCompletedBuild } from '../scripts/completed-build.mjs';
+import { createHash } from 'node:crypto';
 
 export async function fixture(){
   const base=await mkdtemp(join(tmpdir(),'evfx-discovery-'));
@@ -54,20 +55,49 @@ test('Smart Denoise and Match Grain cannot be rediscovered',async()=>{
   }finally{await f.cleanup();}
 });
 
-test('Project Cleaner stays consolidated in Utility Collection across future discovery runs',async()=>{
+test('a completed collection build absorbs a newly added tool and its old name without hiding native Crop',async()=>{
   const f=await fixture();try{
-    f.config.excludedIds.push('project-cleaner','ae-project-cleaner');
-    f.catalog.tools.push({id:'project-cleaner',name:'Project Cleaner'});
-    f.sources['project-cleaner']={base:'dev',project:'EVFX AE Project Cleaner',version:'1.0.0'};
-    await addPackage(f,'EVFX AE Project Cleaner');
-    await addPackage(f,'EVFX Project Cleaner');
-    await addPackage(f,'EVFX Utility Collection','1.2.0');
-    let result=await discoverLocalPlugins(f.root,f);
-    result=await discoverLocalPlugins(f.root,{...f,catalog:result.catalog,sources:result.sources});
-    assert.deepEqual(result.catalog.tools.map(t=>t.id),['utility-collection']);
-    assert.equal(result.sources['project-cleaner'],undefined);
-    assert.equal(result.sources['ae-project-cleaner'],undefined);
-    assert.equal(result.sources['utility-collection'].version,'1.2.0');
+    await addPackage(f,'EVFX New Utility');
+    await addPackage(f,'EVFX Old Utility');
+    await addPackage(f,'EVFX Crop');
+    const project=join(f.base,'EVFX Utility Collection');await mkdir(project);
+    const payload='// EVFX Utility Collection 1.3.0\ncompleted JSX';
+    await writeFile(join(project,'Utility.jsx'),payload);
+    const collection={schema:1,artifact:'Utility.jsx',sha256:createHash('sha256').update(payload).digest('hex'),members:[
+      {id:'new-utility',name:'New Utility',tab:'New Utility',replaces:['old-utility']},
+      {id:'crop-to-content',name:'Crop to Content',tab:'Crop'}
+    ]};
+    await writeFile(join(project,'evfx-release.json'),JSON.stringify({collection}));
+    const result=await discoverLocalPlugins(f.root,f);
+    assert.deepEqual(result.catalog.tools.map(t=>t.id).sort(),['crop','utility-collection']);
+    const tool=result.catalog.tools.find(t=>t.id==='utility-collection');
+    assert.equal(tool.description,'New Utility · Crop to Content');
+    assert(tool.aliases.includes('new-utility'));assert(tool.aliases.includes('old-utility'));
+    assert.deepEqual(result.sources['utility-collection'].collection,collection);
+    assert.deepEqual(result.issues,[]);
+    await addPackage(f,'EVFX Next Utility');
+    const nextPayload=payload+'\nnext tool';
+    collection.members.push({id:'next-utility',name:'Next Utility',tab:'Next Utility'});
+    collection.sha256=createHash('sha256').update(nextPayload).digest('hex');
+    await writeFile(join(project,'Utility.jsx'),nextPayload);
+    await writeFile(join(project,'evfx-release.json'),JSON.stringify({collection}));
+    const next=await discoverLocalPlugins(f.root,{...f,catalog:result.catalog,sources:result.sources});
+    assert.deepEqual(next.catalog.tools.map(t=>t.id).sort(),['crop','utility-collection']);
+    assert.equal(next.catalog.tools.find(t=>t.id==='utility-collection').description,'New Utility · Crop to Content · Next Utility');
+    assert(next.catalog.tools.find(t=>t.id==='utility-collection').aliases.includes('next-utility'));
+  }finally{await f.cleanup();}
+});
+
+test('a collection manifest for an unbuilt payload cannot absorb standalone tools',async()=>{
+  const f=await fixture();try{
+    await addPackage(f,'EVFX New Utility');
+    const project=join(f.base,'EVFX Utility Collection');await mkdir(project);
+    await writeFile(join(project,'Utility.jsx'),'// EVFX Utility Collection 1.3.0\nprevious completed build');
+    await writeFile(join(project,'evfx-release.json'),JSON.stringify({collection:{schema:1,artifact:'Utility.jsx',sha256:'a'.repeat(64),members:[{id:'new-utility',name:'New Utility',tab:'New Utility'}]}}));
+    const result=await discoverLocalPlugins(f.root,f);
+    assert(result.issues.some(issue=>issue.includes('does not match the completed build')));
+    assert(result.catalog.tools.some(tool=>tool.id==='new-utility'));
+    assert.equal(result.sources['utility-collection'].collection,undefined);
   }finally{await f.cleanup();}
 });
 test('generated directories and empty project folders do not become downloads',async()=>{

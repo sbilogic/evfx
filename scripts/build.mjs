@@ -6,6 +6,7 @@ import { createHash } from 'node:crypto';
 import { toolArt, heroArt } from './art.mjs';
 import { getReadiness } from './readiness.mjs';
 import { renderSupport } from './support.mjs';
+import { collectionDescription } from './collections.mjs';
 
 export const root = dirname(dirname(fileURLToPath(import.meta.url)));
 export const escape = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -42,7 +43,7 @@ function toolRow(tool,release,variant,hasComplete) {
   return `<article id="${rowId}" class="tool${hasWarning?' is-dev':''}" data-product="${tool.id}" data-variant="${variant}"${aliases}${variant==='development'?' hidden':''}>
     ${page?`<a class="art" href="${page}" tabindex="-1" aria-hidden="true">${art}</a>`:`<div class="art">${art}</div>`}
     <h3>${page?`<a href="${page}">${escape(tool.name)}</a>`:escape(tool.name)}</h3>
-    <p class="desc">${escape(tool.description)}</p>
+    <p class="desc">${escape(release?.collection?collectionDescription(release.collection):tool.description)}</p>
     ${page?`<a class="how" href="${page}">How it works <span aria-hidden="true">→</span></a>`:''}
     ${hasWarning?`<p id="${warningId}" class="warn"><span class="sr-only">${escape(readiness.title)}: </span>${escape(readiness.note)}</p>`:''}
     ${download(tool,release,hasWarning&&warningId)}
@@ -53,7 +54,7 @@ function detailPage(template,tool,release) {
   const {steps,limits}=explain[tool.id];
   const body=`<article class="detail">
     <div class="detail-art" aria-hidden="true">${toolArt(tool.art)}</div>
-    <div class="detail-head"><h1>${escape(tool.name)}</h1><p class="desc">${escape(tool.description)}</p>${download(tool,release)}</div>
+    <div class="detail-head"><h1>${escape(tool.name)}</h1><p class="desc">${escape(release?.collection?collectionDescription(release.collection):tool.description)}</p>${download(tool,release)}</div>
     <section class="flow" aria-labelledby="flow-title"><h2 id="flow-title">How it works</h2><ol>${steps.map(([title,text])=>`<li><h3>${escape(title)}</h3><p>${escape(text)}</p></li>`).join('')}</ol></section>
     <section class="limits" aria-labelledby="limits-title"><h2 id="limits-title">Limits</h2><ul>${limits.map(l=>`<li>${escape(l)}</li>`).join('')}</ul></section>
   </article>`;

@@ -2,6 +2,7 @@ import { spawnSync } from 'node:child_process';
 import { createReadStream } from 'node:fs';
 import { stat } from 'node:fs/promises';
 import { Readable } from 'node:stream';
+import { validateCollection } from './collections.mjs';
 let token;
 export function githubToken() {
   if(token)return token;
@@ -61,5 +62,5 @@ export function lockFromRelease(release,meta){
     if(!/^[a-f0-9]{64}$/.test(file.sha256))throw new Error('Invalid asset checksum');
     return {name:asset.name,url:asset.browser_download_url,bytes:asset.size,sha256:file.sha256,primary:!!file.primary,...(asset.created_at?{uploadedAt:asset.created_at}:{})};
   });
-  return {version:meta.version??null,...(meta.build!==undefined?{build:meta.build}:{}),...(meta.aeVersion?{aeVersion:meta.aeVersion}:{}),...(meta.binary?{binary:meta.binary}:{}),publishedAt:release.published_at,releaseUrl:release.html_url,tag:release.tag_name,prerelease:!!release.prerelease,...(meta.readiness?{review:meta.readiness}:{}),downloads};
+  return {version:meta.version??null,...(meta.build!==undefined?{build:meta.build}:{}),...(meta.aeVersion?{aeVersion:meta.aeVersion}:{}),...(meta.binary?{binary:meta.binary}:{}),...(meta.collection?{collection:validateCollection(meta.collection)}:{}),publishedAt:release.published_at,releaseUrl:release.html_url,tag:release.tag_name,prerelease:!!release.prerelease,...(meta.readiness?{review:meta.readiness}:{}),downloads};
 }

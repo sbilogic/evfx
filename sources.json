@@ -137,6 +137,39 @@
     "version": "1.2.0",
     "files": [
       "EVFX Utility Collection/EVFX Utility Collection.jsx"
-    ]
+    ],
+    "collection": {
+      "schema": 1,
+      "artifact": "EVFX Utility Collection.jsx",
+      "sha256": "1154bf24cba6fb79840b35673882caa1c158a1fd3fa2905497fcf888cdc234d0",
+      "members": [
+        {
+          "id": "corner-pin-to-power-pin",
+          "name": "Corner Pin to Power Pin",
+          "tab": "Power Pin",
+          "replaces": [
+            "power-pin"
+          ]
+        },
+        {
+          "id": "crop-to-content",
+          "name": "Crop to Content",
+          "tab": "Crop"
+        },
+        {
+          "id": "anchor-point",
+          "name": "Anchor Point",
+          "tab": "Anchor"
+        },
+        {
+          "id": "project-cleaner",
+          "name": "Project Cleaner",
+          "tab": "Cleaner",
+          "replaces": [
+            "ae-project-cleaner"
+          ]
+        }
+      ]
+    }
   }
 }
