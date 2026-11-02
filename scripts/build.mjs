@@ -7,6 +7,7 @@ import { toolArt, heroArt } from './art.mjs';
 import { getReadiness } from './readiness.mjs';
 import { renderSupport } from './support.mjs';
 import { collectionDescription } from './collections.mjs';
+import { retiredPluginIds } from './project-identity.mjs';
 
 export const root = dirname(dirname(fileURLToPath(import.meta.url)));
 export const escape = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -77,6 +78,7 @@ for(const tool of catalog.tools){
 const year=new Date().getFullYear();
 const replacements = {
   TITLE:escape(catalog.title), COUNT:completeCount, DEV_COUNT:devCount,
+  RETIRED_IDS:escape(retiredPluginIds(catalog).join(' ')),
   YEAR:year, HERO_ART:heroArt(), TOOLS:[...groups].map(([category,group])=>`<section class="library-group" data-category-group="${category}" aria-labelledby="host-${category}"${group.complete?'':' hidden'}><h2 id="host-${category}" class="library-label">${escape(group.host)}</h2><div class="grid">${group.rows.join('\n')}</div></section>`).join('\n'), SUPPORT_NAV:support.nav,
   STYLE_VERSION:styleVersion, APP_VERSION:appVersion
 };
@@ -88,7 +90,12 @@ for(const [tool,release] of pages){
   await mkdir(join(root,'dist',tool.id),{recursive:true});
   await writeFile(join(root,'dist',tool.id,'index.html'),fill(detailPage(pageTemplate,tool,release)));
 }
-for(const tool of catalog.tools)for(const alias of tool.aliases||[]){
+const redirects=catalog.tools.flatMap(tool=>{
+  const aliases=[...(tool.aliases||[]),...(!pages.some(([page])=>page.id===tool.id)?[tool.id]:[])];
+  return aliases.map(alias=>({alias,tool}));
+});
+for(const alias of retiredPluginIds(catalog))redirects.push({alias,tool:{id:'collection',name:'plugin library'}});
+for(const {alias,tool} of redirects){
   await mkdir(join(root,'dist',alias),{recursive:true});
   const destination=`../#${tool.id}`;
   await writeFile(join(root,'dist',alias,'index.html'),`<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta http-equiv="refresh" content="0;url=${destination}"><link rel="canonical" href="${site}#${tool.id}"><title>EVFX ${escape(tool.name)}</title></head><body><a href="${destination}">Continue to ${escape(tool.name)}</a></body></html>`);

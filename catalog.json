@@ -19,6 +19,15 @@
         "releaseTag": "smart-grain-v2.2.3-af150566b8",
         "reviewedAt": "2026-10-31",
         "evidence": "EVFXSmartGrain/docs/smartfx-bounds-validation.md: current 2.2.3 AEX and live AE opening/render checks."
+      },
+      "localProject": {
+        "identity": "a7c442d7-a385-4637-933d-f10fe05458b5",
+        "base": "collection",
+        "project": "EVFXSmartGrain",
+        "names": {
+          "readme": "Smart Grain",
+          "folder": "Smart Grain"
+        }
       }
     },
     {
@@ -38,6 +47,15 @@
         "releaseTag": "blurry-v2.1.0-865611ea0b",
         "reviewedAt": "2026-10-31",
         "evidence": "EVFX Blurry/docs/RELEASE_NOTES.md: core/adapter regression suites and AE 2026 smoke checks; documented scope limits."
+      },
+      "localProject": {
+        "identity": "76156926-c4af-444c-9051-c89c9de247bd",
+        "base": "collection",
+        "project": "EVFX Blurry",
+        "names": {
+          "readme": "Blurry",
+          "folder": "Blurry"
+        }
       }
     },
     {
@@ -58,6 +76,15 @@
         "reviewedAt": "2026-11-01",
         "evidence": "Active PixelPicker worktree: docs/HANDOFF.md and docs/QA-RESULTS.md; exact installed AEX hash verified.",
         "note": "Interactive sampler handles, overlay responsiveness and Follow Null refresh still need verification."
+      },
+      "localProject": {
+        "identity": "5deccf0d-f62c-4ee9-b672-d2769b6ec184",
+        "base": "pixel-picker-active",
+        "project": "evfx-pixelpicker-redesign-593091",
+        "names": {
+          "readme": "PixelPicker",
+          "folder": "pixelpicker-redesign-593091"
+        }
       }
     },
     {
@@ -78,6 +105,15 @@
         "reviewedAt": "2026-10-31",
         "evidence": "EVFX Auto Levels/README.md and docs/plugin_build_guide.md: build/use instructions; no completed host-acceptance report found.",
         "note": "No recorded AE runtime test. Check reference sampling and renders on a test project."
+      },
+      "localProject": {
+        "identity": "7205ae3c-99d8-4a41-9ccd-6d3719e5289a",
+        "base": "collection",
+        "project": "EVFX Auto Levels",
+        "names": {
+          "readme": "Auto Levels",
+          "folder": "Auto Levels"
+        }
       }
     },
     {
@@ -99,6 +135,15 @@
         "reviewedAt": "2026-10-31",
         "evidence": "EVFX Choke It: automatically discovered distribution",
         "note": "Newly discovered build; runtime readiness has not been verified."
+      },
+      "localProject": {
+        "identity": "40d424cd-b9e7-4c40-a30c-8f054d0fddc2",
+        "base": "dev",
+        "project": "EVFX Choke It",
+        "names": {
+          "readme": "Choke It",
+          "folder": "Choke It"
+        }
       }
     },
     {
@@ -120,6 +165,15 @@
         "reviewedAt": "2026-10-31",
         "evidence": "EVFX Flares: automatically discovered distribution",
         "note": "Development build. Features and runtime stability may be incomplete."
+      },
+      "localProject": {
+        "identity": "11854c9e-6c6e-4624-8099-b9ae9e7459cf",
+        "base": "dev",
+        "project": "EVFX Flares",
+        "names": {
+          "readme": "Flares",
+          "folder": "Flares"
+        }
       }
     },
     {
@@ -165,7 +219,16 @@
         "project-cleaner",
         "ae-project-cleaner",
         "cleaner"
-      ]
+      ],
+      "localProject": {
+        "identity": "826951cb-33fa-4f70-8d1b-032d4489640f",
+        "base": "collection",
+        "project": "EVFX Utility Collection",
+        "names": {
+          "readme": "Utility Collection",
+          "folder": "Utility Collection"
+        }
+      }
     },
     {
       "id": "crop-ae",
@@ -185,6 +248,15 @@
         "reviewedAt": "2026-10-31",
         "evidence": "EVFX Crop/docs/VERIFICATION.md: Limits; open feature tickets and pending dock review.",
         "note": "Incomplete: translation, mask bypass/deletion and alpha expansion. Dock restoration still needs visual verification."
+      },
+      "localProject": {
+        "identity": "15e1a76f-5cf2-4309-aaea-88281d5158f0",
+        "base": "collection",
+        "project": "EVFX Crop",
+        "names": {
+          "readme": "Crop",
+          "folder": "Crop"
+        }
       }
     },
     {
@@ -205,6 +277,15 @@
         "reviewedAt": "2026-10-31",
         "evidence": "EVFX Multilayer EXR for AE/README.md and docs/antigravity/walkthrough.md: installation and backend workflow documentation.",
         "note": "The installer and complete AE workflow have no recorded end-to-end test."
+      },
+      "localProject": {
+        "identity": "83677c4b-71c1-414b-9fd1-38d9d79baaea",
+        "base": "collection",
+        "project": "EVFX Multilayer EXR for AE",
+        "names": {
+          "readme": "Multilayer EXR for After Effects 1.0.4",
+          "folder": "Multilayer EXR for AE"
+        }
       }
     },
     {
@@ -225,6 +306,15 @@
         "reviewedAt": "2026-10-31",
         "evidence": "EVFX 3d Null Tracker/README.md: described solver and setup; no separate runtime-acceptance report present.",
         "note": "Camera solving and tracking accuracy have no recorded runtime test."
+      },
+      "localProject": {
+        "identity": "cd0cd4ff-4a27-477a-9b65-3c0c394d70dc",
+        "base": "collection",
+        "project": "EVFX 3d Null Tracker",
+        "names": {
+          "readme": "3D Null Tracker Pro (v2.0.0)",
+          "folder": "3d Null Tracker"
+        }
       }
     },
     {
@@ -245,6 +335,14 @@
         "reviewedAt": "2026-10-31",
         "evidence": "EVFX Pick and Choose Adjustment Layer/EVFX_SelectiveFX.jsx: standalone script; no accompanying validation report.",
         "note": "Unversioned script; effect links have no recorded runtime test."
+      },
+      "localProject": {
+        "identity": "f43ff360-1f34-47bc-8fab-89728b022fac",
+        "base": "collection",
+        "project": "EVFX Pick and Choose Adjustment Layer",
+        "names": {
+          "folder": "Pick and Choose Adjustment Layer"
+        }
       }
     },
     {
@@ -265,6 +363,15 @@
         "reviewedAt": "2026-10-31",
         "evidence": "EVFX-AE-Collection/plugins/EVFXShotQC/README.md: MVP and external import/sync listed as a next step.",
         "note": "Experimental: JSON import/sync is unfinished; runtime stability is unverified."
+      },
+      "localProject": {
+        "identity": "cda3c08c-96f8-42b0-ab72-19a63240d607",
+        "base": "collection",
+        "project": "EVFX-AE-Collection/plugins/EVFXShotQC",
+        "names": {
+          "readme": "Shot QC (.aex)",
+          "folder": "Shot QC"
+        }
       }
     },
     {
@@ -285,6 +392,15 @@
         "reviewedAt": "2026-10-31",
         "evidence": "evfx crop for blender/README.md: EVFX-017 stabilization playback pending visible verification.",
         "note": "Stabilization playback is unverified. Cropped denoising can differ from a full-frame render."
+      },
+      "localProject": {
+        "identity": "2b2b9acc-64a0-4e2d-ac58-0cf74f122ae2",
+        "base": "collection",
+        "project": "evfx crop for blender",
+        "names": {
+          "readme": "Crop for Blender",
+          "folder": "crop for blender"
+        }
       }
     },
     {
@@ -304,6 +420,15 @@
         "releaseTag": "sequencer-v0.8.2-66dff7613e",
         "reviewedAt": "2026-10-31",
         "evidence": "EVFX Sequencer/VALIDATION.md: 0.8.2 tests, native workflow and final distribution checksums."
+      },
+      "localProject": {
+        "identity": "03092ab8-1b0e-4e22-9815-635aa1308b40",
+        "base": "collection",
+        "project": "EVFX Sequencer",
+        "names": {
+          "readme": "Sequencer",
+          "folder": "Sequencer"
+        }
       }
     },
     {
@@ -323,6 +448,15 @@
         "releaseTag": "menu-snapshot-bb04c29611",
         "reviewedAt": "2026-10-31",
         "evidence": "EVFX Menu/README.md and bin/validation.json: tested processing formats and bundled encoder verification; supported input limits remain explicit."
+      },
+      "localProject": {
+        "identity": "cfe4bf3a-bfa3-4881-8b45-6b5a3aac9d99",
+        "base": "collection",
+        "project": "EVFX Menu",
+        "names": {
+          "readme": "Menu",
+          "folder": "Menu"
+        }
       }
     },
     {
@@ -343,6 +477,15 @@
         "reviewedAt": "2026-10-31",
         "evidence": "EVFX Corridor Key 2.0/dist/standalone/START HERE.txt: Delivery Status.",
         "note": "Experimental: installation and the complete matting workflow are untested. May be unstable."
+      },
+      "localProject": {
+        "identity": "bec685fd-dbbb-4eba-b098-c92a9d19f045",
+        "base": "collection",
+        "project": "EVFX Corridor Key 2.0",
+        "names": {
+          "readme": "Corridor Key 2.0",
+          "folder": "Corridor Key 2.0"
+        }
       }
     },
     {
@@ -363,6 +506,14 @@
         "reviewedAt": "2026-10-31",
         "evidence": "EVFX OnlyScreens project contains research and tracker experiments; no packaged release available.",
         "note": "Incomplete research project. No installable release."
+      },
+      "localProject": {
+        "identity": "36f69375-f2e1-435c-b87b-5eb17c39c3ec",
+        "base": "collection",
+        "project": "EVFX OnlyScreens",
+        "names": {
+          "folder": "Only Screens"
+        }
       }
     }
   ]

@@ -4,20 +4,26 @@ import { createHash } from 'node:crypto';
 import { constants } from 'node:fs';
 import { findLocalProjects } from './local-plugins.mjs';
 import { loadJson,saveJson } from './sync-files.mjs';
+import { ensureProjectIdentity,trackedProjects } from './project-identity.mjs';
 const normalize=value=>value.replace(/^evfx[\s_-]*/i,'').replace(/[^a-z0-9]/gi,'').toLowerCase();
 const read=async path=>readFile(path,'utf8').catch(error=>{if(error.code==='ENOENT')return null;throw error;});
 
 export async function installBuildHooks(root,{remove=false}={}){
   const config=await loadJson(join(root,'sync.config.json'));
   const sources=await loadJson(join(root,'sources.json'),{});
+  const catalog=await loadJson(join(root,'catalog.json'),{tools:[]});
   const configured=await loadJson(join(root,'build-hooks.json'),[]);
   const hooks=new Map(configured.map(h=>[resolve(root,h.path),{...h,type:'ps1'}]));
   const excluded=new Set(config.excludedIds.map(normalize));
-  for(const project of await findLocalProjects(root,config)){
+  for(const project of await findLocalProjects(root,config,trackedProjects(catalog,config))){
     const name=normalize(basename(project.project));
     if(excluded.has(name))continue;
     const preferred=Object.values(sources).find(s=>s.project&&normalize(basename(s.project))===name);
     if(preferred&&((preferred.base||'collection')!==project.base||preferred.project!==project.project))continue;
+    if(!remove){
+      const old=[...catalog.tools,...(catalog.retired||[])].find(tool=>tool.localProject?.base===project.base&&tool.localProject.project===project.project);
+      await ensureProjectIdentity(project.absolute,old?.localProject.identity);
+    }
     for(const file of ['package.ps1','build_installer.ps1','tools/Package.ps1','tools/Build-Standalone.ps1']){
       const path=join(project.absolute,file);if(await read(path))hooks.set(path,{type:'ps1'});
     }

@@ -1,11 +1,12 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtemp,mkdir,writeFile,rm,utimes } from 'node:fs/promises';
+import { mkdtemp,mkdir,writeFile,rm,utimes,rename,cp } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join,dirname,basename,resolve } from 'node:path';
 import { discoverLocalPlugins,compareVersions,versionFromName } from '../scripts/local-plugins.mjs';
 import { recordCompletedBuild } from '../scripts/completed-build.mjs';
 import { createHash } from 'node:crypto';
+import { installBuildHooks } from '../scripts/build-hooks.mjs';
 
 export async function fixture(){
   const base=await mkdtemp(join(tmpdir(),'evfx-discovery-'));
@@ -34,6 +35,148 @@ test('new EVFX folders are discovered in either root without catalog edits',asyn
     assert.equal(result.sources['new-matte'].base,'dev');
     assert.equal(result.catalog.tools[0].readiness.state,'unverified');
     assert(!JSON.stringify(result.sources).includes(f.base));
+  }finally{await f.cleanup();}
+});
+
+test('removed plugin folders leave the active library while their history stays archived',async()=>{
+  const f=await fixture();try{
+    await addPackage(f,'EVFX Gone');
+    for(const [file,data] of Object.entries({'sync.config.json':f.config,'catalog.json':f.catalog,'sources.json':f.sources}))await writeFile(join(f.root,file),JSON.stringify(data));
+    await installBuildHooks(f.root);
+    const first=await discoverLocalPlugins(f.root,f);
+    await rename(join(f.base,'EVFX Gone'),join(f.base,'archived-gone'));
+    const removed=await discoverLocalPlugins(f.root,{...f,catalog:first.catalog,sources:first.sources});
+    assert.deepEqual(removed.issues,[]);
+    assert.deepEqual(removed.catalog.tools,[]);
+    assert.deepEqual(removed.sources,{});
+    assert.deepEqual(removed.catalog.retired.map(tool=>tool.id),['gone']);
+    const again=await discoverLocalPlugins(f.root,{...f,catalog:removed.catalog,sources:removed.sources});
+    assert.deepEqual(again.catalog,removed.catalog);
+    const stale=join(f.base,'collection','EVFX Gone','release');await mkdir(stale,{recursive:true});
+    await writeFile(join(stale,'EVFX-Gone-0.1.0.zip'),'stale build in another root');
+    const staleScan=await discoverLocalPlugins(f.root,{...f,catalog:again.catalog,sources:again.sources});
+    assert.deepEqual(staleScan.catalog.tools,[]);
+    await rename(join(f.base,'archived-gone'),join(f.base,'EVFX Gone'));
+    const restored=await discoverLocalPlugins(f.root,{...f,catalog:again.catalog,sources:again.sources});
+    assert.deepEqual(restored.catalog.tools.map(tool=>tool.id),['gone']);
+    assert.deepEqual(restored.catalog.tools[0].readiness,first.catalog.tools[0].readiness);
+    assert.deepEqual(restored.catalog.retired,[]);
+  }finally{await f.cleanup();}
+});
+
+test('an unavailable scan root cannot retire plugins as if they were deleted',async()=>{
+  const f=await fixture();try{
+    await addPackage(f,'EVFX Present');
+    const first=await discoverLocalPlugins(f.root,f);
+    const external=join(f.base,'external');await mkdir(external);
+    f.config.roots.push({id:'external',path:'../../external'});
+    await rename(external,join(f.base,'offline-external'));
+    await assert.rejects(discoverLocalPlugins(f.root,{...f,catalog:first.catalog,sources:first.sources}),{code:'ENOENT'});
+    assert.deepEqual(first.catalog.tools.map(tool=>tool.id),['present']);
+  }finally{await f.cleanup();}
+});
+
+test('removing a selected worktree parent retires that plugin while its workspace root is available',async()=>{
+  const f=await fixture();try{
+    const parent=join(f.base,'collection','EVFX Parent'),project=join(parent,'worktrees','EVFX Selected');
+    await mkdir(join(project,'release'),{recursive:true});
+    await writeFile(join(project,'release/EVFX-Selected-1.0.0.zip'),'selected build');
+    f.config.roots.push({id:'active',path:'../EVFX Parent/worktrees',projects:['EVFX Selected']});
+    f.catalog.tools.push({id:'selected',name:'Selected',status:'preview'});
+    f.sources.selected={base:'active',project:'EVFX Selected',version:'1.0.0',artifacts:['EVFX Selected/release/EVFX-Selected-1.0.0.zip']};
+    const first=await discoverLocalPlugins(f.root,f);
+    await rename(parent,join(f.base,'collection','archived-parent'));
+    const removed=await discoverLocalPlugins(f.root,{...f,catalog:first.catalog,sources:first.sources});
+    assert.deepEqual(removed.issues,[]);assert.deepEqual(removed.catalog.tools,[]);
+    assert.deepEqual(removed.catalog.retired.map(tool=>tool.id),['selected']);
+  }finally{await f.cleanup();}
+});
+
+test('source-only lab projects follow renames and removals even when they contain plugin folders',async()=>{
+  const f=await fixture();try{
+    const project=join(f.base,'EVFX Sketch');await mkdir(join(project,'plugins','EVFX Child'),{recursive:true});
+    f.catalog.tools.push({id:'sketch',name:'Sketch',status:'lab'});
+    for(const [file,data] of Object.entries({'sync.config.json':f.config,'catalog.json':f.catalog,'sources.json':f.sources}))await writeFile(join(f.root,file),JSON.stringify(data));
+    await installBuildHooks(f.root);
+    const first=await discoverLocalPlugins(f.root,f);
+    assert(first.catalog.tools[0].localProject?.identity);
+    const renamed=join(f.base,'EVFX Fresh Sketch');await rename(project,renamed);
+    const next=await discoverLocalPlugins(f.root,{...f,catalog:first.catalog,sources:first.sources});
+    assert.equal(next.catalog.tools[0].name,'Fresh Sketch');
+    assert.equal(next.catalog.tools[0].status,'lab');assert.deepEqual(next.sources,{});
+    await rename(renamed,join(f.base,'archived-sketch'));
+    const removed=await discoverLocalPlugins(f.root,{...f,catalog:next.catalog,sources:next.sources});
+    assert.deepEqual(removed.catalog.tools,[]);
+    assert.deepEqual(removed.catalog.retired.map(tool=>tool.id),['sketch']);
+  }finally{await f.cleanup();}
+});
+
+test('a renamed native plugin keeps one identity, its readiness and its old links',async()=>{
+  const f=await fixture();try{
+    const artifact=await addPackage(f,'EVFX Old Native');
+    f.config.roots.find(root=>root.id==='dev').projects=['EVFX Old Native'];
+    const readiness={state:'incomplete',note:'Runtime review still required.',evidence:'Existing review'};
+    f.catalog.tools.push({id:'studio-keyer',name:'Old Native',host:'After Effects',kind:'Native plugin',readiness,status:'preview'});
+    f.sources['studio-keyer']={base:'dev',project:'EVFX Old Native',version:'1.0.0',artifacts:['EVFX Old Native/release/'+basename(artifact)]};
+    for(const [file,data] of Object.entries({'sync.config.json':f.config,'catalog.json':f.catalog,'sources.json':f.sources}))await writeFile(join(f.root,file),JSON.stringify(data));
+    await installBuildHooks(f.root);
+    const first=await discoverLocalPlugins(f.root,f);
+    const renamed=join(f.base,'EVFX Fresh Native');
+    await writeFile(join(f.root,'catalog.json'),JSON.stringify(first.catalog));
+    await writeFile(join(f.root,'sources.json'),JSON.stringify(first.sources));
+    await rename(join(f.base,'EVFX Old Native'),renamed);
+    await installBuildHooks(f.root);
+    const next=await discoverLocalPlugins(f.root,{...f,catalog:first.catalog,sources:first.sources});
+    assert.deepEqual(next.issues,[]);
+    assert.deepEqual(next.catalog.tools.map(tool=>tool.id),['studio-keyer']);
+    assert.equal(next.catalog.tools[0].name,'Fresh Native');
+    assert.deepEqual(next.catalog.tools[0].readiness,readiness);
+    assert(next.catalog.tools[0].aliases.includes('old-native'));
+    assert(next.catalog.tools[0].aliases.includes('fresh-native'));
+    assert.equal(next.sources['studio-keyer'].project,'EVFX Fresh Native');
+    assert(next.sources['studio-keyer'].artifacts[0].startsWith('EVFX Fresh Native/'));
+    await rename(renamed,join(f.base,'collection','EVFX Fresh Native'));
+    const moved=await discoverLocalPlugins(f.root,{...f,catalog:next.catalog,sources:next.sources});
+    assert.deepEqual(moved.issues,[]);
+    assert.deepEqual(moved.catalog.tools.map(tool=>tool.id),['studio-keyer']);
+    assert.equal(moved.sources['studio-keyer'].base,'collection');
+  }finally{await f.cleanup();}
+});
+
+test('product title changes update a plugin name even when its folder stays the same',async()=>{
+  const f=await fixture();try{
+    await addPackage(f,'EVFX Probe');
+    const pkg=join(f.base,'EVFX Probe/package.json');
+    await writeFile(pkg,JSON.stringify({productName:'EVFX Probe'}));
+    const first=await discoverLocalPlugins(f.root,f);
+    await writeFile(pkg,JSON.stringify({productName:'EVFX Spectrum'}));
+    const next=await discoverLocalPlugins(f.root,{...f,catalog:first.catalog,sources:first.sources});
+    assert.deepEqual(next.catalog.tools.map(tool=>tool.id),['probe']);
+    assert.equal(next.catalog.tools[0].name,'Spectrum');
+    assert(next.catalog.tools[0].aliases.includes('spectrum'));
+    const unchanged=await discoverLocalPlugins(f.root,{...f,catalog:next.catalog,sources:next.sources});
+    assert.deepEqual(unchanged.catalog,next.catalog);
+    await writeFile(join(f.base,'EVFX Probe/README.md'),'# EVFX Probe v2.0.0\n\nAn After Effects utility.');
+    const versionOnly=await discoverLocalPlugins(f.root,{...f,catalog:next.catalog,sources:next.sources});
+    assert.equal(versionOnly.catalog.tools[0].name,'Spectrum');
+  }finally{await f.cleanup();}
+});
+
+test('copied project identities cannot silently rename the active plugin',async()=>{
+  const f=await fixture();try{
+    await addPackage(f,'EVFX Original');
+    for(const [file,data] of Object.entries({'sync.config.json':f.config,'catalog.json':f.catalog,'sources.json':f.sources}))await writeFile(join(f.root,file),JSON.stringify(data));
+    await installBuildHooks(f.root);
+    const first=await discoverLocalPlugins(f.root,f);
+    await cp(join(f.base,'EVFX Original'),join(f.base,'EVFX Copy'),{recursive:true});
+    const copied=await discoverLocalPlugins(f.root,{...f,catalog:first.catalog,sources:first.sources});
+    assert.deepEqual(copied.issues,[]);
+    assert.deepEqual(copied.catalog.tools.map(tool=>tool.name),['Original']);
+    assert.equal(copied.sources.original.project,'EVFX Original');
+    await cp(join(f.base,'EVFX Copy'),join(f.base,'EVFX Another Copy'),{recursive:true});
+    await rename(join(f.base,'EVFX Original'),join(f.base,'archived-original'));
+    const ambiguous=await discoverLocalPlugins(f.root,{...f,catalog:first.catalog,sources:first.sources});
+    assert(ambiguous.issues.some(issue=>issue.includes('Multiple folders share')));
   }finally{await f.cleanup();}
 });
 test('updated packages replace older versions and source/reference archives are ignored',async()=>{

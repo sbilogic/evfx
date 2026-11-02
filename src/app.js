@@ -34,6 +34,11 @@ if (buttons.length) {
   for (const button of buttons) button.addEventListener('click', () => show(button.dataset.view));
   function applyHash() {
     let id; try { id = decodeURIComponent(location.hash.slice(1)); } catch { return; }
+    const library=document.querySelector('#collection');
+    if(library.dataset.retired?.split(' ').includes(id)){
+      history.replaceState(null,'','#collection');
+      show('complete');library.scrollIntoView();return;
+    }
     const target = document.getElementById(id) || tools.find(tool => tool.dataset.aliases?.split(' ').includes(id));
     if (target?.dataset.variant) { show(target.dataset.variant); target.scrollIntoView(); }
   }

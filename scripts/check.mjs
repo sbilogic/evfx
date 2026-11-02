@@ -4,6 +4,7 @@ import { dirname,join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { renderSupport } from './support.mjs';
 import { getReadiness } from './readiness.mjs';
+import { retiredPluginIds } from './project-identity.mjs';
 const root=dirname(dirname(fileURLToPath(import.meta.url)));
 const load=async name=>JSON.parse(await readFile(join(root,name),'utf8'));
 const [catalog,sources,releases]=await Promise.all(['catalog.json','sources.json','releases.lock.json'].map(load));
@@ -49,6 +50,13 @@ for(const tool of catalog.tools)for(const alias of tool.aliases||[]){
   assert(!ids.has(alias)&&!aliases.has(alias),`Conflicting legacy URL: ${alias}`);
   aliases.add(alias);
 }
+const retiredIds=new Set();
+for(const tool of catalog.retired||[]){
+  assert(!ids.has(tool.id)&&!retiredIds.has(tool.id),'Duplicate retired plugin: '+tool.id);
+  retiredIds.add(tool.id);
+  for(const id of [tool.id,...(tool.aliases||[])])assert.match(id,/^[a-z][a-z0-9-]+$/);
+}
+for(const id of retiredPluginIds(catalog))aliases.add(id);
 const explain=await load('explain.json');
 for(const [id,page] of Object.entries(explain)){
   assert(ids.has(id)||aliases.has(id),`Unknown tool in explain.json: ${id}`);

@@ -2,6 +2,7 @@ import { readdir,readFile,stat } from 'node:fs/promises';
 import { resolve,join,relative,basename,dirname,extname,sep } from 'node:path';
 import { createHash } from 'node:crypto';
 import { validateCollection,collectionIds,collectionDescription } from './collections.mjs';
+import { readProjectIdentity,trackedProjects } from './project-identity.mjs';
 
 const normalize=value=>String(value).replace(/^evfx[\s_-]*/i,'').replace(/[^a-z0-9]/gi,'').toLowerCase();
 const slug=value=>String(value).replace(/^evfx[\s_-]*/i,'').replace(/([a-z])([A-Z])/g,'$1-$2').replace(/[^a-z0-9]+/gi,'-').replace(/^-|-$/g,'').toLowerCase();
@@ -125,17 +126,46 @@ function projectForSource(source){
   return parts[1]==='plugins'?parts.slice(0,3).join('/'):parts[0];
 }
 
-export async function findLocalProjects(siteRoot,config){
+async function projectNames(project,descriptor){
+  const clean=value=>{
+    if(typeof value!=='string')return null;
+    const name=value.replace(/^EVFX[\s_-]*/i,'').replace(/[*\x60]/g,'').trim();
+    return name&&name.length<=100&&!/[\r\n\x00-\x1f\\/<>{}]/.test(name)?name:null;
+  };
+  const pkg=await readJson(join(project.absolute,'package.json'));
+  const heading=(await text(join(project.absolute,'README.md'))).match(/^#[ \t]+(EVFX[^\r\n]*)/im)?.[1];
+  return Object.fromEntries(Object.entries({
+    descriptor:clean(descriptor?.name),
+    product:clean(pkg?.productName||pkg?.build?.productName||pkg?.displayName),
+    readme:clean(heading?.replace(/\s+[—–|].*$/,'').replace(/\s+v\d+(?:\.\d+)*(?:-[\w.]+)?$/i,'')),
+    folder:clean(basename(project.project).replace(/([a-z])([A-Z])/g,'$1 $2'))
+  }).filter(([,name])=>name));
+}
+
+export async function findLocalProjects(siteRoot,config,tracked=[]){
   const projects=[];
   for(const root of config.roots){
     const directory=resolve(siteRoot,root.path);
-    for(const entry of await entries(directory)){
+    // An unavailable root is not evidence that all of its plugins were removed.
+    let rootEntries;
+    try{rootEntries=await readdir(directory,{withFileTypes:true});}
+    catch(error){
+      const ancestors=config.roots.filter(other=>other!==root&&inside(resolve(siteRoot,other.path),directory));
+      if(error.code!=='ENOENT'||!root.projects||!(await Promise.all(ancestors.map(other=>fileStat(resolve(siteRoot,other.path))))).some(info=>info?.isDirectory()))throw error;
+      continue; // A selected worktree can disappear inside an available workspace.
+    }
+    for(const entry of rootEntries){
       if(!entry.isDirectory()||entry.isSymbolicLink()||!/^evfx/i.test(entry.name))continue;
-      if(root.projects&&!root.projects.includes(entry.name))continue;
       const project=join(directory,entry.name);
+      if(root.projects&&!root.projects.includes(entry.name)){
+        const identity=await readProjectIdentity(project);
+        if(!identity||!tracked.some(previous=>previous.base===root.id&&previous.identity===identity))continue;
+      }
       if(resolve(project)===resolve(siteRoot)||entry.name==='EVFX Collection')continue;
       const children=await entries(join(project,'plugins'));
       if(children.some(x=>x.isDirectory()&&/^evfx/i.test(x.name))){
+        const identity=await readProjectIdentity(project);
+        if(tracked.some(previous=>previous.base===root.id&&(normalize(previous.project)===normalize(entry.name)||identity&&previous.identity===identity)))projects.push({base:root.id,project:entry.name,absolute:project});
         for(const child of children)if(child.isDirectory()&&!child.isSymbolicLink()&&/^evfx/i.test(child.name))projects.push({base:root.id,project:slash(relative(directory,join(project,'plugins',child.name))),absolute:join(project,'plugins',child.name)});
       }else projects.push({base:root.id,project:entry.name,absolute:project});
     }
@@ -149,7 +179,24 @@ export async function discoverLocalPlugins(siteRoot,{catalog,sources,config}){
   const excluded=new Set(config.excludedIds.map(normalize));
   catalog.tools=catalog.tools.filter(tool=>!excluded.has(normalize(tool.id)));
   for(const id of Object.keys(sources))if(excluded.has(normalize(id)))delete sources[id];
-  const projects=await findLocalProjects(siteRoot,config),observations=[],issues=[],nativeProjects=new Set();
+  const history=[...catalog.tools,...(catalog.retired||[])];
+  let projects=await findLocalProjects(siteRoot,config,trackedProjects(catalog,config));
+  const observations=[],issues=[],nativeProjects=new Set(),identities=new Map();
+  for(const project of projects){
+    project.identity=await readProjectIdentity(project.absolute);
+    if(project.identity)identities.set(project.identity,[...(identities.get(project.identity)||[]),project]);
+  }
+  const ignored=new Set();
+  for(const [identity,copies] of identities){
+    if(copies.length<2)continue;
+    const tool=history.find(tool=>tool.localProject?.identity===identity);
+    const source=sources[tool?.id]||tool?.localProject;
+    const preferred=source&&copies.find(project=>project.base===(source.base||'collection')&&project.project===projectForSource(source));
+    if(!preferred)issues.push('Multiple folders share an EVFX project identity: '+copies.map(project=>project.project).join(', '));
+    for(const project of copies)if(project!==preferred)ignored.add(project);
+  }
+  projects=projects.filter(project=>!ignored.has(project));
+  const routes=new Map(catalog.tools.flatMap(tool=>[tool.id,...(tool.aliases||[])].map(alias=>[alias,tool.id])));
   const completedBuilds=await readJson(join(siteRoot,'.local/completed-builds.json'))||{};
   const known=new Map(catalog.tools.map(tool=>[normalize(tool.name),tool.id]));
   for(const [id,source] of Object.entries(sources))known.set(normalize(basename(projectForSource(source))),id);
@@ -157,12 +204,32 @@ export async function discoverLocalPlugins(siteRoot,{catalog,sources,config}){
   for(const project of projects){
     const key=normalize(basename(project.project));
     if(excluded.has(key))continue;
-    let id=known.get(key)||slug(basename(project.project));
+    const tracked=project.identity&&history.find(tool=>tool.localProject?.identity===project.identity);
+    const named=history.find(tool=>[tool.id,...(tool.projectAliases||[]),tool.localProject?.names?.folder].filter(Boolean).some(name=>normalize(name)===key));
+    const namedSource=named&&(sources[named.id]||named.localProject);
+    if(!tracked&&named&&(namedSource?((namedSource.base||'collection')!==project.base||projectForSource(namedSource)!==project.project):!catalog.tools.some(tool=>tool.id===named.id)))continue;
+    let id=tracked?.id||named?.id||known.get(key)||slug(basename(project.project));
     if(excluded.has(normalize(id)))continue;
     const existing=sources[id];
-    if(existing&&((existing.base||'collection')!==project.base||projectForSource(existing)!==project.project))continue;
+    if(existing&&((existing.base||'collection')!==project.base||projectForSource(existing)!==project.project)&&!tracked)continue;
     if(visited.has(id))continue;visited.add(id);
     const descriptor=await readJson(join(project.absolute,'evfx-release.json'));
+    let tool=catalog.tools.find(tool=>tool.id===id)||tracked;
+    const wasKnown=!!tool,names=await projectNames(project,descriptor);
+    const track=()=>{
+      const previous=tool.localProject;
+      const changed=previous?Object.keys(names).find(key=>names[key]!==previous.names?.[key]):!wasKnown?Object.keys(names)[0]:null;
+      if(changed&&tool.name!==names[changed]){
+        const aliases=[slug(tool.name),slug(previous?.names?.folder||tool.name),slug(names[changed]),slug(names.folder)];
+        tool.name=names[changed];
+        const available=aliases.filter(alias=>/^[a-z][a-z0-9-]+$/.test(alias)&&alias!==tool.id&&(!routes.has(alias)||routes.get(alias)===tool.id));
+        tool.projectAliases=[...new Set([...(tool.projectAliases||[]),...available])];
+        tool.aliases=[...new Set([...(tool.aliases||[]),...available])];
+        for(const alias of tool.aliases)routes.set(alias,tool.id);
+      }
+      tool.localProject={...(project.identity?{identity:project.identity}:{}),base:project.base,project:project.project,names};
+      if(!catalog.tools.some(active=>active.id===tool.id))catalog.tools.push(tool);
+    };
     const packages=await packageFiles(project.absolute);
     packages.sort((a,b)=>compareVersions(b.version,a.version)||b.mtime-a.mtime||(/setup|installer/i.test(b.path)?1:0)-(/setup|installer/i.test(a.path)?1:0));
     let selected=packages[0];
@@ -186,7 +253,8 @@ export async function discoverLocalPlugins(siteRoot,{catalog,sources,config}){
       source={base:project.base,project:project.project,version:selected.version,
         artifacts:[selected,...extras].map(p=>slash(relative(base,p.path)))};
     }else if(existing?.bundleRoot){
-      source={...existing,base:project.base,project:project.project};
+      const bundleRoot=slash(join(project.project,relative(projectForSource(existing),existing.bundleRoot)));
+      source={...existing,base:project.base,project:project.project,bundleRoot};
     }else{
       const native=await nativeFiles(project.absolute);
       const preferred=native.find(p=>/\.aex$/i.test(p.path))||native[0];
@@ -194,7 +262,7 @@ export async function discoverLocalPlugins(siteRoot,{catalog,sources,config}){
         const base=sourceRoot(siteRoot,config,{base:project.base});
         source={base:project.base,project:project.project,version:await sourceVersion(project.absolute,preferred.path,existing?.version),files:[slash(relative(base,preferred.path))]};
         selected=preferred;
-      }else if(!existing){continue;}
+      }else if(!existing){if(tool?.status==='lab')track();continue;}
     }
     if(!source)continue;
     const aex=source.files?.find(file=>/\.aex$/i.test(file));
@@ -219,7 +287,6 @@ export async function discoverLocalPlugins(siteRoot,{catalog,sources,config}){
       source.review={...descriptor.readiness,evidence:`${project.project}/evfx-release.json`};
     }
     sources[id]=source;
-    let tool=catalog.tools.find(tool=>tool.id===id);
     if(!tool){
       const folderName=basename(project.project).replace(/^evfx[\s_-]*/i,'').replace(/([a-z])([A-Z])/g,'$1 $2').trim();
       const readme=await text(join(project.absolute,'README.md'));
@@ -234,6 +301,7 @@ export async function discoverLocalPlugins(siteRoot,{catalog,sources,config}){
     }else if(tool.autoDiscovered){
       tool.description=await description(project.absolute,tool.host);tool.detail=tool.description;
     }
+    track();
     if(typeof descriptor?.description==='string'&&descriptor.description.length<=200&&!/[A-Z]:[\\/]/i.test(descriptor.description))tool.description=tool.detail=descriptor.description.trim();
     if(['incomplete','experimental','unverified','legacy','development'].includes(descriptor?.readiness?.state)&&typeof descriptor.readiness.note==='string'){
       const state=descriptor.readiness.state,note=descriptor.readiness.note;
@@ -259,9 +327,18 @@ export async function discoverLocalPlugins(siteRoot,{catalog,sources,config}){
     }
     if(descriptor){const info=await stat(join(project.absolute,'evfx-release.json'));observations.push({toolId:id,path:slash(join(project.absolute,'evfx-release.json')),size:info.size,mtime:info.mtimeMs});}
   }
+  for(const tool of [...catalog.tools]){
+    const source=sources[tool.id]||tool.localProject;
+    if(visited.has(tool.id)||!source||!projectForSource(source))continue;
+    const directory=sourcePath(siteRoot,config,source,projectForSource(source));
+    const info=await stat(directory).catch(error=>{if(error.code==='ENOENT')return null;throw error;});
+    if(info?.isDirectory())continue; // Cleaning a build folder does not remove a plugin.
+    catalog.retired=[...(catalog.retired||[]).filter(old=>old.id!==tool.id),tool];
+    catalog.tools=catalog.tools.filter(active=>active.id!==tool.id);
+  }
   const owners=new Map();
   const independent=new Set(catalog.tools.filter(tool=>tool.host!=='After Effects'||/native|plugin\s*\+\s*panel/i.test(tool.kind||'')||nativeProjects.has(tool.id)).map(tool=>tool.id));
-  const independentIds=new Set([...independent].map(normalize));
+  const independentIds=new Set(catalog.tools.filter(tool=>independent.has(tool.id)).flatMap(tool=>[tool.id,...(tool.aliases||[])]).map(normalize));
   for(const tool of catalog.tools){
     const collection=sources[tool.id]?.collection;
     const manualAliases=(tool.aliases||[]).filter(alias=>!tool.collectionAliases?.includes(alias));
@@ -285,6 +362,7 @@ export async function discoverLocalPlugins(siteRoot,{catalog,sources,config}){
     return !owner||owner===tool.id;
   });
   const active=new Set(catalog.tools.map(tool=>tool.id));
+  if(catalog.retired)catalog.retired=catalog.retired.filter(tool=>!active.has(tool.id));
   for(const id of Object.keys(sources))if(!active.has(id))delete sources[id];
   for(let i=observations.length-1;i>=0;i--)if(!active.has(observations[i].toolId))observations.splice(i,1);
   observations.sort((a,b)=>a.path.localeCompare(b.path));

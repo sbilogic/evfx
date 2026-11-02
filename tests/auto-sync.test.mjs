@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtemp,mkdir,writeFile,rm } from 'node:fs/promises';
+import { mkdtemp,mkdir,writeFile,rm,rename } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join,dirname,basename,resolve } from 'node:path';
 import { syncOnce } from '../scripts/sync-engine.mjs';
@@ -17,7 +17,7 @@ test('auto sync waits for stable files, publishes changes once, and stays idle a
   const artifact=join(releaseDir,'EVFX-Probe-1.0.0-Windows.zip');await writeFile(artifact,'first build');
   let clock=Date.now()+100000,calls=0;
   const publish=async options=>{
-    calls++;assert.deepEqual(options.only,['probe']);
+    calls++;assert.deepEqual(options.only,calls===4?[]:['probe']);
     const discovered=await discoverLocalPlugins(root,{config,catalog:await loadJson(join(root,'catalog.json')),sources:await loadJson(join(root,'sources.json'))});
     await saveJson(join(root,'catalog.json'),discovered.catalog);await saveJson(join(root,'sources.json'),discovered.sources);
     return {published:true};
@@ -35,5 +35,10 @@ test('auto sync waits for stable files, publishes changes once, and stays idle a
     assert.equal((await syncOnce(root,{publish,now:()=>clock})).phase,'disabled');assert.equal(calls,2);
     assert.equal((await syncOnce(root,{force:true,publish,now:()=>clock})).phase,'published');assert.equal(calls,3);
     assert.equal((await syncOnce(root,{force:true,publish,now:()=>clock})).phase,'idle');assert.equal(calls,3);
+    await rename(join(base,'EVFX Probe'),join(base,'archived-probe'));
+    assert.equal((await syncOnce(root,{force:true,publish,now:()=>clock})).phase,'published');assert.equal(calls,4);
+    const retired=await loadJson(join(root,'catalog.json'));
+    assert.deepEqual(retired.tools,[]);assert.deepEqual(retired.retired.map(tool=>tool.id),['probe']);
+    assert.equal((await syncOnce(root,{force:true,publish,now:()=>clock})).phase,'idle');assert.equal(calls,4);
   }finally{assert.equal(dirname(resolve(base)),resolve(tmpdir()));assert.match(basename(base),/^evfx-auto-/);await rm(base,{recursive:true,force:true});}
 });
