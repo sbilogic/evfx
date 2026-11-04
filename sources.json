@@ -74,7 +74,15 @@
     "artifacts": [
       "EVFX Sequencer/release/EVFX-Sequencer-0.8.3-Windows-x64-Setup.exe",
       "EVFX Sequencer/release/EVFX-Sequencer-0.8.3-Windows-x64-Portable.zip"
-    ]
+    ],
+    "review": {
+      "state": "complete",
+      "runtimeVerified": true,
+      "sha256": "1f8c44ed7adbeb51c6244798e98f9b87587bb1ad731365f95f59546afce37b87",
+      "evidence": "EVFX Sequencer/evfx-release.json",
+      "testedBinarySha256": "e491415db5f967e0ac2d03071325f18efaec32a5d51ac7da3fc162b51478eb6c",
+      "portableSha256": "44079219cffd19fb7c946371115046fa5054544baf6ce0610fc6066361329e68"
+    }
   },
   "menu": {
     "version": null,

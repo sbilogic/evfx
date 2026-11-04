@@ -399,9 +399,9 @@
       "status": "release",
       "readiness": {
         "state": "reviewed",
-        "releaseTag": "sequencer-v0.8.2-66dff7613e",
-        "reviewedAt": "2026-10-31",
-        "evidence": "EVFX Sequencer/VALIDATION.md: 0.8.2 tests, native workflow and final distribution checksums."
+        "releaseTag": "sequencer-v0.8.3-c98364b933",
+        "reviewedAt": "2026-11-04",
+        "evidence": "EVFX Sequencer/evfx-release.json"
       },
       "localProject": {
         "identity": "03092ab8-1b0e-4e22-9815-635aa1308b40",
