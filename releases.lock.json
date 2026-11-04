@@ -477,25 +477,25 @@
     ]
   },
   "normalize-levels": {
-    "version": "2.1.0",
-    "build": 2,
-    "aeVersion": 1082882,
+    "version": "2.1.1",
+    "build": 1,
+    "aeVersion": 1084929,
     "binary": {
       "name": "EVFX Normalize Levels v2.aex",
-      "sha256": "81d281421bed5d40e9cee7182f529df0f036cd8cf4320e4b4252b9c653fd61b9"
+      "sha256": "883ec7d3b3ac55d702d858a4fd7ccbec5708554aa1d91bc69bcd16f24b7c5cef"
     },
-    "publishedAt": "2026-11-04T07:23:47Z",
-    "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/normalize-levels-v2.1.0-1f6b2295eb",
-    "tag": "normalize-levels-v2.1.0-1f6b2295eb",
+    "publishedAt": "2026-11-04T07:42:06Z",
+    "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/normalize-levels-v2.1.1-55fa006b4d",
+    "tag": "normalize-levels-v2.1.1-55fa006b4d",
     "prerelease": true,
     "downloads": [
       {
-        "name": "EVFX-normalize-levels-2.1.0.zip",
-        "url": "https://github.com/sbilogic/evfx/releases/download/normalize-levels-v2.1.0-1f6b2295eb/EVFX-normalize-levels-2.1.0.zip",
-        "bytes": 91019,
-        "sha256": "17b4437a41adda50d6e635b9bb3b19e8835917a923752fb7200ff3d7f41baf8c",
+        "name": "EVFX-normalize-levels-2.1.1.zip",
+        "url": "https://github.com/sbilogic/evfx/releases/download/normalize-levels-v2.1.1-55fa006b4d/EVFX-normalize-levels-2.1.1.zip",
+        "bytes": 90969,
+        "sha256": "c90327f448f8ff8a872aaf14e19414bce98235db5402650e4b6f4c9ec7a063ad",
         "primary": true,
-        "uploadedAt": "2026-11-04T07:23:46Z"
+        "uploadedAt": "2026-11-04T07:42:05Z"
       }
     ]
   }
