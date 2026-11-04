@@ -182,23 +182,6 @@
       }
     ]
   },
-  "selective-fx": {
-    "version": null,
-    "publishedAt": "2026-10-31T00:42:01Z",
-    "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/selective-fx-snapshot-9ea5d70d7e",
-    "tag": "selective-fx-snapshot-9ea5d70d7e",
-    "prerelease": true,
-    "downloads": [
-      {
-        "name": "EVFX-selective-fx-snapshot.zip",
-        "url": "https://github.com/sbilogic/evfx/releases/download/selective-fx-snapshot-9ea5d70d7e/EVFX-selective-fx-snapshot.zip",
-        "bytes": 6702,
-        "sha256": "09a36ad0331b36d800b9fc358483486ef34b77ae00975a338a08a0ac297f5d36",
-        "primary": true,
-        "uploadedAt": "2026-10-31T00:42:00Z"
-      }
-    ]
-  },
   "crop-blender": {
     "version": "0.2.0",
     "publishedAt": "2026-10-31T00:42:06Z",
@@ -399,12 +382,23 @@
     ]
   },
   "utility-collection": {
-    "version": "1.3.0",
+    "version": "1.4.0",
     "collection": {
       "schema": 1,
       "artifact": "EVFX Utility Collection.jsx",
-      "sha256": "d15b962b2eb592365658428d369f3927886f8e1a49dfbfb5d60db91494732666",
+      "sha256": "05f328d94a92412d688d5ff22e2797717362a789c4a87b79c8b3cbfa96a07d46",
       "members": [
+        {
+          "id": "anchor-point",
+          "name": "Anchor Point",
+          "tab": "Anchor",
+          "replaces": [
+            "anchor"
+          ],
+          "sourceFiles": [
+            "src/anchor.js"
+          ]
+        },
         {
           "id": "corner-pin-to-power-pin",
           "name": "Corner Pin to Power Pin",
@@ -415,6 +409,15 @@
           ],
           "sourceFiles": [
             "src/corner-pin.js"
+          ]
+        },
+        {
+          "id": "selective-fx",
+          "name": "Selective FX",
+          "tab": "Selective FX",
+          "replaces": [],
+          "sourceFiles": [
+            "src/selective-fx-ui.js"
           ]
         },
         {
@@ -429,14 +432,23 @@
           ]
         },
         {
-          "id": "anchor-point",
-          "name": "Anchor Point",
-          "tab": "Anchor",
+          "id": "levels-match",
+          "name": "Levels Match",
+          "tab": "Levels Match",
+          "replaces": [],
+          "sourceFiles": [
+            "src/levels-match-ui.js"
+          ]
+        },
+        {
+          "id": "review-notes",
+          "name": "Review Notes",
+          "tab": "Notes",
           "replaces": [
-            "anchor"
+            "notes"
           ],
           "sourceFiles": [
-            "src/anchor.js"
+            "src/notes-ui.js"
           ]
         },
         {
@@ -450,32 +462,21 @@
           "sourceFiles": [
             "../EVFX AE Project Cleaner/src/after-effects.js"
           ]
-        },
-        {
-          "id": "review-notes",
-          "name": "Review Notes",
-          "tab": "Notes",
-          "replaces": [
-            "notes"
-          ],
-          "sourceFiles": [
-            "src/notes-ui.js"
-          ]
         }
       ]
     },
-    "publishedAt": "2026-11-04T05:39:14Z",
-    "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/utility-collection-v1.3.0-722a2d9fed",
-    "tag": "utility-collection-v1.3.0-722a2d9fed",
+    "publishedAt": "2026-11-04T06:04:58Z",
+    "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/utility-collection-v1.4.0-dd9210a294",
+    "tag": "utility-collection-v1.4.0-dd9210a294",
     "prerelease": true,
     "downloads": [
       {
-        "name": "EVFX-utility-collection-1.3.0.zip",
-        "url": "https://github.com/sbilogic/evfx/releases/download/utility-collection-v1.3.0-722a2d9fed/EVFX-utility-collection-1.3.0.zip",
-        "bytes": 37482,
-        "sha256": "6e1c7ee138133f0ae9dbf208f0e3dade5486be06a062c2c2d86c30f2d007ed2a",
+        "name": "EVFX-utility-collection-1.4.0.zip",
+        "url": "https://github.com/sbilogic/evfx/releases/download/utility-collection-v1.4.0-dd9210a294/EVFX-utility-collection-1.4.0.zip",
+        "bytes": 47892,
+        "sha256": "a209697bf8beb284f63063ab23fac95d95faeafa8cf555b43d9bc34829310c4f",
         "primary": true,
-        "uploadedAt": "2026-11-04T05:39:13Z"
+        "uploadedAt": "2026-11-04T06:04:57Z"
       }
     ]
   }

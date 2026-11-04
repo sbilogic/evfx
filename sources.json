@@ -59,14 +59,6 @@
       "EVFX 3d Null Tracker/EVFX_3D_Null_Tracker.jsx"
     ]
   },
-  "selective-fx": {
-    "base": "collection",
-    "project": "EVFX Pick and Choose Adjustment Layer",
-    "version": null,
-    "files": [
-      "EVFX Pick and Choose Adjustment Layer/EVFX_SelectiveFX.jsx"
-    ]
-  },
   "crop-blender": {
     "base": "collection",
     "project": "evfx crop for blender",
@@ -134,15 +126,26 @@
   "utility-collection": {
     "base": "collection",
     "project": "EVFX Utility Collection",
-    "version": "1.3.0",
+    "version": "1.4.0",
     "files": [
       "EVFX Utility Collection/EVFX Utility Collection.jsx"
     ],
     "collection": {
       "schema": 1,
       "artifact": "EVFX Utility Collection.jsx",
-      "sha256": "d15b962b2eb592365658428d369f3927886f8e1a49dfbfb5d60db91494732666",
+      "sha256": "05f328d94a92412d688d5ff22e2797717362a789c4a87b79c8b3cbfa96a07d46",
       "members": [
+        {
+          "id": "anchor-point",
+          "name": "Anchor Point",
+          "tab": "Anchor",
+          "replaces": [
+            "anchor"
+          ],
+          "sourceFiles": [
+            "src/anchor.js"
+          ]
+        },
         {
           "id": "corner-pin-to-power-pin",
           "name": "Corner Pin to Power Pin",
@@ -153,6 +156,15 @@
           ],
           "sourceFiles": [
             "src/corner-pin.js"
+          ]
+        },
+        {
+          "id": "selective-fx",
+          "name": "Selective FX",
+          "tab": "Selective FX",
+          "replaces": [],
+          "sourceFiles": [
+            "src/selective-fx-ui.js"
           ]
         },
         {
@@ -167,14 +179,23 @@
           ]
         },
         {
-          "id": "anchor-point",
-          "name": "Anchor Point",
-          "tab": "Anchor",
+          "id": "levels-match",
+          "name": "Levels Match",
+          "tab": "Levels Match",
+          "replaces": [],
+          "sourceFiles": [
+            "src/levels-match-ui.js"
+          ]
+        },
+        {
+          "id": "review-notes",
+          "name": "Review Notes",
+          "tab": "Notes",
           "replaces": [
-            "anchor"
+            "notes"
           ],
           "sourceFiles": [
-            "src/anchor.js"
+            "src/notes-ui.js"
           ]
         },
         {
@@ -187,17 +208,6 @@
           ],
           "sourceFiles": [
             "../EVFX AE Project Cleaner/src/after-effects.js"
-          ]
-        },
-        {
-          "id": "review-notes",
-          "name": "Review Notes",
-          "tab": "Notes",
-          "replaces": [
-            "notes"
-          ],
-          "sourceFiles": [
-            "src/notes-ui.js"
           ]
         }
       ]

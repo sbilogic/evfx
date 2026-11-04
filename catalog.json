@@ -183,8 +183,8 @@
       "category": "ae",
       "kind": "ScriptUI panel",
       "art": "utilities",
-      "description": "Corner Pin to Power Pin · Crop to Content · Anchor Point · Project Cleaner · Review Notes",
-      "detail": "Corner Pin to Power Pin · Crop to Content · Anchor Point · Project Cleaner · Review Notes",
+      "description": "Anchor Point · Corner Pin to Power Pin · Selective FX · Crop to Content · Levels Match · Review Notes · Project Cleaner",
+      "detail": "Anchor Point · Corner Pin to Power Pin · Selective FX · Crop to Content · Levels Match · Review Notes · Project Cleaner",
       "requirements": "After Effects GUI · JSX script",
       "install": "Run EVFX Utility Collection.jsx through File > Scripts > Run Script File. For a dockable panel, copy it to Scripts/ScriptUI Panels and restart AE. Open Utility Collection from Window. Each utility has its own tab.",
       "status": "preview",
@@ -197,32 +197,36 @@
         "note": "This combined build has no recorded AE runtime review. Test its utilities on a backup project."
       },
       "aliases": [
+        "anchor-point",
+        "anchor",
         "corner-pin-to-power-pin",
         "power-pin",
         "corner-pin",
+        "selective-fx",
         "crop-to-content",
         "crop",
-        "anchor-point",
-        "anchor",
+        "levels-match",
+        "review-notes",
+        "notes",
         "project-cleaner",
         "ae-project-cleaner",
-        "cleaner",
-        "review-notes",
-        "notes"
+        "cleaner"
       ],
       "collectionAliases": [
+        "anchor-point",
+        "anchor",
         "corner-pin-to-power-pin",
         "power-pin",
         "corner-pin",
+        "selective-fx",
         "crop-to-content",
         "crop",
-        "anchor-point",
-        "anchor",
+        "levels-match",
+        "review-notes",
+        "notes",
         "project-cleaner",
         "ae-project-cleaner",
-        "cleaner",
-        "review-notes",
-        "notes"
+        "cleaner"
       ],
       "localProject": {
         "identity": "826951cb-33fa-4f70-8d1b-032d4489640f",
@@ -318,34 +322,6 @@
         "names": {
           "readme": "3D Null Tracker Pro (v2.0.0)",
           "folder": "3d Null Tracker"
-        }
-      }
-    },
-    {
-      "id": "selective-fx",
-      "name": "Selective FX",
-      "host": "After Effects",
-      "category": "ae",
-      "kind": "ScriptUI panel",
-      "art": "select",
-      "description": "Link one master effect stack to selected layers.",
-      "detail": "Clones a master effect stack onto selected layers and expression-links their properties back to the master. Adjust the master once and the linked layers follow, including keyframed properties.",
-      "requirements": "After Effects 2020+ · JSX script",
-      "install": "Copy EVFX_SelectiveFX.jsx to Scripts/ScriptUI Panels, restart AE, and open it from Window. Choose a master null or adjustment layer, then tick the layers that should receive the linked effects.",
-      "status": "release",
-      "readiness": {
-        "state": "unverified",
-        "releaseTag": "selective-fx-snapshot-9ea5d70d7e",
-        "reviewedAt": "2026-10-31",
-        "evidence": "EVFX Pick and Choose Adjustment Layer/EVFX_SelectiveFX.jsx: standalone script; no accompanying validation report.",
-        "note": "Unversioned script; effect links have no recorded runtime test."
-      },
-      "localProject": {
-        "identity": "f43ff360-1f34-47bc-8fab-89728b022fac",
-        "base": "collection",
-        "project": "EVFX Pick and Choose Adjustment Layer",
-        "names": {
-          "folder": "Pick and Choose Adjustment Layer"
         }
       }
     },
