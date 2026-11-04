@@ -78,10 +78,10 @@
     "review": {
       "state": "complete",
       "runtimeVerified": true,
-      "sha256": "1f8c44ed7adbeb51c6244798e98f9b87587bb1ad731365f95f59546afce37b87",
+      "sha256": "ab31100bdb5e038fd7576ab8a8adfbfad85cf165039a68872b0cd979e7b5e6a8",
       "evidence": "EVFX Sequencer/evfx-release.json",
-      "testedBinarySha256": "e491415db5f967e0ac2d03071325f18efaec32a5d51ac7da3fc162b51478eb6c",
-      "portableSha256": "44079219cffd19fb7c946371115046fa5054544baf6ce0610fc6066361329e68"
+      "testedBinarySha256": "9c74d5f57503aea68d09f0c34c743d4c386dca39f97cc2e9ead56b95ed9ba364",
+      "portableSha256": "466d9a61aa264f9c105e99174e35b4436be5fcb794542c4278eaba8611debd65"
     }
   },
   "menu": {
