@@ -70,10 +70,10 @@
   "sequencer": {
     "base": "collection",
     "project": "EVFX Sequencer",
-    "version": "0.9.0",
+    "version": "0.9.1",
     "artifacts": [
-      "EVFX Sequencer/release/EVFX-Sequencer-0.9.0-Windows-x64-Setup.exe",
-      "EVFX Sequencer/release/EVFX-Sequencer-0.9.0-Windows-x64-Portable.zip"
+      "EVFX Sequencer/release/EVFX-Sequencer-0.9.1-Windows-x64-Setup.exe",
+      "EVFX Sequencer/release/EVFX-Sequencer-0.9.1-Windows-x64-Portable.zip"
     ],
     "review": {
       "state": "complete",
