@@ -8,6 +8,7 @@ import { getReadiness } from './readiness.mjs';
 import { renderSupport } from './support.mjs';
 import { collectionDescription } from './collections.mjs';
 import { retiredPluginIds } from './project-identity.mjs';
+import { sequencerUpdateFeed } from './update-feed.mjs';
 
 export const root = dirname(dirname(fileURLToPath(import.meta.url)));
 export const escape = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -86,6 +87,8 @@ const fill=text=>{for(const [key,value] of Object.entries(replacements)) text=te
 await rm(join(root,'dist'),{recursive:true,force:true});
 await mkdir(join(root,'dist'),{recursive:true});
 await writeFile(join(root,'dist/index.html'),fill(html));
+await mkdir(join(root,'dist/updates'),{recursive:true});
+await writeFile(join(root,'dist/updates/sequencer.json'),JSON.stringify(sequencerUpdateFeed(catalog,releases),null,2)+'\n');
 for(const [tool,release] of pages){
   await mkdir(join(root,'dist',tool.id),{recursive:true});
   await writeFile(join(root,'dist',tool.id,'index.html'),fill(detailPage(pageTemplate,tool,release)));

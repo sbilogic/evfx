@@ -47,6 +47,12 @@ A version number or ZIP filename does not establish completeness. Existing revie
 
 The declaration must match the uploaded package, or the single AEX/JSX payload being wrapped, and record completed runtime verification. Prerelease versions remain development builds. A declaration without the matching hash and verification cannot promote a build. Known problems can be declared with a readiness state such as `incomplete` and a `note`. This is build metadata maintained by the plugin's packaging process, not a website entry.
 
+## Application update feed
+
+`https://sbilogic.github.io/evfx/updates/sequencer.json` is the stable update feed for EVFX Sequencer. Every site build generates it from the same release lock and exact-build reviews as the library. It selects a reviewed, non-prerelease Windows x64 setup with its immutable GitHub download URL, full SHA-256, exact byte size, version and release-notes link. A newer unverified build leaves the last reviewed version in the feed. The normal package/publish hook updates it; there is no separate update server or manual version list.
+
+Keep schema version 1 and the URL compatible with installed clients. A missing eligible release yields `release: null`. Portable ZIPs and other products never become installer updates. Credentials never enter the feed.
+
 ## Detail pages
 
 The library is grouped by host. Utility Collection discovers its tools from the actual panel tabs and production source modules, including normal shared-source includes. Its build generates the completed-build `collection` record in `evfx-release.json`; no hand-maintained tool registry is used. Website discovery accepts that record only when its SHA-256 matches the selected JSX. Inferred standalone script identities and old names are consolidated under the collection with redirects. Shared source folders stay on disk; full native plugins and tools for other hosts remain independent.
