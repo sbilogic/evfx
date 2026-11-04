@@ -155,8 +155,13 @@ export async function findLocalProjects(siteRoot,config,tracked=[]){
       continue; // A selected worktree can disappear inside an available workspace.
     }
     for(const entry of rootEntries){
-      if(!entry.isDirectory()||entry.isSymbolicLink()||!/^evfx/i.test(entry.name))continue;
+      if(!/^evfx/i.test(entry.name))continue;
       const project=join(directory,entry.name);
+      // Offloaded projects can retain their established path as a Windows
+      // junction. Follow only explicitly tracked projects, never arbitrary links.
+      if(entry.isSymbolicLink()){
+        if(!tracked.some(previous=>previous.base===root.id&&previous.project===entry.name)||!(await fileStat(project))?.isDirectory())continue;
+      }else if(!entry.isDirectory())continue;
       if(root.projects&&!root.projects.includes(entry.name)){
         const identity=await readProjectIdentity(project);
         if(!identity||!tracked.some(previous=>previous.base===root.id&&previous.identity===identity))continue;

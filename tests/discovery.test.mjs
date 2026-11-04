@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtemp,mkdir,writeFile,readFile,rm,utimes,rename,cp } from 'node:fs/promises';
+import { mkdtemp,mkdir,writeFile,readFile,rm,utimes,rename,cp,symlink } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join,dirname,basename,resolve } from 'node:path';
 import { discoverLocalPlugins,compareVersions,versionFromName } from '../scripts/local-plugins.mjs';
@@ -27,6 +27,22 @@ test('version filenames preserve prerelease labels and sort numbered dev builds 
   assert(compareVersions('0.4.0-dev17','0.4.0-dev9')>0);
   assert(compareVersions('0.4.0','0.4.0-dev17')>0);
   assert(compareVersions('1.10.0','1.9.0')>0);
+});
+test('tracked offloaded junctions discover new packages while untracked links stay ignored',async()=>{
+  const f=await fixture();try{
+    await addPackage({...f,base:join(f.base,'storage')},'EVFX Sequencer','0.10.0');
+    const target=join(f.base,'storage/EVFX Sequencer');
+    const identity=await ensureProjectIdentity(target);
+    await symlink(target,join(f.base,'EVFX Sequencer'),'junction');
+    await symlink(target,join(f.base,'EVFX Untracked Link'),'junction');
+    f.catalog.tools.push({id:'sequencer',name:'Sequencer',host:'Windows',status:'preview',readiness:{state:'unverified'},localProject:{identity,base:'dev',project:'EVFX Sequencer',names:{folder:'Sequencer',readme:'Sequencer'}}});
+    f.sources.sequencer={base:'dev',project:'EVFX Sequencer',version:'0.9.1',artifacts:['EVFX Sequencer/release/old.zip']};
+    const result=await discoverLocalPlugins(f.root,f);
+    assert.deepEqual(result.issues,[]);
+    assert.equal(result.sources.sequencer.version,'0.10.0');
+    assert.equal(result.catalog.tools.length,1);
+    assert(result.observations.some(file=>file.toolId==='sequencer'&&file.path.includes('0.10.0')));
+  }finally{await f.cleanup();}
 });
 test('new EVFX folders are discovered in either root without catalog edits',async()=>{
   const f=await fixture();try{
