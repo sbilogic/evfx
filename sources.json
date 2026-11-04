@@ -133,7 +133,7 @@
     "collection": {
       "schema": 1,
       "artifact": "EVFX Utility Collection.jsx",
-      "sha256": "05f328d94a92412d688d5ff22e2797717362a789c4a87b79c8b3cbfa96a07d46",
+      "sha256": "b2f569701b834f4e5fe4f34291b36463ea30f8bf1c5f72eedae039c9d6ba07aa",
       "members": [
         {
           "id": "anchor-point",
@@ -160,9 +160,11 @@
         },
         {
           "id": "selective-fx",
-          "name": "Selective FX",
+          "name": "Pick and Choose Adjustment Layer",
           "tab": "Selective FX",
-          "replaces": [],
+          "replaces": [
+            "pick-and-choose-adjustment-layer"
+          ],
           "sourceFiles": [
             "src/selective-fx-ui.js"
           ]
@@ -212,13 +214,5 @@
         }
       ]
     }
-  },
-  "pick-and-choose-adjustment-layer": {
-    "base": "collection",
-    "project": "EVFX Pick and Choose Adjustment Layer",
-    "version": null,
-    "files": [
-      "EVFX Pick and Choose Adjustment Layer/EVFX_SelectiveFX.jsx"
-    ]
   }
 }
