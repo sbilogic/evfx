@@ -14,7 +14,7 @@ One-shot hooks cover native CMake Release builds, PowerShell packaging, Blender 
 
 Native builds report their actual AEX output. If a previously packaged ZIP is older, the publisher replaces its binary and matching companion scripts while retaining install files, presets and licences. A newly packaged ZIP takes precedence again. Debug builds do not publish. A new native hash remains unverified until its own runtime review; the last complete release stays in the default view.
 
-`sync.config.json` lists roots relative to this checkout: the EVFX Collection folder and its parent Dev folder. Only immediate EVFX-prefixed projects and the collection's plugin subfolders are inspected. Release/dist packages and native Release AEX/JSX files are supported. Source/reference archives, generated dependency trees and empty projects are excluded. Smart Denoise and Match Grain are explicitly excluded and cannot be rediscovered.
+`sync.config.json` lists roots relative to this checkout: the EVFX Collection folder and its parent Dev folder. Immediate EVFX-prefixed projects, collection plugin subfolders and independently tracked nested projects are inspected. Release/dist packages and native Release AEX/JSX files are supported. Source/reference archives, generated dependency trees and empty projects are excluded. Match Grain is explicitly excluded and cannot be rediscovered.
 
 An active worktree can be configured as a root with a `projects` allow-list. PixelPicker follows its selected redesign worktree rather than its legacy main folder. Native AE versions and build numbers come from the compiled PiPL resource; release metadata records the AEX hash separately from the ZIP hash.
 

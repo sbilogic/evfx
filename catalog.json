@@ -31,6 +31,35 @@
       }
     },
     {
+      "id": "smart-denoise",
+      "name": "Smart Denoise",
+      "host": "After Effects",
+      "category": "ae",
+      "kind": "Native plugin",
+      "art": "denoise",
+      "description": "Reduce noise with automatic analysis and spatial and temporal filtering.",
+      "detail": "Noise-profile-based denoising with automatic analysis, temporal filtering, NVIDIA CUDA acceleration and CPU fallback.",
+      "requirements": "Windows x64 · After Effects · 8 / 16 / 32 bpc · NVIDIA CUDA optional",
+      "install": "Extract the ZIP, close After Effects, run Install.cmd, and restart After Effects.",
+      "status": "preview",
+      "readiness": {
+        "state": "experimental",
+        "releaseTag": null,
+        "reviewedAt": "2026-11-05",
+        "evidence": "EVFXSmartGrain/denoise/docs/validation-v1.0.3.md: final native AE render and geometry checks; playback and ROI interaction not verified.",
+        "note": "After Effects identifies this as a development build. Playback and ROI interaction remain unverified; test it in a backup project."
+      },
+      "localProject": {
+        "identity": "202bb4f8-823f-457d-af7a-00a6e44a95fd",
+        "base": "collection",
+        "project": "EVFXSmartGrain/denoise",
+        "names": {
+          "readme": "Smart Denoise",
+          "folder": "denoise"
+        }
+      }
+    },
+    {
       "id": "blurry",
       "name": "Blurry",
       "host": "After Effects",

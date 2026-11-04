@@ -1,12 +1,13 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { mkdtemp,mkdir,writeFile,rm,utimes,rename,cp } from 'node:fs/promises';
+import { mkdtemp,mkdir,writeFile,readFile,rm,utimes,rename,cp } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join,dirname,basename,resolve } from 'node:path';
 import { discoverLocalPlugins,compareVersions,versionFromName } from '../scripts/local-plugins.mjs';
 import { recordCompletedBuild } from '../scripts/completed-build.mjs';
 import { createHash } from 'node:crypto';
 import { installBuildHooks } from '../scripts/build-hooks.mjs';
+import { ensureProjectIdentity } from '../scripts/project-identity.mjs';
 
 export async function fixture(){
   const base=await mkdtemp(join(tmpdir(),'evfx-discovery-'));
@@ -35,6 +36,42 @@ test('new EVFX folders are discovered in either root without catalog edits',asyn
     assert.equal(result.sources['new-matte'].base,'dev');
     assert.equal(result.catalog.tools[0].readiness.state,'unverified');
     assert(!JSON.stringify(result.sources).includes(f.base));
+  }finally{await f.cleanup();}
+});
+
+test('a nested native project gets build hooks and follows builds and parent-folder renames',async()=>{
+  const f=await fixture();try{
+    f.config.excludedIds=['match-grain'];
+    await addPackage(f,'EVFX Smart Grain');
+    const parent=join(f.base,'EVFX Smart Grain'),nested=join(parent,'denoise');
+    await mkdir(join(nested,'release'),{recursive:true});
+    await writeFile(join(nested,'README.md'),'# EVFX Smart Denoise\n\nAn After Effects effect for noise reduction.');
+    await writeFile(join(nested,'CMakeLists.txt'),'add_library(EVFXSmartDenoise MODULE plugin.cpp)\nset_target_properties(EVFXSmartDenoise PROPERTIES SUFFIX ".aex")\n');
+    await writeFile(join(nested,'release/EVFXSmartDenoise-v1.0.3-Windows.zip'),'completed package');
+    const identity=await ensureProjectIdentity(nested);
+    f.catalog.tools.push({id:'smart-denoise',name:'Smart Denoise',host:'After Effects',kind:'Native plugin',status:'preview',readiness:{state:'experimental',note:'Development build.'},localProject:{identity,base:'dev',project:'EVFX Smart Grain/denoise',names:{folder:'denoise',readme:'Smart Denoise'}}});
+    f.sources['smart-denoise']={base:'dev',project:'EVFX Smart Grain/denoise',version:'1.0.2',artifacts:['EVFX Smart Grain/denoise/release/old.zip']};
+    for(const [file,data] of Object.entries({'sync.config.json':f.config,'catalog.json':f.catalog,'sources.json':f.sources}))await writeFile(join(f.root,file),JSON.stringify(data));
+    await installBuildHooks(f.root);
+    const first=await discoverLocalPlugins(f.root,f);
+    assert.deepEqual(first.issues,[]);
+    assert.equal(first.sources['smart-denoise'].version,'1.0.3');
+    assert.deepEqual(first.catalog.tools.map(tool=>tool.id).sort(),['smart-denoise','smart-grain']);
+    assert.match(await readFile(join(nested,'CMakeLists.txt'),'utf8'),/evfx_site_after_builds/);
+    await writeFile(join(nested,'release/EVFXSmartDenoise-v1.0.4-Windows.zip'),'newer completed package');
+    const updated=await discoverLocalPlugins(f.root,{...f,catalog:first.catalog,sources:first.sources});
+    assert.equal(updated.sources['smart-denoise'].version,'1.0.4');
+    await mkdir(join(nested,'build/dist'),{recursive:true});
+    const aex=join(nested,'build/dist/EVFXSmartDenoise.aex');
+    await writeFile(aex,'completed native build');
+    await recordCompletedBuild(f.root,nested,aex);
+    const built=await discoverLocalPlugins(f.root,{...f,catalog:updated.catalog,sources:updated.sources});
+    assert(built.sources['smart-denoise'].files[0].endsWith('/build/dist/EVFXSmartDenoise.aex'));
+    await rename(parent,join(f.base,'EVFX Renamed Grain'));
+    const renamed=await discoverLocalPlugins(f.root,{...f,catalog:built.catalog,sources:built.sources});
+    assert.deepEqual(renamed.issues,[]);
+    assert.deepEqual(renamed.catalog.tools.map(tool=>tool.id).sort(),['smart-denoise','smart-grain']);
+    assert.equal(renamed.sources['smart-denoise'].project,'EVFX Renamed Grain/denoise');
   }finally{await f.cleanup();}
 });
 
@@ -190,7 +227,7 @@ test('updated packages replace older versions and source/reference archives are 
     assert.equal(result.catalog.tools[0].readiness.state,'experimental');
   }finally{await f.cleanup();}
 });
-test('Smart Denoise and Match Grain cannot be rediscovered',async()=>{
+test('explicitly excluded projects cannot be rediscovered',async()=>{
   const f=await fixture();try{
     await addPackage(f,'EVFX Smart Denoise');await addPackage(f,'EVFX Match Grain');await addPackage(f,'EVFX Smart Grain');
     const result=await discoverLocalPlugins(f.root,f);

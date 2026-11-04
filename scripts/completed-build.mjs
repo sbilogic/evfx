@@ -2,11 +2,13 @@ import { stat,realpath } from 'node:fs/promises';
 import { join,resolve,relative,sep } from 'node:path';
 import { findLocalProjects } from './local-plugins.mjs';
 import { loadJson,saveJson,withLock } from './sync-files.mjs';
+import { trackedProjects } from './project-identity.mjs';
 const normalize=value=>value.replace(/^evfx[\s_-]*/i,'').replace(/[^a-z0-9]/gi,'').toLowerCase();
 export async function recordCompletedBuild(root,projectPath,artifactPath){
   const config=await loadJson(join(root,'sync.config.json'));
+  const catalog=await loadJson(join(root,'catalog.json'),{tools:[]});
   const projectReal=await realpath(resolve(projectPath));
-  const projects=await findLocalProjects(root,config);
+  const projects=await findLocalProjects(root,config,trackedProjects(catalog,config));
   const project=projects.find(p=>resolve(p.absolute).toLowerCase()===projectReal.toLowerCase());
   if(!project)throw new Error('Completed build is outside the configured EVFX projects.');
   if(config.excludedIds.map(normalize).includes(normalize(project.project.split('/').at(-1))))return;

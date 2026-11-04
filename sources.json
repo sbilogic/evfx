@@ -7,6 +7,14 @@
       "EVFXSmartGrain/release/EVFXSmartGrainV2-v2.2.3-Windows.zip"
     ]
   },
+  "smart-denoise": {
+    "base": "collection",
+    "project": "EVFXSmartGrain/denoise",
+    "version": "1.0.3",
+    "artifacts": [
+      "EVFXSmartGrain/denoise/release/EVFXSmartDenoise-v1.0.3-Windows.zip"
+    ]
+  },
   "blurry": {
     "base": "collection",
     "project": "EVFX Blurry",

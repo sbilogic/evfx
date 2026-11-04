@@ -143,7 +143,7 @@ async function projectNames(project,descriptor){
 }
 
 export async function findLocalProjects(siteRoot,config,tracked=[]){
-  const projects=[];
+  const projects=[],trackedIdentities=new Set(tracked.map(project=>project.identity).filter(Boolean));
   for(const root of config.roots){
     const directory=resolve(siteRoot,root.path);
     // An unavailable root is not evidence that all of its plugins were removed.
@@ -168,6 +168,12 @@ export async function findLocalProjects(siteRoot,config,tracked=[]){
         if(tracked.some(previous=>previous.base===root.id&&(normalize(previous.project)===normalize(entry.name)||identity&&previous.identity===identity)))projects.push({base:root.id,project:entry.name,absolute:project});
         for(const child of children)if(child.isDirectory()&&!child.isSymbolicLink()&&/^evfx/i.test(child.name))projects.push({base:root.id,project:slash(relative(directory,join(project,'plugins',child.name))),absolute:join(project,'plugins',child.name)});
       }else projects.push({base:root.id,project:entry.name,absolute:project});
+      // An independently tracked project can live directly inside another project.
+      if(trackedIdentities.size)for(const child of await entries(project)){
+        if(!child.isDirectory()||child.isSymbolicLink()||child.name.startsWith('.')||child.name==='plugins')continue;
+        const absolute=join(project,child.name),identity=await readProjectIdentity(absolute);
+        if(identity&&trackedIdentities.has(identity))projects.push({base:root.id,project:slash(relative(directory,absolute)),absolute});
+      }
     }
   }
   return projects;
