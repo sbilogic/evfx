@@ -218,11 +218,11 @@
   "normalize-levels": {
     "base": "collection",
     "project": "EVFX Normalize Levels",
-    "version": "2.0.0",
+    "version": "2.0.1",
     "files": [
       "EVFX Normalize Levels/build/dist/EVFX Normalize Levels v2.aex"
     ],
     "build": 1,
-    "aeVersion": 1050113
+    "aeVersion": 1052161
   }
 }
