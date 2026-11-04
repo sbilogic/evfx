@@ -9,10 +9,10 @@
   },
   "smart-denoise": {
     "base": "collection",
-    "project": "EVFXSmartGrain/denoise",
+    "project": "EVFXSmartDenoise",
     "version": "1.0.3",
     "artifacts": [
-      "EVFXSmartGrain/denoise/release/EVFXSmartDenoise-v1.0.3-Windows.zip"
+      "EVFXSmartDenoise/release/EVFXSmartDenoise-v1.0.3-Windows.zip"
     ]
   },
   "blurry": {
@@ -78,10 +78,10 @@
   "sequencer": {
     "base": "collection",
     "project": "EVFX Sequencer",
-    "version": "0.10.0",
+    "version": "0.10.1",
     "artifacts": [
-      "EVFX Sequencer/release/EVFX-Sequencer-0.10.0-Windows-x64-Setup.exe",
-      "EVFX Sequencer/release/EVFX-Sequencer-0.10.0-Windows-x64-Portable.zip"
+      "EVFX Sequencer/release/EVFX-Sequencer-0.10.1-Windows-x64-Setup.exe",
+      "EVFX Sequencer/release/EVFX-Sequencer-0.10.1-Windows-x64-Portable.zip"
     ],
     "review": {
       "state": "complete",

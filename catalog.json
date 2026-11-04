@@ -52,10 +52,10 @@
       "localProject": {
         "identity": "202bb4f8-823f-457d-af7a-00a6e44a95fd",
         "base": "collection",
-        "project": "EVFXSmartGrain/denoise",
+        "project": "EVFXSmartDenoise",
         "names": {
           "readme": "Smart Denoise",
-          "folder": "denoise"
+          "folder": "Smart Denoise"
         }
       }
     },
