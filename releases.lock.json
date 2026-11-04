@@ -200,33 +200,27 @@
     ]
   },
   "sequencer": {
-    "version": "0.10.1",
-    "publishedAt": "2026-11-04T19:51:46Z",
-    "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/sequencer-v0.10.1-29d0768287",
-    "tag": "sequencer-v0.10.1-29d0768287",
-    "prerelease": false,
-    "review": {
-      "state": "complete",
-      "runtimeVerified": true,
-      "sha256": "4f441e8d945a5f5fe2b6c8373c017e1636af0f88e3580c2296c4144a87dd51f0",
-      "evidence": "EVFX Sequencer/evfx-release.json"
-    },
+    "version": "0.11.0",
+    "publishedAt": "2026-11-04T20:09:04Z",
+    "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/sequencer-v0.11.0-2e631bf95f",
+    "tag": "sequencer-v0.11.0-2e631bf95f",
+    "prerelease": true,
     "downloads": [
       {
-        "name": "EVFX-Sequencer-0.10.1-Windows-x64-Setup.exe",
-        "url": "https://github.com/sbilogic/evfx/releases/download/sequencer-v0.10.1-29d0768287/EVFX-Sequencer-0.10.1-Windows-x64-Setup.exe",
-        "bytes": 178246656,
-        "sha256": "4f441e8d945a5f5fe2b6c8373c017e1636af0f88e3580c2296c4144a87dd51f0",
+        "name": "EVFX-Sequencer-0.11.0-Windows-x64-Setup.exe",
+        "url": "https://github.com/sbilogic/evfx/releases/download/sequencer-v0.11.0-2e631bf95f/EVFX-Sequencer-0.11.0-Windows-x64-Setup.exe",
+        "bytes": 178321920,
+        "sha256": "a7241ea603b7065c11c5ae5ca328078ce2234328d20bad3412ca74c99f9b4a30",
         "primary": true,
-        "uploadedAt": "2026-11-04T19:50:52Z"
+        "uploadedAt": "2026-11-04T20:08:09Z"
       },
       {
-        "name": "EVFX-Sequencer-0.10.1-Windows-x64-Portable.zip",
-        "url": "https://github.com/sbilogic/evfx/releases/download/sequencer-v0.10.1-29d0768287/EVFX-Sequencer-0.10.1-Windows-x64-Portable.zip",
-        "bytes": 178149116,
-        "sha256": "65c1da8b6c545dbb35187da963fa48d4f631445cca92da8958889508690fec02",
+        "name": "EVFX-Sequencer-0.11.0-Windows-x64-Portable.zip",
+        "url": "https://github.com/sbilogic/evfx/releases/download/sequencer-v0.11.0-2e631bf95f/EVFX-Sequencer-0.11.0-Windows-x64-Portable.zip",
+        "bytes": 178224434,
+        "sha256": "43a8da69fd587efa3e2139987d9f0fc3f45e8eff79edf14fec84c5db8c1d7d3d",
         "primary": false,
-        "uploadedAt": "2026-11-04T19:51:20Z"
+        "uploadedAt": "2026-11-04T20:08:33Z"
       }
     ],
     "complete": {
