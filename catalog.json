@@ -495,6 +495,35 @@
           "folder": "Only Screens"
         }
       }
+    },
+    {
+      "id": "pick-and-choose-adjustment-layer",
+      "name": "Pick and Choose Adjustment Layer",
+      "host": "After Effects",
+      "category": "ae",
+      "kind": "Plugin",
+      "art": "screen",
+      "description": "After Effects effect.",
+      "detail": "After Effects effect.",
+      "requirements": "Windows x64 · After Effects",
+      "install": "Extract the ZIP and follow the included installation instructions.",
+      "status": "preview",
+      "autoDiscovered": true,
+      "readiness": {
+        "state": "unverified",
+        "releaseTag": null,
+        "reviewedAt": "2026-11-04",
+        "evidence": "EVFX Pick and Choose Adjustment Layer: automatically discovered distribution",
+        "note": "Newly discovered build; runtime readiness has not been verified."
+      },
+      "localProject": {
+        "identity": "f43ff360-1f34-47bc-8fab-89728b022fac",
+        "base": "collection",
+        "project": "EVFX Pick and Choose Adjustment Layer",
+        "names": {
+          "folder": "Pick and Choose Adjustment Layer"
+        }
+      }
     }
   ],
   "retired": [

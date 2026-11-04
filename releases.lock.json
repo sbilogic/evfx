@@ -479,5 +479,22 @@
         "uploadedAt": "2026-11-04T06:04:57Z"
       }
     ]
+  },
+  "pick-and-choose-adjustment-layer": {
+    "version": null,
+    "publishedAt": "2026-11-04T06:05:14Z",
+    "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/pick-and-choose-adjustment-layer-snapshot-405818dfef",
+    "tag": "pick-and-choose-adjustment-layer-snapshot-405818dfef",
+    "prerelease": true,
+    "downloads": [
+      {
+        "name": "EVFX-pick-and-choose-adjustment-layer-snapshot.zip",
+        "url": "https://github.com/sbilogic/evfx/releases/download/pick-and-choose-adjustment-layer-snapshot-405818dfef/EVFX-pick-and-choose-adjustment-layer-snapshot.zip",
+        "bytes": 6576,
+        "sha256": "09c7ca81c9a9e55c77178514ec960ae660cd1816131b965696737c63a4d3633c",
+        "primary": true,
+        "uploadedAt": "2026-11-04T06:05:13Z"
+      }
+    ]
   }
 }

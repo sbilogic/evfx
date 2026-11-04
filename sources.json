@@ -212,5 +212,13 @@
         }
       ]
     }
+  },
+  "pick-and-choose-adjustment-layer": {
+    "base": "collection",
+    "project": "EVFX Pick and Choose Adjustment Layer",
+    "version": null,
+    "files": [
+      "EVFX Pick and Choose Adjustment Layer/EVFX_SelectiveFX.jsx"
+    ]
   }
 }
