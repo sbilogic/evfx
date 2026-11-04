@@ -497,6 +497,36 @@
           "folder": "Only Screens"
         }
       }
+    },
+    {
+      "id": "normalize-levels",
+      "name": "Normalize Levels",
+      "host": "After Effects",
+      "category": "ae",
+      "kind": "Plugin",
+      "art": "screen",
+      "description": "After Effects effect that remaps a layer's range to 0–1 (Forward) or restores it from 0–1 back to its original range (Reverse).",
+      "detail": "After Effects effect that remaps a layer's range to 0–1 (Forward) or restores it from 0–1 back to its original range (Reverse).",
+      "requirements": "Windows x64 · After Effects",
+      "install": "Extract the ZIP and follow the included installation instructions.",
+      "status": "preview",
+      "autoDiscovered": true,
+      "readiness": {
+        "state": "unverified",
+        "releaseTag": null,
+        "reviewedAt": "2026-11-04",
+        "evidence": "EVFX Normalize Levels: automatically discovered distribution",
+        "note": "Newly discovered build; runtime readiness has not been verified."
+      },
+      "localProject": {
+        "identity": "cdc0a720-34f8-4214-9251-dbd942430bdd",
+        "base": "collection",
+        "project": "EVFX Normalize Levels",
+        "names": {
+          "readme": "Normalize Levels",
+          "folder": "Normalize Levels"
+        }
+      }
     }
   ],
   "retired": [

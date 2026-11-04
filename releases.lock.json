@@ -481,5 +481,28 @@
         "uploadedAt": "2026-11-04T06:15:39Z"
       }
     ]
+  },
+  "normalize-levels": {
+    "version": "2.0.0",
+    "build": 1,
+    "aeVersion": 1050113,
+    "binary": {
+      "name": "EVFX Normalize Levels v2.aex",
+      "sha256": "d9c5404d0aba03bfea8db2497abd7653f8cf3c801091133a09b298e6923ed8c2"
+    },
+    "publishedAt": "2026-11-04T06:33:35Z",
+    "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/normalize-levels-v2.0.0-240a65a68c",
+    "tag": "normalize-levels-v2.0.0-240a65a68c",
+    "prerelease": true,
+    "downloads": [
+      {
+        "name": "EVFX-normalize-levels-2.0.0.zip",
+        "url": "https://github.com/sbilogic/evfx/releases/download/normalize-levels-v2.0.0-240a65a68c/EVFX-normalize-levels-2.0.0.zip",
+        "bytes": 80440,
+        "sha256": "f7913cebc7a607e2c3948e3a8f50bf605e2709107a3cb1e9f186e1d1665510d7",
+        "primary": true,
+        "uploadedAt": "2026-11-04T06:33:33Z"
+      }
+    ]
   }
 }
