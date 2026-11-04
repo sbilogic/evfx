@@ -126,14 +126,14 @@
   "utility-collection": {
     "base": "collection",
     "project": "EVFX Utility Collection",
-    "version": "1.5.1",
+    "version": "1.5.2",
     "files": [
       "EVFX Utility Collection/EVFX Utility Collection.jsx"
     ],
     "collection": {
       "schema": 1,
       "artifact": "EVFX Utility Collection.jsx",
-      "sha256": "37432fd6e2e14bd4ad44f4f4f903e5d8f99bce13c93857e0aee649f9de68a1db",
+      "sha256": "79fda1df719fc2254e00837eaf9cbc93d9fcef07fd6e38f8757adceb45bcca9e",
       "members": [
         {
           "id": "anchor-point",
