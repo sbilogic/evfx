@@ -84,3 +84,21 @@
 @media(max-width:1000px){.wrap{width:calc(100% - 56px)}.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:48px 22px}.hero-art{width:52vw}}
 @media(max-width:620px){.wrap{width:calc(100% - 32px)}.detail{grid-template-columns:1fr;gap:28px;padding-top:28px}.detail-art{aspect-ratio:4/3}.bar nav{gap:14px;font-size:11px}.flow li:before{font-size:56px}.top{grid-template-columns:1fr;padding-top:16px}.top nav{grid-column:1;grid-row:1;justify-content:flex-end;font-size:11px;gap:18px;margin-bottom:28px}.mark{grid-row:2;font-size:34vw}.hero-art{width:78vw;top:24px;right:-14%}.grid{grid-template-columns:1fr;gap:44px}.tool h3{font-size:26px}.views{gap:22px}.views button{font-size:14px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*:before,*:after{transition:none!important;animation:none!important}}
+
+/* Align descriptions, warnings and download rows without fixed text heights. */
+@supports (grid-template-rows:subgrid){
+  @media(min-width:621px){
+    .grid{row-gap:0;margin-bottom:-56px}
+    .tool{display:grid;grid-template-rows:subgrid;grid-row:span 6;row-gap:0;padding-bottom:56px}
+    .tool .art{grid-row:1}
+    .tool h3{grid-row:2}
+    .tool .desc{grid-row:3}
+    .tool .how,.tool .warn{grid-row:4}
+    .tool .line{grid-row:5;margin-top:0}
+    .tool .notes{grid-row:6}
+  }
+  @media(min-width:621px) and (max-width:1000px){
+    .grid{margin-bottom:-48px}
+    .tool{padding-bottom:48px}
+  }
+}
