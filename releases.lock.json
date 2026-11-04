@@ -506,19 +506,19 @@
     ]
   },
   "smart-denoise": {
-    "version": "1.0.3",
-    "publishedAt": "2026-11-04T18:58:56Z",
-    "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/smart-denoise-v1.0.3-9668cc0409",
-    "tag": "smart-denoise-v1.0.3-9668cc0409",
+    "version": "1.1.0",
+    "publishedAt": "2026-11-04T23:09:44Z",
+    "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/smart-denoise-v1.1.0-ea841c685a",
+    "tag": "smart-denoise-v1.1.0-ea841c685a",
     "prerelease": true,
     "downloads": [
       {
-        "name": "EVFXSmartDenoise-v1.0.3-Windows.zip",
-        "url": "https://github.com/sbilogic/evfx/releases/download/smart-denoise-v1.0.3-9668cc0409/EVFXSmartDenoise-v1.0.3-Windows.zip",
-        "bytes": 144721,
-        "sha256": "92f404813f8a9d333fa7070cc81c5f518aad1e5477a2976d34f2929a600f426c",
+        "name": "EVFXSmartDenoise-v1.1.0-Windows.zip",
+        "url": "https://github.com/sbilogic/evfx/releases/download/smart-denoise-v1.1.0-ea841c685a/EVFXSmartDenoise-v1.1.0-Windows.zip",
+        "bytes": 476275,
+        "sha256": "75fb988834eb9edcb0adbaa63b21fabbb1c45b866e20f4b8f2a210211b23cfdc",
         "primary": true,
-        "uploadedAt": "2026-11-04T18:58:55Z"
+        "uploadedAt": "2026-11-04T23:09:43Z"
       }
     ]
   }
