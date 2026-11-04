@@ -376,11 +376,11 @@
     ]
   },
   "utility-collection": {
-    "version": "1.5.0",
+    "version": "1.5.1",
     "collection": {
       "schema": 1,
       "artifact": "EVFX Utility Collection.jsx",
-      "sha256": "a66df6d1994203390e809eb641aa59e2e9e7a932d73d756c0b74fa99b55b9115",
+      "sha256": "37432fd6e2e14bd4ad44f4f4f903e5d8f99bce13c93857e0aee649f9de68a1db",
       "members": [
         {
           "id": "anchor-point",
@@ -461,18 +461,18 @@
         }
       ]
     },
-    "publishedAt": "2026-11-04T06:34:42Z",
-    "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/utility-collection-v1.5.0-873d9a115b",
-    "tag": "utility-collection-v1.5.0-873d9a115b",
+    "publishedAt": "2026-11-04T06:52:17Z",
+    "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/utility-collection-v1.5.1-dcc4e12cda",
+    "tag": "utility-collection-v1.5.1-dcc4e12cda",
     "prerelease": true,
     "downloads": [
       {
-        "name": "EVFX-utility-collection-1.5.0.zip",
-        "url": "https://github.com/sbilogic/evfx/releases/download/utility-collection-v1.5.0-873d9a115b/EVFX-utility-collection-1.5.0.zip",
-        "bytes": 50623,
-        "sha256": "96bbb60492daadf06bf5da06e79eecde8a251ade419b5b3b1b74a9a8c60a98a7",
+        "name": "EVFX-utility-collection-1.5.1.zip",
+        "url": "https://github.com/sbilogic/evfx/releases/download/utility-collection-v1.5.1-dcc4e12cda/EVFX-utility-collection-1.5.1.zip",
+        "bytes": 51016,
+        "sha256": "eec8859adcac508b27afc88c7c1f0af4f8b9f9062c7364a3b36063b913e71b21",
         "primary": true,
-        "uploadedAt": "2026-11-04T06:34:41Z"
+        "uploadedAt": "2026-11-04T06:52:16Z"
       }
     ]
   },
