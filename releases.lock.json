@@ -200,33 +200,27 @@
     ]
   },
   "sequencer": {
-    "version": "0.8.2",
-    "publishedAt": "2026-10-31T00:42:54Z",
-    "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/sequencer-v0.8.2-66dff7613e",
-    "tag": "sequencer-v0.8.2-66dff7613e",
-    "prerelease": false,
-    "review": {
-      "state": "complete",
-      "runtimeVerified": true,
-      "sha256": "7eaaeb3f00839bdb20dff2156ebc2616e712e10c9e2aa1d4e26be59e2b04ffd1",
-      "evidence": "EVFX Sequencer/VALIDATION.md: 0.8.2 tests, native workflow and final distribution checksums."
-    },
+    "version": "0.8.3",
+    "publishedAt": "2026-11-04T06:47:00Z",
+    "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/sequencer-v0.8.3-c98364b933",
+    "tag": "sequencer-v0.8.3-c98364b933",
+    "prerelease": true,
     "downloads": [
       {
-        "name": "EVFX-Sequencer-0.8.2-Windows-x64-Setup.exe",
-        "url": "https://github.com/sbilogic/evfx/releases/download/sequencer-v0.8.2-66dff7613e/EVFX-Sequencer-0.8.2-Windows-x64-Setup.exe",
-        "bytes": 177991168,
-        "sha256": "7eaaeb3f00839bdb20dff2156ebc2616e712e10c9e2aa1d4e26be59e2b04ffd1",
+        "name": "EVFX-Sequencer-0.8.3-Windows-x64-Setup.exe",
+        "url": "https://github.com/sbilogic/evfx/releases/download/sequencer-v0.8.3-c98364b933/EVFX-Sequencer-0.8.3-Windows-x64-Setup.exe",
+        "bytes": 178051584,
+        "sha256": "1f8c44ed7adbeb51c6244798e98f9b87587bb1ad731365f95f59546afce37b87",
         "primary": true,
-        "uploadedAt": "2026-10-31T00:42:08Z"
+        "uploadedAt": "2026-11-04T06:46:12Z"
       },
       {
-        "name": "EVFX-Sequencer-0.8.2-Windows-x64-Portable.zip",
-        "url": "https://github.com/sbilogic/evfx/releases/download/sequencer-v0.8.2-66dff7613e/EVFX-Sequencer-0.8.2-Windows-x64-Portable.zip",
-        "bytes": 177898857,
-        "sha256": "e5d9073558853056118caad5aecdc31834de6f0e37bd19512400e95d6c1c392b",
+        "name": "EVFX-Sequencer-0.8.3-Windows-x64-Portable.zip",
+        "url": "https://github.com/sbilogic/evfx/releases/download/sequencer-v0.8.3-c98364b933/EVFX-Sequencer-0.8.3-Windows-x64-Portable.zip",
+        "bytes": 177959297,
+        "sha256": "44079219cffd19fb7c946371115046fa5054544baf6ce0610fc6066361329e68",
         "primary": false,
-        "uploadedAt": "2026-10-31T00:42:31Z"
+        "uploadedAt": "2026-11-04T06:46:33Z"
       }
     ],
     "complete": {
