@@ -428,7 +428,7 @@
       "status": "release",
       "readiness": {
         "state": "reviewed",
-        "releaseTag": "sequencer-v0.9.1-74bebf4c36",
+        "releaseTag": "sequencer-v0.10.0-fbafc28c36",
         "reviewedAt": "2026-11-04",
         "evidence": "EVFX Sequencer/evfx-release.json"
       },
