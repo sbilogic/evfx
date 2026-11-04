@@ -467,5 +467,22 @@
         "uploadedAt": "2026-11-02T00:41:16Z"
       }
     ]
+  },
+  "review-notes": {
+    "version": "1.0.0",
+    "publishedAt": "2026-11-04T05:32:41Z",
+    "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/review-notes-v1.0.0-efb8635d36",
+    "tag": "review-notes-v1.0.0-efb8635d36",
+    "prerelease": true,
+    "downloads": [
+      {
+        "name": "EVFX-review-notes-1.0.0.zip",
+        "url": "https://github.com/sbilogic/evfx/releases/download/review-notes-v1.0.0-efb8635d36/EVFX-review-notes-1.0.0.zip",
+        "bytes": 20122,
+        "sha256": "87c0d1f80b6baa59c5b41d034318ed5c84a3a22d015e0ccd9766c7837a50fd36",
+        "primary": true,
+        "uploadedAt": "2026-11-04T05:32:40Z"
+      }
+    ]
   }
 }

@@ -191,5 +191,13 @@
         }
       ]
     }
+  },
+  "review-notes": {
+    "base": "collection",
+    "project": "EVFX Review Notes",
+    "version": "1.0.0",
+    "files": [
+      "EVFX Review Notes/EVFX Review Notes.jsx"
+    ]
   }
 }

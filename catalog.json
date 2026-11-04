@@ -515,6 +515,36 @@
           "folder": "Only Screens"
         }
       }
+    },
+    {
+      "id": "review-notes",
+      "name": "Review Notes",
+      "host": "After Effects",
+      "category": "ae",
+      "kind": "Plugin",
+      "art": "screen",
+      "description": "Brings EVFX Sequencer .notes review feedback into After Effects: markers, drawn marks, masked fix layers, resolve and write-back, revision sheets",
+      "detail": "Brings EVFX Sequencer .notes review feedback into After Effects: markers, drawn marks, masked fix layers, resolve and write-back, revision sheets",
+      "requirements": "Windows x64 · After Effects",
+      "install": "Extract the ZIP and follow the included installation instructions.",
+      "status": "preview",
+      "autoDiscovered": true,
+      "readiness": {
+        "state": "unverified",
+        "releaseTag": null,
+        "reviewedAt": "2026-11-04",
+        "evidence": "EVFX Review Notes: automatically discovered distribution",
+        "note": "Newly discovered build; runtime readiness has not been verified."
+      },
+      "localProject": {
+        "identity": "cf40982c-16e8-4710-9fec-e3152d668a5a",
+        "base": "collection",
+        "project": "EVFX Review Notes",
+        "names": {
+          "readme": "Review Notes",
+          "folder": "Review Notes"
+        }
+      }
     }
   ]
 }
