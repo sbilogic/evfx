@@ -108,9 +108,9 @@
   "corridor-key": {
     "base": "collection",
     "project": "EVFX Corridor Key 2.0",
-    "version": "0.19.0",
+    "version": "0.19.1",
     "artifacts": [
-      "EVFX Corridor Key 2.0/dist/standalone/EVFX-Corridor-Key-2.0-0.19.0-Windows-x64-Setup.exe"
+      "EVFX Corridor Key 2.0/dist/standalone/EVFX-Corridor-Key-2.0-0.19.1-Windows-x64-Setup.exe"
     ]
   },
   "shot-qc": {
