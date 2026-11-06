@@ -78,18 +78,18 @@
   "sequencer": {
     "base": "collection",
     "project": "EVFX Sequencer",
-    "version": "0.11.0",
+    "version": "0.12.0",
     "artifacts": [
-      "EVFX Sequencer/release/EVFX-Sequencer-0.11.0-Windows-x64-Setup.exe",
-      "EVFX Sequencer/release/EVFX-Sequencer-0.11.0-Windows-x64-Portable.zip"
+      "EVFX Sequencer/release/EVFX-Sequencer-0.12.0-Windows-x64-Setup.exe",
+      "EVFX Sequencer/release/EVFX-Sequencer-0.12.0-Windows-x64-Portable.zip"
     ],
     "review": {
       "state": "complete",
       "runtimeVerified": true,
-      "sha256": "596ed65d9038c01ef7fe8df53d03b60434ed0d840c2e66dac54d081d8780f70c",
+      "sha256": "30d0944982e8574c1dcfab3dcdaa6b129f9e79d75a53847eb608864103278834",
       "evidence": "EVFX Sequencer/evfx-release.json",
-      "testedBinarySha256": "dab4ff6810d0f398ed6131ee4f9f4936b706fa999fb41773ccaabb5e246b8c20",
-      "portableSha256": "2e33cd7ed6b9d9f182cb53db5fbac1a2330bfc62ce5fd83313c5fe4193c80929"
+      "testedBinarySha256": "250442afa6828386b085377468d9cca592b33b331e671a88f3ccef19d1d68b04",
+      "portableSha256": "d59e6773f531addf67b77843f588516f86cbf455573c29bc4381a084fe392223"
     }
   },
   "menu": {
