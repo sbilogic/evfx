@@ -443,6 +443,37 @@
       }
     },
     {
+      "id": "omnicast",
+      "name": "Omnicast",
+      "host": "Windows",
+      "category": "windows",
+      "kind": "Standalone app",
+      "art": "orbit",
+      "androidCompanion": true,
+      "androidRequirements": "Android 8+",
+      "description": "Share media, files and remote control across your local network.",
+      "detail": "A local-network app for media playback, file sharing, remote desktop and distributed rendering, with an Android companion.",
+      "requirements": "Windows x64 · Local network",
+      "install": "Run the Windows setup on each PC. Install the Android APK on your phone or tablet, then pair it with a PC.",
+      "status": "preview",
+      "readiness": {
+        "state": "experimental",
+        "releaseTag": null,
+        "reviewedAt": "2026-11-07",
+        "evidence": "Omnicast/README.md describes the app as alpha; the 0.17.5 installers and Android assets passed package verification.",
+        "note": "Alpha build. Some features may be unstable; network discovery depends on local network and firewall settings."
+      },
+      "localProject": {
+        "identity": "3a2f99e3-9f9f-407a-a2ff-1c1bda2f19f8",
+        "base": "dev",
+        "project": "Omnicast",
+        "names": {
+          "product": "Omnicast",
+          "folder": "Omnicast"
+        }
+      }
+    },
+    {
       "id": "menu",
       "name": "Menu",
       "host": "Windows",

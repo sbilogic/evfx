@@ -55,6 +55,32 @@ test('new EVFX folders are discovered in either root without catalog edits',asyn
   }finally{await f.cleanup();}
 });
 
+test('an explicitly tracked non-EVFX app publishes its matching Android companion with each setup',async()=>{
+  const f=await fixture();try{
+    const project=join(f.base,'Omnicast'),release=join(project,'release');
+    await mkdir(release,{recursive:true});
+    await writeFile(join(project,'README.md'),'# Omnicast\n\nA Windows app for local network sharing.');
+    await writeFile(join(release,'Omnicast-Setup-0.17.5.exe'),'setup');
+    await writeFile(join(release,'Omnicast-Android-0.17.5.apk'),'phone');
+    await writeFile(join(release,'Omnicast-Android-0.18.0.apk'),'future phone build');
+    const identity=await ensureProjectIdentity(project);
+    f.catalog.tools.push({id:'omnicast',name:'Omnicast',host:'Windows',kind:'Standalone app',status:'preview',androidCompanion:true,readiness:{state:'experimental',note:'Alpha'},localProject:{identity,base:'dev',project:'Omnicast',names:{folder:'Omnicast',readme:'Omnicast'}}});
+    f.sources.omnicast={base:'dev',project:'Omnicast',version:'0.17.4',artifacts:['Omnicast/release/Omnicast-Setup-0.17.4.exe']};
+    const first=await discoverLocalPlugins(f.root,f);
+    assert.deepEqual(first.issues,[]);
+    assert.equal(first.sources.omnicast.version,'0.17.5');
+    assert.deepEqual(first.sources.omnicast.artifacts,['Omnicast/release/Omnicast-Setup-0.17.5.exe','Omnicast/release/Omnicast-Android-0.17.5.apk']);
+    await writeFile(join(release,'Omnicast-Setup-0.18.0.exe'),'next setup');
+    const next=await discoverLocalPlugins(f.root,{...f,catalog:first.catalog,sources:first.sources});
+    assert.equal(next.sources.omnicast.version,'0.18.0');
+    assert.deepEqual(next.sources.omnicast.artifacts,['Omnicast/release/Omnicast-Setup-0.18.0.exe','Omnicast/release/Omnicast-Android-0.18.0.apk']);
+    await rename(project,join(f.base,'Omnicast Next'));
+    const renamed=await discoverLocalPlugins(f.root,{...f,catalog:next.catalog,sources:next.sources});
+    assert.equal(renamed.sources.omnicast.project,'Omnicast Next');
+    assert.equal(renamed.catalog.tools[0].id,'omnicast');
+  }finally{await f.cleanup();}
+});
+
 test('a nested native project gets build hooks and follows builds and parent-folder renames',async()=>{
   const f=await fixture();try{
     f.config.excludedIds=['match-grain'];

@@ -127,7 +127,8 @@ async function publish({automatic=false,prepareOnly=false,only=null,expectedFing
       }
       if(existing)continue;
       const uploadUrl=release.upload_url.replace(/\{.*$/,'')+`?name=${encodeURIComponent(asset.name)}`;
-      const uploaded=await github(uploadUrl,{method:'POST',filePath:asset.path,headers:{'Content-Type':asset.name.endsWith('.zip')?'application/zip':'application/octet-stream'}});
+      const type=asset.name.endsWith('.zip')?'application/zip':asset.name.endsWith('.apk')?'application/vnd.android.package-archive':'application/octet-stream';
+      const uploaded=await github(uploadUrl,{method:'POST',filePath:asset.path,headers:{'Content-Type':type}});
       if(uploaded.digest&&uploaded.digest!==`sha256:${asset.sha256}`)throw new Error(`Uploaded checksum differs: ${asset.name}`);
       release.assets.push(uploaded);releaseChanged=true;console.log(`Uploaded ${asset.name}`);
     }

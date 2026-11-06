@@ -92,6 +92,15 @@
       "portableSha256": "d59e6773f531addf67b77843f588516f86cbf455573c29bc4381a084fe392223"
     }
   },
+  "omnicast": {
+    "base": "dev",
+    "project": "Omnicast",
+    "version": "0.17.5",
+    "artifacts": [
+      "Omnicast/release/Omnicast-Setup-0.17.5.exe",
+      "Omnicast/release/Omnicast-Android-0.17.5.apk"
+    ]
+  },
   "menu": {
     "version": null,
     "bundleRoot": "EVFX Menu",

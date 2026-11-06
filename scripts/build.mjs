@@ -32,7 +32,10 @@ function download(tool,release,warningId) {
   const action = asset
     ? `<a class="download" href="${escape(asset.url)}" aria-label="Download EVFX ${escape(tool.name)} ${escape(version)}"${warningId?` aria-describedby="${warningId}"`:''}>Download<span aria-hidden="true"> ↓</span></a>`
     : `<span class="no-download">No download</span>`;
-  const notes = asset?`<details class="notes"><summary>Install<span class="sr-only"> EVFX ${escape(tool.name)}</span></summary><p class="req">${escape(tool.requirements)}</p><p>${escape(tool.install)}</p><p><a href="${escape(release.releaseUrl)}">Release${release.downloads.length>1?' & portable ZIP':''} ↗</a></p><p class="sha">${release.binary?'ZIP ':''}SHA-256 <code>${escape(asset.sha256)}</code>${release.binary?`<br>${escape(release.binary.name)} <code>${escape(release.binary.sha256)}</code>`:''}</p></details>`:'';
+  const android=release?.downloads.find(download=>!download.primary&&/\.apk$/i.test(download.name));
+  const companion=android?`<p><a href="${escape(android.url)}">Android APK ↓</a> · ${escape(version)}${tool.androidRequirements?` · ${escape(tool.androidRequirements)}`:''}</p><p class="sha">APK SHA-256 <code>${escape(android.sha256)}</code></p>`:'';
+  const portable=release?.downloads.some(download=>!download.primary&&/portable.*\.zip$/i.test(download.name));
+  const notes = asset?`<details class="notes"><summary>${android?'Install &amp; Android':'Install'}<span class="sr-only"> EVFX ${escape(tool.name)}</span></summary><p class="req">${escape(tool.requirements)}</p><p>${escape(tool.install)}</p>${companion}<p><a href="${escape(release.releaseUrl)}">Release${portable?' & portable ZIP':''} ↗</a></p><p class="sha">${release.binary?'ZIP ':''}SHA-256 <code>${escape(asset.sha256)}</code>${release.binary?`<br>${escape(release.binary.name)} <code>${escape(release.binary.sha256)}</code>`:''}</p></details>`:'';
   return `<div class="line"><span class="release-meta"><span class="meta">${meta}</span>${uploaded}</span>${action}</div>${notes.replace('</details>',mobileInstall(mobileReleases[tool.id],escape)+'</details>')}`;
 }
 

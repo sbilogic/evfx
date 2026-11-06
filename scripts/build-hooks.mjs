@@ -33,6 +33,8 @@ export async function installBuildHooks(root,{remove=false}={}){
       const path=join(project.absolute,file),content=await read(path);
       if(content&&/writeFile|copyFile/.test(content)&&/\.jsx/.test(content))hooks.set(path,{type:file.endsWith('.cjs')?'cjs':'mjs'});
     }
+    const desktopRelease=join(project.absolute,'scripts/release.mjs'),releaseScript=await read(desktopRelease);
+    if(releaseScript&&/electron-builder/.test(releaseScript)&&/buildBootstrap/.test(releaseScript))hooks.set(desktopRelease,{type:'mjs',absolute:true});
     for(const file of ['CMakeLists.txt','plugin/CMakeLists.txt']){
       const path=join(project.absolute,file),content=await read(path);
       if(content&&/\.aex\b/i.test(content))hooks.set(path,{type:'cmake',project:project.absolute});
@@ -58,6 +60,8 @@ export async function installBuildHooks(root,{remove=false}={}){
       lines=[`include("\${CMAKE_CURRENT_LIST_DIR}/${helper}" OPTIONAL)`,`if(COMMAND evfx_site_after_builds)`,`  evfx_site_after_builds("\${CMAKE_CURRENT_LIST_DIR}/${project}")`,'endif()'];
     }else if(hook.type==='python'){
       lines=['if __name__ == "__main__":','    try:','        import subprocess as _evfx_subprocess, shutil as _evfx_shutil, sys as _evfx_sys','        from pathlib import Path as _evfx_Path',`        _evfx_hook = (_evfx_Path(__file__).resolve().parent / ${JSON.stringify(local('sync-after-build.mjs'))}).resolve()`,'        _evfx_node = _evfx_shutil.which("node")','        if _evfx_node and _evfx_hook.is_file():','            _evfx_subprocess.run([_evfx_node, str(_evfx_hook)], stdout=_evfx_sys.stderr, stderr=_evfx_sys.stderr, check=False)','    except OSError as _evfx_error:','        print(f"EVFX site sync will retry on the next build: {_evfx_error}", file=_evfx_sys.stderr)'];
+    }else if(hook.absolute){
+      lines=["try { const evfxChild = await import('node:child_process'); process.once('beforeExit', code => { if(code === 0) { const result = evfxChild.spawnSync(process.execPath, ["+JSON.stringify(join(root,'scripts/sync-after-build.mjs'))+"], {stdio:'inherit',windowsHide:true}); if(result.error || result.status !== 0) console.warn('EVFX site sync will retry on the next build.'); } }); } catch(evfxError) { console.warn('EVFX site sync will retry on the next build:', evfxError.message); }"];
     }else{
       // CommonJS builders need their synchronous path rather than import.meta.
       lines=hook.type==='cjs'?[`try { const evfxChild = require('node:child_process'); const evfxHook = require('node:path').resolve(__dirname, ${JSON.stringify(local('sync-after-build.mjs'))}); process.once('beforeExit', code => { if(code === 0) evfxChild.spawnSync(process.execPath, [evfxHook], {stdio:'inherit',windowsHide:true}); }); } catch(evfxError) { console.warn('EVFX site sync will retry on the next build:', evfxError.message); }`]:[`try { const evfxChild = await import('node:child_process'); const evfxUrl = await import('node:url'); const evfxHook = evfxUrl.fileURLToPath(new URL(${JSON.stringify(local('sync-after-build.mjs'))}, import.meta.url)); process.once('beforeExit', code => { if(code === 0) evfxChild.spawnSync(process.execPath, [evfxHook], {stdio:'inherit',windowsHide:true}); }); } catch(evfxError) { console.warn('EVFX site sync will retry on the next build:', evfxError.message); }`];

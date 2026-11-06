@@ -40,7 +40,7 @@ for(const tool of catalog.tools){
     assert(url.pathname.startsWith(`/${catalog.repository}/releases/download/`));
     assert.match(asset.sha256,/^[a-f0-9]{64}$/);
     assert(asset.bytes>0);
-    assert(/\.(exe|zip)$/.test(asset.name));
+    assert(/\.(exe|zip)$/i.test(asset.name)||tool.androidCompanion&&!asset.primary&&/[-_]android[-_].*\.apk$/i.test(asset.name));
   }
 }
 for(const id of Object.keys(releases))assert(ids.has(id),`Unknown tool in release lock: ${id}`);

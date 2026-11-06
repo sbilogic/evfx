@@ -5,7 +5,7 @@ import zipfile
 
 for value in sys.argv[1:]:
     path=Path(value)
-    if path.suffix.lower()=='.zip':
+    if path.suffix.lower() in ('.zip','.apk'):
         with zipfile.ZipFile(path) as archive:
             for info in archive.infolist():
                 name=PurePosixPath(info.filename.replace('\\','/'))

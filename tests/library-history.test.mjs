@@ -37,3 +37,26 @@ test('removed plugins have library redirects without stale cards or explanation 
     await rm(base,{recursive:true,force:true});
   }
 });
+
+test('a Windows alpha lists its matching Android APK with a visible warning',async()=>{
+  const base=await mkdtemp(join(tmpdir(),'evfx-history-'));
+  const source=dirname(dirname(fileURLToPath(import.meta.url)));
+  try{
+    for(const dir of ['scripts','src'])await cp(join(source,dir),join(base,dir),{recursive:true});
+    const url='https://github.com/example/evfx/releases',tag='omnicast-v0.17.5',sha='a'.repeat(64);
+    const tool={id:'omnicast',name:'Omnicast',host:'Windows',category:'windows',kind:'Standalone app',art:'orbit',androidCompanion:true,description:'Share files on a local network.',detail:'Share files on a local network.',requirements:'Windows x64',install:'Run setup.',status:'preview',readiness:{state:'experimental',evidence:'Release notes',note:'Alpha build.'}};
+    const downloads=[{name:'Omnicast-Setup-0.17.5.exe',url:url+'/download/'+tag+'/Omnicast-Setup-0.17.5.exe',bytes:100,sha256:sha,primary:true},{name:'Omnicast-Android-0.17.5.apk',url:url+'/download/'+tag+'/Omnicast-Android-0.17.5.apk',bytes:50,sha256:sha,primary:false}];
+    const data={'catalog.json':{repository:'example/evfx',title:'EVFX',tools:[tool]},'sources.json':{omnicast:{}},'releases.lock.json':{omnicast:{version:'0.17.5',tag,prerelease:true,releaseUrl:url+'/tag/'+tag,downloads}},'support.json':{},'sync.config.json':{excludedIds:[]},'explain.json':{}};
+    for(const [file,value] of Object.entries(data))await writeFile(join(base,file),JSON.stringify(value));
+    for(const script of ['check','build']){
+      const run=spawnSync(process.execPath,['scripts/'+script+'.mjs'],{cwd:base,encoding:'utf8',windowsHide:true});
+      assert.equal(run.status,0,run.stderr);
+    }
+    const html=await readFile(join(base,'dist/index.html'),'utf8');
+    assert(html.includes('data-variant="development" hidden'));
+    assert(html.includes('⚠ Experimental'));
+    assert(html.includes('Android APK'));
+    assert(html.includes(downloads[1].url));
+    assert(!html.includes('portable ZIP'));
+  }finally{assert.equal(dirname(resolve(base)),resolve(tmpdir()));assert.match(basename(base),/^evfx-history-/);await rm(base,{recursive:true,force:true});}
+});

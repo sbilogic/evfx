@@ -34,13 +34,13 @@ export function sourcePath(siteRoot,config,source,path){
   return result;
 }
 
-async function packageFiles(project){
+async function packageFiles(project,{androidCompanion=false}={}){
   const result=[];
   async function walk(dir,depth){
     for(const entry of await entries(dir)){
       if(entry.isSymbolicLink())continue;
       const path=join(dir,entry.name);
-      if(entry.isFile()&&/\.(zip|exe)$/i.test(entry.name)){
+      if(entry.isFile()&&(/\.(zip|exe)$/i.test(entry.name)||androidCompanion&&/[-_]android[-_].*\.apk$/i.test(entry.name))){
         if(/(?:^|[-_ ])(?:source|research|reference|ai[-_ ]?text|payload|symbols|fixtures?|backup|archive)(?:[-_. ]|$)/i.test(entry.name))continue;
         if(/(?:^|[-_])(?:unit[-_]tests?|test[-_]results|test[-_]output)(?:[-_.]|$)/i.test(entry.name))continue;
         if(extname(entry.name).toLowerCase()==='.exe'&&!/setup|installer/i.test(entry.name))continue;
@@ -155,8 +155,15 @@ export async function findLocalProjects(siteRoot,config,tracked=[]){
       continue; // A selected worktree can disappear inside an available workspace.
     }
     for(const entry of rootEntries){
-      if(!/^evfx/i.test(entry.name))continue;
       const project=join(directory,entry.name);
+      if(!/^evfx/i.test(entry.name)){
+        const exact=tracked.some(previous=>previous.base===root.id&&previous.project===entry.name);
+        if(!exact){
+          if(!entry.isDirectory()||entry.isSymbolicLink())continue;
+          const identity=await readProjectIdentity(project);
+          if(!identity||!tracked.some(previous=>previous.identity===identity&&!/^evfx/i.test(basename(previous.project))))continue;
+        }
+      }
       // Offloaded projects can retain their established path as a Windows
       // junction. Follow only explicitly tracked projects, never arbitrary links.
       if(entry.isSymbolicLink()){
@@ -241,9 +248,10 @@ export async function discoverLocalPlugins(siteRoot,{catalog,sources,config}){
       tool.localProject={...(project.identity?{identity:project.identity}:{}),base:project.base,project:project.project,names};
       if(!catalog.tools.some(active=>active.id===tool.id))catalog.tools.push(tool);
     };
-    const packages=await packageFiles(project.absolute);
-    packages.sort((a,b)=>compareVersions(b.version,a.version)||b.mtime-a.mtime||(/setup|installer/i.test(b.path)?1:0)-(/setup|installer/i.test(a.path)?1:0));
-    let selected=packages[0];
+    const packages=await packageFiles(project.absolute,{androidCompanion:tool?.androidCompanion});
+    const desktop=packages.filter(p=>!/\.apk$/i.test(p.path));
+    desktop.sort((a,b)=>compareVersions(b.version,a.version)||b.mtime-a.mtime||(/setup|installer/i.test(b.path)?1:0)-(/setup|installer/i.test(a.path)?1:0));
+    let selected=desktop[0];
     let source=existing?structuredClone(existing):null;
     const completed=completedBuilds[`${project.base}:${project.project}`];
     const completedPath=completed?resolve(project.absolute,completed.artifact):null;
@@ -259,7 +267,7 @@ export async function discoverLocalPlugins(siteRoot,{catalog,sources,config}){
       const best=packages.filter(p=>p.version===selected.version);
       const setup=best.find(p=>/setup|installer/i.test(basename(p.path)));
       if(setup)selected=setup;
-      const extras=best.filter(p=>p.path!==selected.path&&/portable/i.test(basename(p.path)));
+      const extras=best.filter(p=>p.path!==selected.path&&(/portable/i.test(basename(p.path))||tool?.androidCompanion&&/[-_]android[-_].*\.apk$/i.test(basename(p.path))));
       const base=sourceRoot(siteRoot,config,{base:project.base});
       source={base:project.base,project:project.project,version:selected.version,
         artifacts:[selected,...extras].map(p=>slash(relative(base,p.path)))};
