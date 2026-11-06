@@ -1,0 +1,11 @@
+{
+  "sequencer": {
+    "version": "0.1.0",
+    "channel": "preview",
+    "filename": "EVFX-Sequencer-Android-0.1.0.apk",
+    "url": "https://github.com/sbilogic/evfx/releases/download/sequencer-android-v0.1.0-93487e6897/EVFX-Sequencer-Android-0.1.0.apk",
+    "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/sequencer-android-v0.1.0-93487e6897",
+    "sha256": "93487e6897385fb7cb59e29385b9f5b78dba758604d52b559d59e304eb13f7fb",
+    "bytes": 98774
+  }
+}

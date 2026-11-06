@@ -9,11 +9,13 @@ import { renderSupport } from './support.mjs';
 import { collectionDescription } from './collections.mjs';
 import { retiredPluginIds } from './project-identity.mjs';
 import { corridorKeyUpdateFeed, sequencerUpdateFeed } from './update-feed.mjs';
+import { mobileInstall } from './mobile-release.mjs';
 
 export const root = dirname(dirname(fileURLToPath(import.meta.url)));
 export const escape = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const [catalog, releases, supportConfig, explain] = await Promise.all(['catalog.json','releases.lock.json','support.json','explain.json'].map(async f=>JSON.parse(await readFile(join(root,f),'utf8'))));
 const support=renderSupport(supportConfig);
+const mobileReleases=JSON.parse(await readFile(join(root,'mobile-releases.json'),'utf8').catch(e=>{if(e.code==='ENOENT')return '{}';throw e;}));
 const [styleVersion,appVersion]=await Promise.all(['style.css','app.js'].map(async file=>createHash('sha256').update(await readFile(join(root,'src',file))).digest('hex').slice(0,10)));
 const bytes = n => n >= 1e6 ? `${(n/1e6).toFixed(1)} MB` : `${Math.max(1,Math.round(n/1000))} KB`;
 const site = 'https://sbilogic.github.io/evfx/';
@@ -31,7 +33,7 @@ function download(tool,release,warningId) {
     ? `<a class="download" href="${escape(asset.url)}" aria-label="Download EVFX ${escape(tool.name)} ${escape(version)}"${warningId?` aria-describedby="${warningId}"`:''}>Download<span aria-hidden="true"> ↓</span></a>`
     : `<span class="no-download">No download</span>`;
   const notes = asset?`<details class="notes"><summary>Install<span class="sr-only"> EVFX ${escape(tool.name)}</span></summary><p class="req">${escape(tool.requirements)}</p><p>${escape(tool.install)}</p><p><a href="${escape(release.releaseUrl)}">Release${release.downloads.length>1?' & portable ZIP':''} ↗</a></p><p class="sha">${release.binary?'ZIP ':''}SHA-256 <code>${escape(asset.sha256)}</code>${release.binary?`<br>${escape(release.binary.name)} <code>${escape(release.binary.sha256)}</code>`:''}</p></details>`:'';
-  return `<div class="line"><span class="release-meta"><span class="meta">${meta}</span>${uploaded}</span>${action}</div>${notes}`;
+  return `<div class="line"><span class="release-meta"><span class="meta">${meta}</span>${uploaded}</span>${action}</div>${notes.replace('</details>',mobileInstall(mobileReleases[tool.id],escape)+'</details>')}`;
 }
 
 function toolRow(tool,release,variant,hasComplete) {

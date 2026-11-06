@@ -5,6 +5,7 @@ import { fileURLToPath } from 'node:url';
 import { renderSupport } from './support.mjs';
 import { getReadiness } from './readiness.mjs';
 import { retiredPluginIds } from './project-identity.mjs';
+import { validateMobileRelease } from './mobile-release.mjs';
 const root=dirname(dirname(fileURLToPath(import.meta.url)));
 const load=async name=>JSON.parse(await readFile(join(root,name),'utf8'));
 const [catalog,sources,releases]=await Promise.all(['catalog.json','sources.json','releases.lock.json'].map(load));
@@ -44,6 +45,8 @@ for(const tool of catalog.tools){
 }
 for(const id of Object.keys(releases))assert(ids.has(id),`Unknown tool in release lock: ${id}`);
 for(const id of Object.keys(sources))assert(ids.has(id),`Unknown distribution source: ${id}`);
+const mobile=await load('mobile-releases.json').catch(e=>{if(e.code==='ENOENT')return {};throw e;});
+for(const [id,release] of Object.entries(mobile)){assert(ids.has(id),`Unknown mobile tool: ${id}`);validateMobileRelease(release,catalog.repository);}
 const aliases=new Set();
 for(const tool of catalog.tools)for(const alias of tool.aliases||[]){
   assert.match(alias,/^[a-z][a-z0-9-]+$/);

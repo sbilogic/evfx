@@ -6,6 +6,7 @@ test('generated files never count as site edits, even when trimmed output drops 
   assert.deepEqual(editedSourcePaths('M catalog.json'), []);
   assert.deepEqual(editedSourcePaths(' M catalog.json\0 M sources.json\0'), []);
   assert.deepEqual(editedSourcePaths('M  releases.lock.json\0MM catalog.json\0'), []);
+  assert.deepEqual(editedSourcePaths(' M mobile-releases.json'), []);
 });
 
 test('source edits are still detected in every status position', () => {

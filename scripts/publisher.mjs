@@ -10,7 +10,7 @@ import { discoverLocalPlugins,sourcePath,sourceRoot } from './local-plugins.mjs'
 import { loadJson,saveJson,withLock } from './sync-files.mjs';
 
 const root=dirname(dirname(fileURLToPath(import.meta.url)));
-const generated=new Set(['catalog.json','sources.json','releases.lock.json']);
+const generated=new Set(['catalog.json','sources.json','releases.lock.json','mobile-releases.json']);
 const git=process.env.EVFX_GIT||'git';
 const digest=value=>createHash('sha256').update(value).digest('hex');
 const hashFile=async path=>{const hash=createHash('sha256');for await(const chunk of createReadStream(path))hash.update(chunk);return hash.digest('hex');};
