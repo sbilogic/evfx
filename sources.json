@@ -144,12 +144,9 @@
     "base": "collection",
     "project": "EVFX Flares",
     "version": "0.4.0-dev17",
-    "files": [
-      "EVFX Flares/build/Release/EVFX Flares.aex"
-    ],
-    "templateArtifact": "EVFX Flares/dist/EVFX-Flares-0.4.0-dev17-Windows-x64.zip",
-    "build": 17,
-    "aeVersion": 131089
+    "artifacts": [
+      "EVFX Flares/dist/EVFX-Flares-0.4.0-dev17-Windows-x64.zip"
+    ]
   },
   "utility-collection": {
     "base": "collection",
