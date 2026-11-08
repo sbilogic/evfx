@@ -197,7 +197,7 @@
       },
       "localProject": {
         "identity": "11854c9e-6c6e-4624-8099-b9ae9e7459cf",
-        "base": "dev",
+        "base": "collection",
         "project": "EVFX Flares",
         "names": {
           "readme": "Flares",

@@ -366,18 +366,24 @@
   },
   "flares": {
     "version": "0.4.0-dev17",
-    "publishedAt": "2026-10-31T02:14:20Z",
-    "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/flares-v0.4.0-dev17-2e3b311d09",
-    "tag": "flares-v0.4.0-dev17-2e3b311d09",
+    "build": 17,
+    "aeVersion": 131089,
+    "binary": {
+      "name": "EVFX Flares.aex",
+      "sha256": "5d5da3afb33d1b5f9789bd6d4d86f4a35a20521534da678644623d622ea934f5"
+    },
+    "publishedAt": "2026-11-08T08:57:34Z",
+    "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/flares-v0.4.0-dev17-8a4b524270",
+    "tag": "flares-v0.4.0-dev17-8a4b524270",
     "prerelease": true,
     "downloads": [
       {
-        "name": "EVFX-Flares-0.4.0-dev17-Windows-x64.zip",
-        "url": "https://github.com/sbilogic/evfx/releases/download/flares-v0.4.0-dev17-2e3b311d09/EVFX-Flares-0.4.0-dev17-Windows-x64.zip",
-        "bytes": 305278714,
-        "sha256": "83a793be8ed63f0eaba99d4ffa52cd5b88946d38dd1326f7b3baf03de9c67fcb",
+        "name": "EVFX-flares-0.4.0-dev17.zip",
+        "url": "https://github.com/sbilogic/evfx/releases/download/flares-v0.4.0-dev17-8a4b524270/EVFX-flares-0.4.0-dev17.zip",
+        "bytes": 305278723,
+        "sha256": "1e40453bcf46cc4528153956b4f76aa13b26d9850413f58d6995157130650c3d",
         "primary": true,
-        "uploadedAt": "2026-10-31T02:13:16Z"
+        "uploadedAt": "2026-11-08T08:56:52Z"
       }
     ]
   },

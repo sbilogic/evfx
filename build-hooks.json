@@ -1,6 +1,6 @@
 [
   {"path":"../../EVFX Choke It/package.ps1"},
-  {"path":"../../EVFX Flares/package.ps1"},
+  {"path":"../EVFX Flares/package.ps1"},
   {"path":"../EVFX Sequencer/package.ps1"},
   {"path":"../EVFX-PixelPicker/build-aex.ps1","condition":"$Configuration -eq 'Release'"},
   {"path":"../EVFX Multilayer EXR for AE/build_installer.ps1"},
