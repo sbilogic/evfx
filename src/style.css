@@ -102,3 +102,8 @@
     .tool{padding-bottom:48px}
   }
 }
+
+.collection-heading{margin:0;font-size:15px;font-weight:400;letter-spacing:-.01em;padding-bottom:6px;border-bottom:2px solid var(--ink)}
+
+.alternate-build{margin-top:12px;font-size:12px;line-height:1.5}.alternate-build>summary{cursor:pointer;color:var(--warning);padding:6px 0}.alternate-build .warn{margin-top:10px}
+@supports(grid-template-rows:subgrid){@media(min-width:621px){.tool{grid-row:span 7}.tool .alternate-build{grid-row:7}}}

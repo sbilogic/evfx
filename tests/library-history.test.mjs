@@ -53,10 +53,12 @@ test('a Windows alpha lists its matching Android APK with a visible warning',asy
       assert.equal(run.status,0,run.stderr);
     }
     const html=await readFile(join(base,'dist/index.html'),'utf8');
-    assert(html.includes('data-variant="development" hidden'));
+    assert(html.includes('data-variant="development"'));
+    assert(!html.includes('data-variant="development" hidden'));
     assert(html.includes('⚠ Experimental'));
     assert(html.includes('Android APK'));
     assert(html.includes(downloads[1].url));
     assert(!html.includes('portable ZIP'));
   }finally{assert.equal(dirname(resolve(base)),resolve(tmpdir()));assert.match(basename(base),/^evfx-history-/);await rm(base,{recursive:true,force:true});}
 });
+

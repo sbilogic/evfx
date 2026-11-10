@@ -7,42 +7,23 @@ for (const time of document.querySelectorAll('time[datetime]')) {
   if (Number.isFinite(date.getTime())) time.textContent = localTime.format(date);
 }
 
-const buttons = [...document.querySelectorAll('[data-view]')];
-if (buttons.length) {
-  const tools = [...document.querySelectorAll('.tool')];
-  const banner = document.querySelector('#dev-banner');
-  const status = document.querySelector('#results-count');
-  let view = 'complete';
-
-  function show(next) {
-    view = next;
-    let visible = 0;
-    for (const tool of tools) {
-      tool.hidden = tool.dataset.variant !== view;
-      if (!tool.hidden) tool.querySelector('.no').textContent = String(++visible).padStart(2, '0');
-    }
-    for (const group of document.querySelectorAll('[data-category-group]')) {
-      group.hidden = !group.querySelector('.tool:not([hidden])');
-    }
-    for (const button of buttons) {
-      button.hidden = false;
-      button.setAttribute('aria-pressed', String(button.dataset.view === view));
-    }
-    banner.hidden = view !== 'development';
-    status.textContent = `${visible} ${view === 'development' ? 'development' : 'released'} ${visible === 1 ? 'tool' : 'tools'}`;
-  }
-  for (const button of buttons) button.addEventListener('click', () => show(button.dataset.view));
-  function applyHash() {
-    let id; try { id = decodeURIComponent(location.hash.slice(1)); } catch { return; }
-    const library=document.querySelector('#collection');
-    if(library.dataset.retired?.split(' ').includes(id)){
-      history.replaceState(null,'','#collection');
-      show('complete');library.scrollIntoView();return;
-    }
-    const target = document.getElementById(id) || tools.find(tool => tool.dataset.aliases?.split(' ').includes(id));
-    if (target?.dataset.variant) { show(target.dataset.variant); target.scrollIntoView(); }
-  }
-  window.addEventListener('pageshow', () => { show(view); applyHash(); });
-  window.addEventListener('hashchange', applyHash);
-  show(view);
+const tools = [...document.querySelectorAll('.tool')];
+for (const [index, tool] of tools.entries()) {
+  tool.querySelector('.no').textContent = String(index + 1).padStart(2, '0');
 }
+function applyHash() {
+  let id;
+  try { id = decodeURIComponent(location.hash.slice(1)); } catch { return; }
+  const library = document.querySelector('#collection');
+  if (!library) return;
+  if (library.dataset.retired?.split(' ').includes(id)) {
+    history.replaceState(null, '', '#collection');
+    library.scrollIntoView();
+    return;
+  }
+  const target = document.getElementById(id) || tools.find(tool => tool.dataset.aliases?.split(' ').includes(id));
+  if (target?.matches('details')) target.open = true;
+  target?.scrollIntoView();
+}
+window.addEventListener('pageshow', applyHash);
+window.addEventListener('hashchange', applyHash);

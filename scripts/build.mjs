@@ -47,7 +47,7 @@ function toolRow(tool,release,variant,hasComplete) {
   const page=variant==='complete'&&explain[tool.id]?`./${tool.id}/`:null;
   const aliases=tool.aliases?.length?` data-aliases="${escape(tool.aliases.join(' '))}"`:'';
   const art=`${toolArt(tool.art)}<span class="no" aria-hidden="true"></span>${hasWarning?`<span class="flag">⚠ ${escape(readiness.badge)}</span>`:''}`;
-  return `<article id="${rowId}" class="tool${hasWarning?' is-dev':''}" data-product="${tool.id}" data-variant="${variant}"${aliases}${variant==='development'?' hidden':''}>
+  return `<article id="${rowId}" class="tool${hasWarning?' is-dev':''}" data-product="${tool.id}" data-variant="${variant}"${aliases}>
     ${page?`<a class="art" href="${page}" tabindex="-1" aria-hidden="true">${art}</a>`:`<div class="art">${art}</div>`}
     <h3>${page?`<a href="${page}">${escape(tool.name)}</a>`:escape(tool.name)}</h3>
     <p class="desc">${escape(release?.collection?collectionDescription(release.collection):tool.description)}</p>
@@ -78,14 +78,26 @@ for(const tool of catalog.tools){
   const complete=latest?.complete||(latest&&getReadiness(tool,latest).state==='reviewed'?latest:null);
   if(!groups.has(tool.category))groups.set(tool.category,{host:tool.host,rows:[],complete:0});
   const group=groups.get(tool.category);
-  if(complete){group.rows.push(toolRow(tool,complete,'complete',true));group.complete++;completeCount++;if(explain[tool.id])pages.push([tool,complete]);}
-  if(!complete||latest.tag!==complete.tag){group.rows.push(toolRow(tool,latest,'development',!!complete));devCount++;}
+  if(complete){
+    let row=toolRow(tool,complete,'complete',true);
+    if(latest.tag!==complete.tag){
+      const readiness=getReadiness(tool,latest);
+      const warningId=`${tool.id}-development-warning`;
+      const development=`<details id="${tool.id}-development" class="alternate-build"><summary>Development build</summary><p id="${warningId}" class="warn">${escape(readiness.note)}</p>${download(tool,latest,warningId)}</details>`;
+      row=row.replace('</article>',`${development}</article>`);
+      devCount++;
+    }
+    group.rows.push(row);group.complete++;completeCount++;
+    if(explain[tool.id])pages.push([tool,complete]);
+  }else{
+    group.rows.push(toolRow(tool,latest,'development',false));devCount++;
+  }
 }
 const year=new Date().getFullYear();
 const replacements = {
   TITLE:escape(catalog.title), COUNT:completeCount, DEV_COUNT:devCount,
   RETIRED_IDS:escape(retiredPluginIds(catalog).join(' ')),
-  YEAR:year, HERO_ART:heroArt(), TOOLS:[...groups].map(([category,group])=>`<section class="library-group" data-category-group="${category}" aria-labelledby="host-${category}"${group.complete?'':' hidden'}><h2 id="host-${category}" class="library-label">${escape(group.host)}</h2><div class="grid">${group.rows.join('\n')}</div></section>`).join('\n'), SUPPORT_NAV:support.nav,
+  YEAR:year, HERO_ART:heroArt(), TOOLS:[...groups].map(([category,group])=>`<section class="library-group" data-category-group="${category}" aria-labelledby="host-${category}"><h2 id="host-${category}" class="library-label">${escape(group.host)}</h2><div class="grid">${group.rows.join('\n')}</div></section>`).join('\n'), SUPPORT_NAV:support.nav,
   STYLE_VERSION:styleVersion, APP_VERSION:appVersion
 };
 const fill=text=>{for(const [key,value] of Object.entries(replacements)) text=text.replaceAll(`{{${key}}}`,String(value));return text.replace(/>\s+</g,'><').trim();};
