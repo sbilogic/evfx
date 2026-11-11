@@ -200,57 +200,63 @@
     ]
   },
   "sequencer": {
-    "version": "0.12.2",
-    "publishedAt": "2026-11-11T11:53:18Z",
-    "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/sequencer-v0.12.2-4b3c0e668f",
-    "tag": "sequencer-v0.12.2-4b3c0e668f",
-    "prerelease": true,
+    "version": "0.12.3",
+    "publishedAt": "2026-11-11T12:00:31Z",
+    "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/sequencer-v0.12.3-9943638aae",
+    "tag": "sequencer-v0.12.3-9943638aae",
+    "prerelease": false,
+    "review": {
+      "state": "complete",
+      "runtimeVerified": true,
+      "sha256": "77fbe5c6d37a08c1887b182f1ce83738933ced4f4926fd5acc0d1a4e3f0a5fd5",
+      "evidence": "EVFX Sequencer/evfx-release.json"
+    },
     "downloads": [
       {
-        "name": "EVFX-Sequencer-0.12.2-Windows-x64-Setup.exe",
-        "url": "https://github.com/sbilogic/evfx/releases/download/sequencer-v0.12.2-4b3c0e668f/EVFX-Sequencer-0.12.2-Windows-x64-Setup.exe",
-        "bytes": 182104064,
-        "sha256": "a30624161e18ed0dca968cc17926d1ec4d632dbd5f82e5d4741ab826a0939730",
+        "name": "EVFX-Sequencer-0.12.3-Windows-x64-Setup.exe",
+        "url": "https://github.com/sbilogic/evfx/releases/download/sequencer-v0.12.3-9943638aae/EVFX-Sequencer-0.12.3-Windows-x64-Setup.exe",
+        "bytes": 182102016,
+        "sha256": "77fbe5c6d37a08c1887b182f1ce83738933ced4f4926fd5acc0d1a4e3f0a5fd5",
         "primary": true,
-        "uploadedAt": "2026-11-11T11:52:20Z"
+        "uploadedAt": "2026-11-11T11:59:39Z"
       },
       {
-        "name": "EVFX-Sequencer-0.12.2-Windows-x64-Portable.zip",
-        "url": "https://github.com/sbilogic/evfx/releases/download/sequencer-v0.12.2-4b3c0e668f/EVFX-Sequencer-0.12.2-Windows-x64-Portable.zip",
-        "bytes": 182006425,
-        "sha256": "bc333967079a33e3def73283c1fd44673a95a846bb46d033bf07cf00bb241090",
+        "name": "EVFX-Sequencer-0.12.3-Windows-x64-Portable.zip",
+        "url": "https://github.com/sbilogic/evfx/releases/download/sequencer-v0.12.3-9943638aae/EVFX-Sequencer-0.12.3-Windows-x64-Portable.zip",
+        "bytes": 182004074,
+        "sha256": "1eef4e44dfbe19ebc03fbd7e4353441edf9006331f531823aa05e9f4334e4bf4",
         "primary": false,
-        "uploadedAt": "2026-11-11T11:52:53Z"
+        "uploadedAt": "2026-11-11T12:00:06Z"
       }
     ],
     "complete": {
-      "version": "0.12.1",
-      "publishedAt": "2026-11-11T11:24:11Z",
-      "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/sequencer-v0.12.1-7aa90ec001",
-      "tag": "sequencer-v0.12.1-7aa90ec001",
+      "version": "0.12.3",
+      "publishedAt": "2026-11-11T12:00:31Z",
+      "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/sequencer-v0.12.3-9943638aae",
+      "tag": "sequencer-v0.12.3-9943638aae",
       "prerelease": false,
       "review": {
         "state": "complete",
         "runtimeVerified": true,
-        "sha256": "98a1a03f0ae2b5a516297e013be87c8f5a3211c559ea6ffcc092c318685f6cd2",
+        "sha256": "77fbe5c6d37a08c1887b182f1ce83738933ced4f4926fd5acc0d1a4e3f0a5fd5",
         "evidence": "EVFX Sequencer/evfx-release.json"
       },
       "downloads": [
         {
-          "name": "EVFX-Sequencer-0.12.1-Windows-x64-Setup.exe",
-          "url": "https://github.com/sbilogic/evfx/releases/download/sequencer-v0.12.1-7aa90ec001/EVFX-Sequencer-0.12.1-Windows-x64-Setup.exe",
-          "bytes": 182091776,
-          "sha256": "98a1a03f0ae2b5a516297e013be87c8f5a3211c559ea6ffcc092c318685f6cd2",
+          "name": "EVFX-Sequencer-0.12.3-Windows-x64-Setup.exe",
+          "url": "https://github.com/sbilogic/evfx/releases/download/sequencer-v0.12.3-9943638aae/EVFX-Sequencer-0.12.3-Windows-x64-Setup.exe",
+          "bytes": 182102016,
+          "sha256": "77fbe5c6d37a08c1887b182f1ce83738933ced4f4926fd5acc0d1a4e3f0a5fd5",
           "primary": true,
-          "uploadedAt": "2026-11-11T11:23:12Z"
+          "uploadedAt": "2026-11-11T11:59:39Z"
         },
         {
-          "name": "EVFX-Sequencer-0.12.1-Windows-x64-Portable.zip",
-          "url": "https://github.com/sbilogic/evfx/releases/download/sequencer-v0.12.1-7aa90ec001/EVFX-Sequencer-0.12.1-Windows-x64-Portable.zip",
-          "bytes": 181994202,
-          "sha256": "05e46daa7504ecfc53ac08a37e6ba272fe1d2eca23496c7030de5b92dda5035e",
+          "name": "EVFX-Sequencer-0.12.3-Windows-x64-Portable.zip",
+          "url": "https://github.com/sbilogic/evfx/releases/download/sequencer-v0.12.3-9943638aae/EVFX-Sequencer-0.12.3-Windows-x64-Portable.zip",
+          "bytes": 182004074,
+          "sha256": "1eef4e44dfbe19ebc03fbd7e4353441edf9006331f531823aa05e9f4334e4bf4",
           "primary": false,
-          "uploadedAt": "2026-11-11T11:23:38Z"
+          "uploadedAt": "2026-11-11T12:00:06Z"
         }
       ]
     }
