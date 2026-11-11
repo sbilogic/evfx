@@ -523,27 +523,27 @@
     ]
   },
   "omnicast": {
-    "version": "0.17.18",
-    "publishedAt": "2026-11-11T09:58:41Z",
-    "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/omnicast-v0.17.18-feea7f77ac",
-    "tag": "omnicast-v0.17.18-feea7f77ac",
+    "version": "0.17.19",
+    "publishedAt": "2026-11-11T11:13:50Z",
+    "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/omnicast-v0.17.19-83cb44c40c",
+    "tag": "omnicast-v0.17.19-83cb44c40c",
     "prerelease": true,
     "downloads": [
       {
-        "name": "Omnicast-Setup-0.17.18.exe",
-        "url": "https://github.com/sbilogic/evfx/releases/download/omnicast-v0.17.18-feea7f77ac/Omnicast-Setup-0.17.18.exe",
-        "bytes": 110991360,
-        "sha256": "37ec31d1e6db53eac31b100f9f36a6133f6857f65ac28149cd9679aa945c5b2c",
+        "name": "Omnicast-Setup-0.17.19.exe",
+        "url": "https://github.com/sbilogic/evfx/releases/download/omnicast-v0.17.19-83cb44c40c/Omnicast-Setup-0.17.19.exe",
+        "bytes": 110992896,
+        "sha256": "46ea8d22cc806b809c9131b4c09a50b7e0beeffc1eb09d568ff71da52e407525",
         "primary": true,
-        "uploadedAt": "2026-11-11T09:58:19Z"
+        "uploadedAt": "2026-11-11T11:13:26Z"
       },
       {
-        "name": "Omnicast-Android-0.17.18.apk",
-        "url": "https://github.com/sbilogic/evfx/releases/download/omnicast-v0.17.18-feea7f77ac/Omnicast-Android-0.17.18.apk",
+        "name": "Omnicast-Android-0.17.19.apk",
+        "url": "https://github.com/sbilogic/evfx/releases/download/omnicast-v0.17.19-83cb44c40c/Omnicast-Android-0.17.19.apk",
         "bytes": 111854,
-        "sha256": "aa194a93fd823efb8773e84284c28f2c8fd707fa3fd41aea027066d46938c55e",
+        "sha256": "5506a11ba839d5e7ff4e260b88e7e7c933dbadf5202b1d7362c79f18ceb57acf",
         "primary": false,
-        "uploadedAt": "2026-11-11T09:58:39Z"
+        "uploadedAt": "2026-11-11T11:13:49Z"
       }
     ]
   }
