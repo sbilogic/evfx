@@ -95,10 +95,10 @@
   "omnicast": {
     "base": "dev",
     "project": "Omnicast",
-    "version": "0.17.28",
+    "version": "0.17.29",
     "artifacts": [
-      "Omnicast/release/Omnicast-Setup-0.17.28.exe",
-      "Omnicast/release/Omnicast-Android-0.17.28.apk"
+      "Omnicast/release/Omnicast-Setup-0.17.29.exe",
+      "Omnicast/release/Omnicast-Android-0.17.29.apk"
     ]
   },
   "menu": {
