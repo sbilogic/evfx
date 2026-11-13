@@ -33,7 +33,7 @@ with zipfile.ZipFile(source) as original:
     if native.is_absolute() or ".." in native.parts or "'" in native.name or any(c in native.name for c in "\r\n"):
         raise ValueError("Unsafe native plugin path")
     parent = "" if str(native.parent) == "." else str(native.parent) + "/"
-    repaired = {"rebalance", "smart-grain", "smart-denoise", "choke-it", "flares", "crop-ae"}
+    repaired = {"smart-grain", "smart-denoise", "choke-it", "flares", "crop-ae"}
     if product not in repaired:
         scripts = [item for item in files if item.filename.lower() == (parent + "install.ps1").lower()]
         wrappers = [item for item in files if item.filename.lower() in {(parent + "install.cmd").lower(), (parent + "install.bat").lower()}]
@@ -232,21 +232,6 @@ try {
         elif not text.startswith("param([string]$PluginDirectory)\n") or patched_default not in text:
             raise ValueError("Installation script has changed; preserve it for review")
         additions[parent + "Install.ps1"] = text.replace("\n", "\r\n").encode("utf-8")
-    guide = parent + "START HERE.txt"
-    if product == "rebalance" and guide.lower() in existing:
-        guide_item = next(item for item in files if item.filename.lower() == guide.lower())
-        text = original.read(guide_item).decode("utf-8-sig").replace("\r\n", "\n")
-        old = ("Save your project and close AE. Run Install.ps1, or copy EVFXRebalance.aex\n"
-               "to your AE Plug-ins folder. Restart AE. This machine uses the existing\n"
-               "writable MediaCore Testing/EVFX development folder. Do not import the AEX\n"
-               "as footage. Install only one version of the effect.")
-        new = ("Save your project and close AE. Double-click Install.cmd and approve the\n"
-               "Windows administrator prompt. The installer creates the standard shared\n"
-               "Adobe MediaCore folder if needed. Restart AE. Do not import the AEX as\n"
-               "footage. Install only one version of the effect.")
-        if old not in text:
-            raise ValueError("Rebalance install guide has changed; preserve it for review")
-        additions[guide_item.filename] = text.replace(old, new, 1).replace("\n", "\r\n").encode("utf-8")
     if product not in repaired and any(name.lower() in existing for name in additions):
         raise ValueError("Existing installer needs a product-specific repair")
     with zipfile.ZipFile(destination, "w", compression=zipfile.ZIP_DEFLATED, allowZip64=True) as output:

@@ -66,16 +66,14 @@ test('a native package installs from a path with spaces to a newly created Media
   }finally{await rm(base,{recursive:true,force:true});}
 });
 
-test('Rebalance replaces the developer-only installer and preserves the plugin',async()=>{
-  const base=await mkdtemp(join(tmpdir(),'evfx rebalance installer '));
+test('a package with a developer-only MediaCore path is rejected',async()=>{
+  const base=await mkdtemp(join(tmpdir(),'evfx developer path '));
   try{
     const input=join(base,'input.zip'),output=join(base,'output.zip');
-    const code='import sys,zipfile;z=zipfile.ZipFile(sys.argv[1],"w");z.writestr("EVFX Rebalance Plugin/EVFXRebalance.aex",b"plugin");z.writestr("EVFX Rebalance Plugin/Install.ps1",r"C:\\Program Files\\Adobe\\Common\\Plug-ins\\7.0\\MediaCore\\Testing\\EVFX");z.writestr("EVFX Rebalance Plugin/START HERE.txt",b"Save your project and close AE. Run Install.ps1, or copy EVFXRebalance.aex\\r\\nto your AE Plug-ins folder. Restart AE. This machine uses the existing\\r\\nwritable MediaCore Testing/EVFX development folder. Do not import the AEX\\r\\nas footage. Install only one version of the effect.");z.writestr("EVFX Rebalance Plugin/keep.txt",b"keep");z.close()';
+    const code='import sys,zipfile;z=zipfile.ZipFile(sys.argv[1],"w");z.writestr("Example.aex",b"plugin");z.writestr("Install.ps1",r"C:\\Program Files\\Adobe\\Common\\Plug-ins\\7.0\\MediaCore\\Testing\\EVFX");z.writestr("Install.cmd",b"%~dp0 ExecutionPolicy Bypass -Verb RunAs");z.close()';
     const make=run('python',['-c',code,input]);assert.equal(make.status,0,make.stderr);
-    const fix=run('python',[join(root,'scripts','prepare-windows-installer.py'),input,output,'rebalance']);
-    assert.equal(fix.status,0,fix.stderr);
-    const check=run('python',['-c','import sys,zipfile;z=zipfile.ZipFile(sys.argv[1]);p="EVFX Rebalance Plugin/";s=z.read(p+"Install.ps1");assert b"MediaCore\\\\Testing" not in s;assert b"$env:ProgramFiles" in s;assert b"-Verb RunAs" in z.read(p+"Install.cmd");guide=z.read(p+"START HERE.txt");assert b"Install.cmd" in guide and b"Testing/EVFX" not in guide;assert z.read(p+"EVFXRebalance.aex")==b"plugin";assert z.read(p+"keep.txt")==b"keep"',output]);
-    assert.equal(check.status,0,check.stderr);
+    const fix=run('python',[join(root,'scripts','prepare-windows-installer.py'),input,output,'example']);
+    assert.notEqual(fix.status,0);
   }finally{await rm(base,{recursive:true,force:true});}
 });
 
