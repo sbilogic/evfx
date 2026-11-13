@@ -41,6 +41,8 @@ function download(tool,release,warningId) {
 
 function releaseNotes(tool,release) {
   const versions=release?.history||[];
+  const olderNative=tool.host==='After Effects'&&/plugin/i.test(tool.kind)&&versions.some(item=>item.tag!==release.tag&&item.releaseUrl);
+  const warning=olderNative?'<p class="history-warning">Older release downloads may not include installer fixes.</p>':'';
   const rows=versions.map(item=>{
     const date=new Date(item.publishedAt);
     const label=item.version?`v${item.version}${item.build!==undefined?` · build ${item.build}`:''}`:'Snapshot';
@@ -49,7 +51,7 @@ function releaseNotes(tool,release) {
     const link=item.releaseUrl?.startsWith(`https://github.com/${catalog.repository}/releases/tag/`)?`<a href="${escape(item.releaseUrl)}" aria-label="Open ${escape(tool.name)} ${escape(label)} release">Release ↗</a>`:'';
     return `<li><div class="history-meta"><strong>${escape(label)}</strong>${item.prerelease?'<span class="history-preview">⚠ Preview</span>':''}${time}${link}</div>${note}</li>`;
   }).join('');
-  return `<details class="history"><summary>Release notes<span class="sr-only"> for ${escape(tool.name)}</span></summary>${rows?`<ol>${rows}</ol>`:'<p>No published versions.</p>'}</details>`;
+  return `<details class="history"><summary>Release notes<span class="sr-only"> for ${escape(tool.name)}</span></summary>${warning}${rows?`<ol>${rows}</ol>`:'<p>No published versions.</p>'}</details>`;
 }
 
 function toolRow(tool,release,variant,hasComplete) {
