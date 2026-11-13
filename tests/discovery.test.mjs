@@ -55,6 +55,30 @@ test('new EVFX folders are discovered in either root without catalog edits',asyn
   }finally{await f.cleanup();}
 });
 
+test('a project marked private is never discovered or given public build hooks',async()=>{
+  const f=await fixture();try{
+    await addPackage(f,'EVFX Private');
+    const project=join(f.base,'EVFX Private');
+    await writeFile(join(project,'.evfx-private'),'');
+    await writeFile(join(project,'package.ps1'),'Write-Host "package"');
+    for(const [file,data] of Object.entries({'sync.config.json':f.config,'catalog.json':f.catalog,'sources.json':f.sources}))await writeFile(join(f.root,file),JSON.stringify(data));
+    await installBuildHooks(f.root);
+    const result=await discoverLocalPlugins(f.root,f);
+    assert.deepEqual(result.catalog.tools,[]);
+    assert.deepEqual(result.sources,{});
+    assert.doesNotMatch(await readFile(join(project,'package.ps1'),'utf8'),/EVFX site hook/);
+  }finally{await f.cleanup();}
+});
+
+test('a formerly public project marked private blocks public publication',async()=>{
+  const f=await fixture();try{
+    await addPackage(f,'EVFX Private Later');
+    const first=await discoverLocalPlugins(f.root,f);
+    await writeFile(join(f.base,'EVFX Private Later','.evfx-private'),'');
+    await assert.rejects(discoverLocalPlugins(f.root,{...f,catalog:first.catalog,sources:first.sources}),/marked private/i);
+  }finally{await f.cleanup();}
+});
+
 test('an explicitly tracked non-EVFX app publishes its matching Android companion with each setup',async()=>{
   const f=await fixture();try{
     const project=join(f.base,'Omnicast'),release=join(project,'release');

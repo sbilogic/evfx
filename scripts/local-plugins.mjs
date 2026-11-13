@@ -169,6 +169,8 @@ export async function findLocalProjects(siteRoot,config,tracked=[]){
       if(entry.isSymbolicLink()){
         if(!tracked.some(previous=>previous.base===root.id&&previous.project===entry.name)||!(await fileStat(project))?.isDirectory())continue;
       }else if(!entry.isDirectory())continue;
+      // A private project must never enter the public release publisher.
+      if((await fileStat(join(project,'.evfx-private')))?.isFile())continue;
       if(root.projects&&!root.projects.includes(entry.name)){
         const identity=await readProjectIdentity(project);
         if(!identity||!tracked.some(previous=>previous.base===root.id&&previous.identity===identity))continue;
@@ -178,13 +180,13 @@ export async function findLocalProjects(siteRoot,config,tracked=[]){
       if(children.some(x=>x.isDirectory()&&/^evfx/i.test(x.name))){
         const identity=await readProjectIdentity(project);
         if(tracked.some(previous=>previous.base===root.id&&(normalize(previous.project)===normalize(entry.name)||identity&&previous.identity===identity)))projects.push({base:root.id,project:entry.name,absolute:project});
-        for(const child of children)if(child.isDirectory()&&!child.isSymbolicLink()&&/^evfx/i.test(child.name))projects.push({base:root.id,project:slash(relative(directory,join(project,'plugins',child.name))),absolute:join(project,'plugins',child.name)});
+        for(const child of children)if(child.isDirectory()&&!child.isSymbolicLink()&&/^evfx/i.test(child.name)&&!(await fileStat(join(project,'plugins',child.name,'.evfx-private')))?.isFile())projects.push({base:root.id,project:slash(relative(directory,join(project,'plugins',child.name))),absolute:join(project,'plugins',child.name)});
       }else projects.push({base:root.id,project:entry.name,absolute:project});
       // An independently tracked project can live directly inside another project.
       if(trackedIdentities.size)for(const child of await entries(project)){
         if(!child.isDirectory()||child.isSymbolicLink()||child.name.startsWith('.')||child.name==='plugins')continue;
         const absolute=join(project,child.name),identity=await readProjectIdentity(absolute);
-        if(identity&&trackedIdentities.has(identity))projects.push({base:root.id,project:slash(relative(directory,absolute)),absolute});
+        if(identity&&trackedIdentities.has(identity)&&!(await fileStat(join(absolute,'.evfx-private')))?.isFile())projects.push({base:root.id,project:slash(relative(directory,absolute)),absolute});
       }
     }
   }
@@ -351,6 +353,8 @@ export async function discoverLocalPlugins(siteRoot,{catalog,sources,config}){
     if(visited.has(tool.id)||!source||!projectForSource(source))continue;
     const directory=sourcePath(siteRoot,config,source,projectForSource(source));
     const info=await stat(directory).catch(error=>{if(error.code==='ENOENT')return null;throw error;});
+    if(info?.isDirectory()&&(await fileStat(join(directory,'.evfx-private')))?.isFile())
+      throw new Error(`${tool.id}: project is marked private but remains in the public catalog`);
     if(info?.isDirectory())continue; // Cleaning a build folder does not remove a plugin.
     catalog.retired=[...(catalog.retired||[]).filter(old=>old.id!==tool.id),tool];
     catalog.tools=catalog.tools.filter(active=>active.id!==tool.id);

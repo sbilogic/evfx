@@ -107,3 +107,18 @@
 
 .alternate-build{margin-top:12px;font-size:12px;line-height:1.5}.alternate-build>summary{cursor:pointer;color:var(--warning);padding:6px 0}.alternate-build .warn{margin-top:10px}
 @supports(grid-template-rows:subgrid){@media(min-width:621px){.tool{grid-row:span 7}.tool .alternate-build{grid-row:7}}}
+
+.private-section{margin-top:100px;border-top:1px solid var(--ink);padding-top:20px}
+.private-heading{display:flex;justify-content:space-between;align-items:baseline;gap:20px}
+.private-heading h2{margin:0;font-size:clamp(36px,5vw,64px);font-weight:400;letter-spacing:-.05em}
+.private-heading span,.private-form label,.private-status,.private-install{font:11px/1.5 var(--mono);color:var(--muted)}
+.private-form{margin-top:34px;max-width:430px}.private-form label{display:block;margin-bottom:8px}
+.private-fields{display:flex;gap:10px}.private-fields input{min-width:0;flex:1;padding:12px;border:1px solid var(--ink);border-radius:0;background:transparent;font:16px var(--sans);color:var(--ink)}
+.private-fields input:focus-visible{outline:2px solid var(--orange);outline-offset:3px}
+.private-fields button{border:1px solid var(--ink);background:var(--ink);color:var(--paper);padding:10px 18px}.private-fields button:hover{background:var(--orange);border-color:var(--orange)}
+.private-content{margin-top:28px}.private-lock{border:0;border-bottom:1px solid var(--ink);background:none;padding:2px 0;font:11px var(--mono)}
+.private-list{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:28px;margin-top:30px}.private-item{display:flex;flex-direction:column;min-width:0}
+.private-item h3{font-size:28px;line-height:1.05;font-weight:400;letter-spacing:-.04em;margin:0 0 10px}
+.private-download{border:0;border-bottom:2px solid var(--warning);background:transparent;padding:0 0 1px}.private-download:disabled{opacity:.5;cursor:wait}.private-install{margin:10px 0 0}.private-status:empty{display:none}
+@media(max-width:1000px){.private-list{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:620px){.private-section{margin-top:72px}.private-list{grid-template-columns:1fr;gap:36px}.private-heading span{max-width:10ch;text-align:right}}

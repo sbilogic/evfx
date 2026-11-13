@@ -16,7 +16,7 @@ export const escape = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&
 const [catalog, releases, supportConfig, explain] = await Promise.all(['catalog.json','releases.lock.json','support.json','explain.json'].map(async f=>JSON.parse(await readFile(join(root,f),'utf8'))));
 const support=renderSupport(supportConfig);
 const mobileReleases=JSON.parse(await readFile(join(root,'mobile-releases.json'),'utf8').catch(e=>{if(e.code==='ENOENT')return '{}';throw e;}));
-const [styleVersion,appVersion]=await Promise.all(['style.css','app.js'].map(async file=>createHash('sha256').update(await readFile(join(root,'src',file))).digest('hex').slice(0,10)));
+const [styleVersion,appVersion,privateAppVersion]=await Promise.all(['style.css','app.js','private.js'].map(async file=>createHash('sha256').update(await readFile(join(root,'src',file))).digest('hex').slice(0,10)));
 const bytes = n => n >= 1e6 ? `${(n/1e6).toFixed(1)} MB` : `${Math.max(1,Math.round(n/1000))} KB`;
 const site = 'https://sbilogic.github.io/evfx/';
 const utcTime = new Intl.DateTimeFormat('en-GB',{day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit',hourCycle:'h23',timeZone:'UTC',timeZoneName:'short'});
@@ -98,7 +98,7 @@ const replacements = {
   TITLE:escape(catalog.title), COUNT:completeCount, DEV_COUNT:devCount,
   RETIRED_IDS:escape(retiredPluginIds(catalog).join(' ')),
   YEAR:year, HERO_ART:heroArt(), TOOLS:[...groups].map(([category,group])=>`<section class="library-group" data-category-group="${category}" aria-labelledby="host-${category}"><h2 id="host-${category}" class="library-label">${escape(group.host)}</h2><div class="grid">${group.rows.join('\n')}</div></section>`).join('\n'), SUPPORT_NAV:support.nav,
-  STYLE_VERSION:styleVersion, APP_VERSION:appVersion
+  STYLE_VERSION:styleVersion, APP_VERSION:appVersion, PRIVATE_APP_VERSION:privateAppVersion
 };
 const fill=text=>{for(const [key,value] of Object.entries(replacements)) text=text.replaceAll(`{{${key}}}`,String(value));return text.replace(/>\s+</g,'><').trim();};
 await rm(join(root,'dist'),{recursive:true,force:true});
@@ -122,7 +122,7 @@ for(const {alias,tool} of redirects){
   const destination=`../#${tool.id}`;
   await writeFile(join(root,'dist',alias,'index.html'),`<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta http-equiv="refresh" content="0;url=${destination}"><link rel="canonical" href="${site}#${tool.id}"><title>EVFX ${escape(tool.name)}</title></head><body><a href="${destination}">Continue to ${escape(tool.name)}</a></body></html>`);
 }
-for(const file of ['style.css','app.js','favicon.svg']) await copyFile(join(root,'src',file),join(root,'dist',file));
+for(const file of ['style.css','app.js','private.js','private.enc','favicon.svg']) await copyFile(join(root,'src',file),join(root,'dist',file));
 await writeFile(join(root,'dist/.nojekyll'),'');
 await writeFile(join(root,'dist/robots.txt'),`User-agent: *\nAllow: /\nSitemap: ${site}sitemap.xml\n`);
 await writeFile(join(root,'dist/sitemap.xml'),`<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${['',...pages.map(([t])=>`${t.id}/`)].map(p=>`<url><loc>${site}${p}</loc></url>`).join('')}</urlset>`);

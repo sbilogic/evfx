@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "assets": [
+    {
+      "name": "a76567589faba4e2f83c51c69b8cece5.bin",
+      "url": "https://github.com/sbilogic/evfx/releases/download/private-vault/a76567589faba4e2f83c51c69b8cece5.bin",
+      "sha256": "dc792c7a6cba75ce564e85caf930fb09383628c41c5e6d4ab1cebe014b152192",
+      "bytes": 10412430
+    },
+    {
+      "name": "261e8598b36f4001748e9450abf032f3.bin",
+      "url": "https://github.com/sbilogic/evfx/releases/download/private-vault/261e8598b36f4001748e9450abf032f3.bin",
+      "sha256": "c0adc7eef673b0f12190cbd02dc928c817b428b8f0a569320bd6a14ea573cf5a",
+      "bytes": 65055813
+    }
+  ]
+}

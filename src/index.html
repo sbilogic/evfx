@@ -13,6 +13,7 @@
   <link rel="icon" href="./favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="./style.css?v={{STYLE_VERSION}}">
   <script src="./app.js?v={{APP_VERSION}}" defer></script>
+  <script type="module" src="./private.js?v={{PRIVATE_APP_VERSION}}"></script>
   <title>{{TITLE}}</title>
 </head>
 <body id="top">
@@ -20,12 +21,21 @@
   <header class="top wrap">
     <h1 class="mark"><span class="sr-only">EVFX</span><span aria-hidden="true">evfx</span></h1>
     <div class="hero-art" aria-hidden="true">{{HERO_ART}}</div>
-    <nav aria-label="Main navigation"><a href="https://github.com/sbilogic/evfx/releases">All releases ↗</a>{{SUPPORT_NAV}}</nav>
+    <nav aria-label="Main navigation"><a href="#private">Private</a><a href="https://github.com/sbilogic/evfx/releases">All releases ↗</a>{{SUPPORT_NAV}}</nav>
   </header>
   <main id="collection" class="wrap" data-retired="{{RETIRED_IDS}}">
     <div class="views"><h2 class="collection-heading">Collection</h2></div>
     {{TOOLS}}
-
+    <section id="private" class="private-section" aria-labelledby="private-title">
+      <div class="private-heading"><h2 id="private-title">Private</h2><span>Encrypted downloads</span></div>
+      <form class="private-form">
+        <label for="private-password">Password</label>
+        <div class="private-fields"><input id="private-password" type="password" autocomplete="current-password" required><button type="submit">Unlock ↗</button></div>
+      </form>
+      <div class="private-content" hidden><button class="private-lock" type="button">Lock</button><div class="private-list"></div></div>
+      <p class="private-status" role="status" aria-live="polite"></p>
+      <noscript><p class="private-status">JavaScript is required to unlock private downloads.</p></noscript>
+    </section>
   </main>
   <footer class="foot wrap"><span>© {{YEAR}} Sahil Bloch</span><a href="https://github.com/sbilogic/evfx">Source ↗</a></footer>
 </body>

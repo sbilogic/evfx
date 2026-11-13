@@ -32,6 +32,8 @@ jobs:
         run: node --test
       - name: Build static page
         run: node scripts/build.mjs
+      - name: Stage encrypted downloads
+        run: node scripts/stage-private-assets.mjs
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:

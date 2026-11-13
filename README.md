@@ -67,7 +67,7 @@ Each released tool listed in `explain.json` gets a page at `/evfx/<id>/` with it
 
 ## Local controls
 
-Requires Node 22+, Python 3, Git and cached GitHub authentication through Git Credential Manager, or a session-only `GH_TOKEN`. No credentials are stored by the hooks.
+Requires Node 22+, Python 3, Git and cached GitHub authentication through Git Credential Manager, or a session-only `GH_TOKEN`. The hooks do not store GitHub credentials.
 
 ```sh
 node scripts/install-build-hooks.mjs
@@ -86,6 +86,7 @@ The normal build/package command publishes automatically; running sync manually 
 node scripts/check.mjs
 node --test
 node scripts/build.mjs
+node scripts/stage-private-assets.mjs
 node scripts/serve.mjs
 ```
 
@@ -96,6 +97,14 @@ GitHub Actions checks and deploys pushes and explicit publisher dispatches. Meta
 Each download shows its GitHub asset upload date and time, including the timezone. The browser formats it in the visitor's local timezone; without JavaScript, the static UTC time remains visible. Older metadata without an asset timestamp is labelled Published using the release date. Site rebuilds and release-note edits do not reset upload times.
 
 CSS and JavaScript URLs include content hashes so new display code loads after a deployment while unchanged assets stay cached.
+
+## Private downloads
+
+GitHub Pages and release assets are public, so the private catalog and every private ZIP are encrypted before upload with AES-256-GCM and a password-derived key. The browser decrypts them locally; the password is never included in the site or sent to GitHub. The deployment stages encrypted assets on the same origin because GitHub release downloads do not provide the cross-origin access browsers need.
+
+The locally generated password is protected by Windows for the current user in the ignored `.local/private-vault.key`; source paths and package recipes are in ignored `.local/private-sources.json`. Keep a separate copy of the password: losing it means losing access to the encrypted downloads. After a connected private build succeeds, `scripts/publish-private.mjs` creates a fresh encrypted asset and updates the encrypted catalog. It uses the same publication lock as public releases, exits when finished, and never publishes plaintext. A raw Cargo build does not invoke a hook attached to its install script.
+
+A private project contains an `.evfx-private` marker so public discovery and public build hooks skip it, including after a folder move. The private hook passes its current project path so the private source paths follow the move. Marking an already public release private cannot make its previously uploaded assets secret.
 
 ## Support
 
