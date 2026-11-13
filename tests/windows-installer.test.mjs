@@ -8,6 +8,12 @@ import {fileURLToPath} from 'node:url';
 
 const root=dirname(dirname(fileURLToPath(import.meta.url)));
 const run=(cmd,args,options={})=>spawnSync(cmd,args,{encoding:'utf8',windowsHide:true,...options});
+async function verifyRepeatable(output,base,id){
+  const second=join(base,'repaired-again.zip');
+  const rerun=run('python',[join(root,'scripts','prepare-windows-installer.py'),output,second,id]);
+  assert.equal(rerun.status,0,rerun.stderr);
+  assert.deepEqual(await readFile(second),await readFile(output));
+}
 
 test('a native package installs from a path with spaces to a newly created MediaCore folder', {skip:process.platform!=='win32'},async()=>{
   const base=await mkdtemp(join(tmpdir(),'evfx installer test '));
@@ -81,6 +87,7 @@ test('existing native installers gain an elevated launcher without losing their 
     const make=run('python',['-c',code,input]);assert.equal(make.status,0,make.stderr);
     const fix=run('python',[join(root,'scripts','prepare-windows-installer.py'),input,output,'smart-grain']);
     assert.equal(fix.status,0,fix.stderr);
+    await verifyRepeatable(output,base,'smart-grain');
     const check=run('python',['-c','import sys,zipfile;z=zipfile.ZipFile(sys.argv[1]);s=z.read("Install.ps1");assert b"Write-Host $targetFolder" in s and b"$PluginDirectory" in s;w=z.read("Install.cmd");assert b"-Verb RunAs" in w and b"ExecutionPolicy Bypass" in w and b"%~dp0" in w;assert z.read("EVFXSmartGrainV2.aex")==b"plugin"',output]);
     assert.equal(check.status,0,check.stderr);
   }finally{await rm(base,{recursive:true,force:true});}
@@ -94,6 +101,7 @@ test('an installer that depended on the developer registry defaults to shared Me
     const make=run('python',['-c',code,input]);assert.equal(make.status,0,make.stderr);
     const fix=run('python',[join(root,'scripts','prepare-windows-installer.py'),input,output,'choke-it']);
     assert.equal(fix.status,0,fix.stderr);
+    await verifyRepeatable(output,base,'choke-it');
     const check=run('python',['-c','import sys,zipfile;z=zipfile.ZipFile(sys.argv[1]);p="delivery/";s=z.read(p+"install.ps1");assert b"$env:ProgramFiles" in s and b"Adobe/Common/Plug-ins/7.0/MediaCore" in s and b"After Effects not found" not in s;assert b"-Verb RunAs" in z.read(p+"Install.cmd")',output]);
     assert.equal(check.status,0,check.stderr);
   }finally{await rm(base,{recursive:true,force:true});}
@@ -113,6 +121,7 @@ with zipfile.ZipFile(sys.argv[1],'w') as z:
     const make=run('python',['-c',code,input]);assert.equal(make.status,0,make.stderr);
     const fix=run('python',[join(root,'scripts','prepare-windows-installer.py'),input,output,'flares']);
     assert.equal(fix.status,0,fix.stderr);
+    await verifyRepeatable(output,base,'flares');
     const check=run('python',['-c',`import sys,zipfile,json,hashlib
 z=zipfile.ZipFile(sys.argv[1]);m=json.loads(z.read('manifest.json'))
 for f in m['files']:
@@ -138,9 +147,11 @@ with zipfile.ZipFile(sys.argv[1],'w') as z:
     const make=run('python',['-c',code,input]);assert.equal(make.status,0,make.stderr);
     const fix=run('python',[join(root,'scripts','prepare-windows-installer.py'),input,output,'flares']);
     assert.equal(fix.status,0,fix.stderr);
+    await verifyRepeatable(output,base,'flares');
     const check=run('python',['-c',`import sys,zipfile
 z=zipfile.ZipFile(sys.argv[1]);s=z.read('install.ps1');w=z.read('Install EVFX Flares.cmd')
 assert b'$PanelVersion' in s and b'$PanelOnly' in s and b'$CallerAppData' in s
+assert s.index(b'$PluginDirectory') < s.index(b'$PanelVersion') < s.index(b'$PanelOnly') < s.index(b'$CallerAppData')
 assert b'Adobe/Common/Plug-ins/7.0/MediaCore' in s and b'-CallerAppData' in w`,output]);
     assert.equal(check.status,0,check.stderr);
   }finally{await rm(base,{recursive:true,force:true});}
@@ -157,6 +168,7 @@ with zipfile.ZipFile(sys.argv[1],'w') as z:
     const make=run('python',['-c',code,input]);assert.equal(make.status,0,make.stderr);
     const fix=run('python',[join(root,'scripts','prepare-windows-installer.py'),input,output,'crop-ae']);
     assert.equal(fix.status,0,fix.stderr);
+    await verifyRepeatable(output,base,'crop-ae');
     const check=run('python',['-c',`import sys,zipfile
 z=zipfile.ZipFile(sys.argv[1]);s=z.read('installer/Install.ps1');w=z.read('Install.cmd')
 assert b'Adobe After Effects 2026' not in s and b'HKLM:' in s and b'InstallPath' in s

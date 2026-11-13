@@ -97,13 +97,18 @@ try {
         text = original.read(script_name).decode("utf-8-sig").replace("\r\n", "\n")
         old_ae = "[string]$AfterEffectsRoot = 'C:\\Program Files\\Adobe\\Adobe After Effects 2026\\Support Files'"
         old_shared = "[string]$SharedPluginRoot = 'C:\\Program Files\\Adobe\\Common\\Plug-ins\\7.0\\MediaCore'"
-        if old_ae not in text or old_shared not in text or "$appRoot = [IO.Path]::GetFullPath($AfterEffectsRoot)" not in text:
-            raise ValueError("Crop installer has changed; preserve it for review")
-        text = text.replace(old_ae, "[string]$AfterEffectsRoot = ''", 1)
-        text = text.replace(old_shared, "[string]$SharedPluginRoot = (Join-Path $env:ProgramFiles 'Adobe/Common/Plug-ins/7.0/MediaCore')", 1)
-        text = text.replace("[string]$UserDataRoot,", "[string]$UserDataRoot,\n    [string]$CallerAppData,\n    [string]$CallerLocalAppData,", 1)
-        text = text.replace("$UserDataRoot = Join-Path $env:APPDATA", "$UserDataRoot = Join-Path $(if ($CallerAppData) { $CallerAppData } else { $env:APPDATA })", 1)
-        text = text.replace("Join-Path $env:LOCALAPPDATA 'EVFX Crop\\Install Backups'", "Join-Path $(if ($CallerLocalAppData) { $CallerLocalAppData } else { $env:LOCALAPPDATA }) 'EVFX Crop\\Install Backups'", 1)
+        already_repaired = ("[string]$AfterEffectsRoot = ''" in text and
+                            "[string]$SharedPluginRoot = (Join-Path $env:ProgramFiles 'Adobe/Common/Plug-ins/7.0/MediaCore')" in text and
+                            "$CallerAppData" in text and "$CallerLocalAppData" in text and
+                            "After Effects was not found. Install it first" in text)
+        if not already_repaired:
+            if old_ae not in text or old_shared not in text or "$appRoot = [IO.Path]::GetFullPath($AfterEffectsRoot)" not in text:
+                raise ValueError("Crop installer has changed; preserve it for review")
+            text = text.replace(old_ae, "[string]$AfterEffectsRoot = ''", 1)
+            text = text.replace(old_shared, "[string]$SharedPluginRoot = (Join-Path $env:ProgramFiles 'Adobe/Common/Plug-ins/7.0/MediaCore')", 1)
+            text = text.replace("[string]$UserDataRoot,", "[string]$UserDataRoot,\n    [string]$CallerAppData,\n    [string]$CallerLocalAppData,", 1)
+            text = text.replace("$UserDataRoot = Join-Path $env:APPDATA", "$UserDataRoot = Join-Path $(if ($CallerAppData) { $CallerAppData } else { $env:APPDATA })", 1)
+            text = text.replace("Join-Path $env:LOCALAPPDATA 'EVFX Crop\\Install Backups'", "Join-Path $(if ($CallerLocalAppData) { $CallerLocalAppData } else { $env:LOCALAPPDATA }) 'EVFX Crop\\Install Backups'", 1)
         discovery = r'''if (-not $AfterEffectsRoot) {
     $candidates = @()
     $versions = Get-ChildItem -LiteralPath 'HKLM:\SOFTWARE\Adobe\After Effects' -ErrorAction SilentlyContinue |
@@ -120,7 +125,8 @@ try {
     if (-not $AfterEffectsRoot) { throw 'After Effects was not found. Install it first, or pass -AfterEffectsRoot.' }
 }
 '''
-        text = text.replace("$appRoot = [IO.Path]::GetFullPath($AfterEffectsRoot)", discovery + "$appRoot = [IO.Path]::GetFullPath($AfterEffectsRoot)", 1)
+        if not already_repaired:
+            text = text.replace("$appRoot = [IO.Path]::GetFullPath($AfterEffectsRoot)", discovery + "$appRoot = [IO.Path]::GetFullPath($AfterEffectsRoot)", 1)
         crop_launcher = launcher.replace(b"%~dp0Install.ps1", b"%~dp0installer\\Install.ps1")
         crop_launcher = crop_launcher.replace(
             b"+ $env:EVFX_INSTALL_SCRIPT + [char]34);",
@@ -143,20 +149,27 @@ try {
         start = text.rfind("if(-not $PluginDirectory) {", 0, marker)
         stop = text.find("if(-not $PluginDirectory) {throw", marker)
         end = text.find("\n", stop)
-        if marker < 0 or start < 0 or stop < 0 or end < 0:
+        if marker >= 0:
+            if start < 0 or stop < 0 or end < 0:
+                raise ValueError("Flares installer has changed; preserve it for review")
+            text = text[:start] + ("if(-not $PluginDirectory) {\n"
+                                   "    $PluginDirectory=Join-Path $env:ProgramFiles 'Adobe/Common/Plug-ins/7.0/MediaCore/EVFX Flares'\n"
+                                   "}\n") + text[end+1:]
+        elif "$PluginDirectory=Join-Path $env:ProgramFiles 'Adobe/Common/Plug-ins/7.0/MediaCore/EVFX Flares'" not in text:
             raise ValueError("Flares installer has changed; preserve it for review")
-        text = text[:start] + ("if(-not $PluginDirectory) {\n"
-                               "    $PluginDirectory=Join-Path $env:ProgramFiles 'Adobe/Common/Plug-ins/7.0/MediaCore/EVFX Flares'\n"
-                               "}\n") + text[end+1:]
         old_param = "param([string]$PluginDirectory='')"
+        has_caller = "$CallerAppData" in text
         if old_param in text:
             text = text.replace(old_param, "param([string]$PluginDirectory='', [string]$CallerAppData='')", 1)
-        elif re.match(r"\s*param\s*\(\s*\n", text, re.I) and "$CallerAppData" not in text:
-            text = re.sub(r"(\bparam\s*\(\s*\n)", r"\1    [string]$CallerAppData='',\n", text, count=1, flags=re.I)
+        elif re.match(r"\s*param\s*\(\s*\n", text, re.I) and not has_caller:
+            text, count = re.subn(r"(?m)^([ \t]*\[switch\]\$PanelOnly)[ \t]*$", r"\1,\n    [string]$CallerAppData=''", text, count=1, flags=re.I)
+            if count != 1:
+                raise ValueError("Flares installer parameters changed; preserve them for review")
         elif "$CallerAppData" not in text:
             raise ValueError("Flares installer parameters changed; preserve them for review")
-        text = text.replace("[Environment]::GetFolderPath('ApplicationData')",
-                            "$(if ($CallerAppData) { $CallerAppData } else { [Environment]::GetFolderPath('ApplicationData') })")
+        if not has_caller:
+            text = text.replace("[Environment]::GetFolderPath('ApplicationData')",
+                                "$(if ($CallerAppData) { $CallerAppData } else { [Environment]::GetFolderPath('ApplicationData') })")
         flares_launcher = launcher.replace(
             b"+ $env:EVFX_INSTALL_SCRIPT + [char]34);",
             b"+ $env:EVFX_INSTALL_SCRIPT + [char]34 + ' -CallerAppData ' + [char]34 + $env:APPDATA + [char]34);",
@@ -194,9 +207,10 @@ try {
                                "    $PluginDirectory=Join-Path $env:ProgramFiles 'Adobe/Common/Plug-ins/7.0/MediaCore/EVFX Choke It'\n"
                                "}\n") + text[end:]
         old_param = "param([string]$PluginDirectory='')"
-        if old_param not in text:
+        if old_param in text:
+            text = text.replace(old_param, "param([string]$PluginDirectory='', [string]$BackupRoot='')", 1)
+        elif "param([string]$PluginDirectory='', [string]$BackupRoot='')" not in text:
             raise ValueError("Choke It installer parameters changed; preserve them for review")
-        text = text.replace(old_param, "param([string]$PluginDirectory='', [string]$BackupRoot='')", 1)
         old_backup = "$taskBackupRoot=[IO.Path]::GetFullPath((Join-Path ([Environment]::GetFolderPath('LocalApplicationData')) 'EVFX\\Choke It\\Backups'))"
         new_backup = ("if (-not $BackupRoot) { $BackupRoot=Join-Path ([Environment]::GetFolderPath('LocalApplicationData')) 'EVFX\\Choke It\\Backups' }\n"
                       "$taskBackupRoot=[IO.Path]::GetFullPath($BackupRoot)")
@@ -212,13 +226,11 @@ try {
             raise ValueError("Expected installation script is missing")
         text = original.read(script).decode("utf-8-sig").replace("\r\n", "\n")
         default = "$targetFolder = Join-Path $env:ProgramFiles 'Adobe/Common/Plug-ins/7.0/MediaCore/EVFX Collection'"
-        if default not in text or not text.startswith("$ErrorActionPreference"):
+        patched_default = "$targetFolder = if ($PluginDirectory) { $PluginDirectory } else { Join-Path $env:ProgramFiles 'Adobe/Common/Plug-ins/7.0/MediaCore/EVFX Collection' }"
+        if default in text and text.startswith("$ErrorActionPreference"):
+            text = "param([string]$PluginDirectory)\n" + text.replace(default, patched_default, 1)
+        elif not text.startswith("param([string]$PluginDirectory)\n") or patched_default not in text:
             raise ValueError("Installation script has changed; preserve it for review")
-        text = "param([string]$PluginDirectory)\n" + text.replace(
-            default,
-            "$targetFolder = if ($PluginDirectory) { $PluginDirectory } else { Join-Path $env:ProgramFiles 'Adobe/Common/Plug-ins/7.0/MediaCore/EVFX Collection' }",
-            1,
-        )
         additions[parent + "Install.ps1"] = text.replace("\n", "\r\n").encode("utf-8")
     guide = parent + "START HERE.txt"
     if product == "rebalance" and guide.lower() in existing:
