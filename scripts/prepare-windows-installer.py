@@ -1,5 +1,7 @@
 """Add a safe Windows installer to a simple native AE package."""
 import re
+import hashlib
+import json
 import shutil
 import sys
 import zipfile
@@ -22,12 +24,31 @@ exit /b %EVFX_INSTALL_RESULT%
 with zipfile.ZipFile(source) as original:
     files = [item for item in original.infolist() if not item.is_dir()]
     natives = [item for item in files if item.filename.lower().endswith(".aex")]
+    if not natives:
+        shutil.copyfile(source, destination)
+        sys.exit(0)
     if len(natives) != 1:
         raise ValueError("A simple installer requires exactly one native plugin")
     native = PurePosixPath(natives[0].filename)
     if native.is_absolute() or ".." in native.parts or "'" in native.name or any(c in native.name for c in "\r\n"):
         raise ValueError("Unsafe native plugin path")
     parent = "" if str(native.parent) == "." else str(native.parent) + "/"
+    repaired = {"rebalance", "smart-grain", "smart-denoise", "choke-it", "flares", "crop-ae"}
+    if product not in repaired:
+        scripts = [item for item in files if item.filename.lower() == (parent + "install.ps1").lower()]
+        wrappers = [item for item in files if item.filename.lower() in {(parent + "install.cmd").lower(), (parent + "install.bat").lower()}]
+        if scripts or wrappers:
+            if len(scripts) != 1 or not wrappers:
+                raise ValueError("Native package has an incomplete installer")
+            script = original.read(scripts[0]).decode("utf-8-sig", errors="replace")
+            wrapper = original.read(wrappers[0]).decode("utf-8-sig", errors="replace")
+            if (re.search(r"MediaCore[\\/]+Testing", script, re.I) or
+                    not re.search(r"%~dp0", wrapper, re.I) or
+                    not re.search(r"ExecutionPolicy\s+Bypass", wrapper, re.I) or
+                    not re.search(r"-Verb\s+RunAs|ShellExecute[^\n]*runas", wrapper, re.I)):
+                raise ValueError("Native package installer needs an elevation or path repair")
+            shutil.copyfile(source, destination)
+            sys.exit(0)
     installer = (r'''param([string]$PluginDirectory)
 $ErrorActionPreference = 'Stop'
 function Get-FileDigest([string]$Path) {
@@ -69,6 +90,97 @@ try {
 '''.replace("__PLUGIN__", native.name).replace("__PRODUCT__", product).replace("\n", "\r\n")).encode("utf-8")
     additions = {parent + "Install.cmd": launcher, parent + "Install.ps1": installer}
     existing = {item.filename.lower() for item in files}
+    if product == "crop-ae":
+        script_name = parent + "installer/Install.ps1"
+        if script_name not in original.namelist():
+            raise ValueError("Expected Crop installer is missing")
+        text = original.read(script_name).decode("utf-8-sig").replace("\r\n", "\n")
+        old_ae = "[string]$AfterEffectsRoot = 'C:\\Program Files\\Adobe\\Adobe After Effects 2026\\Support Files'"
+        old_shared = "[string]$SharedPluginRoot = 'C:\\Program Files\\Adobe\\Common\\Plug-ins\\7.0\\MediaCore'"
+        if old_ae not in text or old_shared not in text or "$appRoot = [IO.Path]::GetFullPath($AfterEffectsRoot)" not in text:
+            raise ValueError("Crop installer has changed; preserve it for review")
+        text = text.replace(old_ae, "[string]$AfterEffectsRoot = ''", 1)
+        text = text.replace(old_shared, "[string]$SharedPluginRoot = (Join-Path $env:ProgramFiles 'Adobe/Common/Plug-ins/7.0/MediaCore')", 1)
+        text = text.replace("[string]$UserDataRoot,", "[string]$UserDataRoot,\n    [string]$CallerAppData,\n    [string]$CallerLocalAppData,", 1)
+        text = text.replace("$UserDataRoot = Join-Path $env:APPDATA", "$UserDataRoot = Join-Path $(if ($CallerAppData) { $CallerAppData } else { $env:APPDATA })", 1)
+        text = text.replace("Join-Path $env:LOCALAPPDATA 'EVFX Crop\\Install Backups'", "Join-Path $(if ($CallerLocalAppData) { $CallerLocalAppData } else { $env:LOCALAPPDATA }) 'EVFX Crop\\Install Backups'", 1)
+        discovery = r'''if (-not $AfterEffectsRoot) {
+    $candidates = @()
+    $versions = Get-ChildItem -LiteralPath 'HKLM:\SOFTWARE\Adobe\After Effects' -ErrorAction SilentlyContinue |
+        Where-Object { $_.PSChildName -match '^\d+\.\d+$' } |
+        Sort-Object { [version]$_.PSChildName } -Descending
+    foreach ($version in $versions) {
+        $entry = Get-ItemProperty -LiteralPath $version.PSPath -ErrorAction SilentlyContinue
+        if ($entry.InstallPath) { $candidates += $entry.InstallPath }
+    }
+    $adobeRoot = Join-Path $env:ProgramFiles 'Adobe'
+    $candidates += @(Get-ChildItem -LiteralPath $adobeRoot -Directory -Filter 'Adobe After Effects*' -ErrorAction SilentlyContinue |
+        Sort-Object Name -Descending | ForEach-Object { Join-Path $_.FullName 'Support Files' })
+    $AfterEffectsRoot = $candidates | Where-Object { Test-Path -LiteralPath (Join-Path $_ 'AfterFX.exe') -PathType Leaf } | Select-Object -First 1
+    if (-not $AfterEffectsRoot) { throw 'After Effects was not found. Install it first, or pass -AfterEffectsRoot.' }
+}
+'''
+        text = text.replace("$appRoot = [IO.Path]::GetFullPath($AfterEffectsRoot)", discovery + "$appRoot = [IO.Path]::GetFullPath($AfterEffectsRoot)", 1)
+        crop_launcher = launcher.replace(b"%~dp0Install.ps1", b"%~dp0installer\\Install.ps1")
+        crop_launcher = crop_launcher.replace(
+            b"+ $env:EVFX_INSTALL_SCRIPT + [char]34);",
+            b"+ $env:EVFX_INSTALL_SCRIPT + [char]34 + ' -CallerAppData ' + [char]34 + $env:APPDATA + [char]34 + ' -CallerLocalAppData ' + [char]34 + $env:LOCALAPPDATA + [char]34);",
+        )
+        additions = {parent + "Install.cmd": crop_launcher, script_name: text.replace("\n", "\r\n").encode("utf-8")}
+        readme_name = parent + "README.md"
+        if readme_name in original.namelist():
+            readme = original.read(readme_name).decode("utf-8-sig").replace("\r\n", "\n")
+            readme = readme.replace("Run `installer/Install.ps1` with After Effects closed.", "Close After Effects, double-click `Install.cmd`, and approve the administrator prompt.")
+            readme = readme.replace("Protected folders can require an elevated PowerShell on other machines.", "")
+            additions[readme_name] = readme.encode("utf-8")
+    if product == "flares":
+        script = next((item for item in files if item.filename.lower() == (parent + "install.ps1").lower()), None)
+        wrapper = next((item for item in files if item.filename.lower() == (parent + "Install EVFX Flares.cmd").lower()), None)
+        if not script or not wrapper:
+            raise ValueError("Expected Flares installer is missing")
+        text = original.read(script).decode("utf-8-sig").replace("\r\n", "\n")
+        marker = text.find("$aeRegistry=")
+        start = text.rfind("if(-not $PluginDirectory) {", 0, marker)
+        stop = text.find("if(-not $PluginDirectory) {throw", marker)
+        end = text.find("\n", stop)
+        if marker < 0 or start < 0 or stop < 0 or end < 0:
+            raise ValueError("Flares installer has changed; preserve it for review")
+        text = text[:start] + ("if(-not $PluginDirectory) {\n"
+                               "    $PluginDirectory=Join-Path $env:ProgramFiles 'Adobe/Common/Plug-ins/7.0/MediaCore/EVFX Flares'\n"
+                               "}\n") + text[end+1:]
+        old_param = "param([string]$PluginDirectory='')"
+        if old_param in text:
+            text = text.replace(old_param, "param([string]$PluginDirectory='', [string]$CallerAppData='')", 1)
+        elif re.match(r"\s*param\s*\(\s*\n", text, re.I) and "$CallerAppData" not in text:
+            text = re.sub(r"(\bparam\s*\(\s*\n)", r"\1    [string]$CallerAppData='',\n", text, count=1, flags=re.I)
+        elif "$CallerAppData" not in text:
+            raise ValueError("Flares installer parameters changed; preserve them for review")
+        text = text.replace("[Environment]::GetFolderPath('ApplicationData')",
+                            "$(if ($CallerAppData) { $CallerAppData } else { [Environment]::GetFolderPath('ApplicationData') })")
+        flares_launcher = launcher.replace(
+            b"+ $env:EVFX_INSTALL_SCRIPT + [char]34);",
+            b"+ $env:EVFX_INSTALL_SCRIPT + [char]34 + ' -CallerAppData ' + [char]34 + $env:APPDATA + [char]34);",
+        )
+        additions = {wrapper.filename: flares_launcher, script.filename: text.replace("\n", "\r\n").encode("utf-8")}
+        manifest_name, checksums_name = parent + "manifest.json", parent + "SHA256SUMS.txt"
+        if manifest_name not in original.namelist() or checksums_name not in original.namelist():
+            raise ValueError("Flares package integrity files are missing")
+        manifest = json.loads(original.read(manifest_name).decode("utf-8-sig"))
+        for name, data in additions.items():
+            relative = name[len(parent):]
+            entries = [item for item in manifest["files"] if item.get("path") == relative]
+            if len(entries) != 1:
+                raise ValueError("Flares installer manifest is ambiguous")
+            entries[0].update(bytes=len(data), sha256=hashlib.sha256(data).hexdigest())
+        additions[manifest_name] = (json.dumps(manifest, indent=2, ensure_ascii=False) + "\n").encode("utf-8")
+        hashes = original.read(checksums_name).decode("utf-8-sig").splitlines()
+        for name, data in additions.items():
+            relative = name[len(parent):]
+            matches = [i for i, line in enumerate(hashes) if line.endswith("  " + relative)]
+            if len(matches) != 1:
+                raise ValueError("Flares checksum list is ambiguous")
+            hashes[matches[0]] = hashlib.sha256(data).hexdigest() + "  " + relative
+        additions[checksums_name] = ("\n".join(hashes) + "\n").encode("utf-8")
     if product == "choke-it":
         script = next((item for item in files if item.filename.lower() == (parent + "install.ps1").lower()), None)
         if not script:
@@ -81,7 +193,19 @@ try {
         text = text[:start] + ("if (-not $PluginDirectory) {\n"
                                "    $PluginDirectory=Join-Path $env:ProgramFiles 'Adobe/Common/Plug-ins/7.0/MediaCore/EVFX Choke It'\n"
                                "}\n") + text[end:]
-        additions = {parent + "Install.cmd": launcher, script.filename: text.replace("\n", "\r\n").encode("utf-8")}
+        old_param = "param([string]$PluginDirectory='')"
+        if old_param not in text:
+            raise ValueError("Choke It installer parameters changed; preserve them for review")
+        text = text.replace(old_param, "param([string]$PluginDirectory='', [string]$BackupRoot='')", 1)
+        old_backup = "$taskBackupRoot=[IO.Path]::GetFullPath((Join-Path ([Environment]::GetFolderPath('LocalApplicationData')) 'EVFX\\Choke It\\Backups'))"
+        new_backup = ("if (-not $BackupRoot) { $BackupRoot=Join-Path ([Environment]::GetFolderPath('LocalApplicationData')) 'EVFX\\Choke It\\Backups' }\n"
+                      "$taskBackupRoot=[IO.Path]::GetFullPath($BackupRoot)")
+        text = text.replace(old_backup, new_backup, 1)
+        choke_launcher = launcher.replace(
+            b"+ $env:EVFX_INSTALL_SCRIPT + [char]34);",
+            b"+ $env:EVFX_INSTALL_SCRIPT + [char]34 + ' -BackupRoot ' + [char]34 + (Join-Path $env:LOCALAPPDATA 'EVFX\\Choke It\\Backups') + [char]34);",
+        )
+        additions = {parent + "Install.cmd": choke_launcher, script.filename: text.replace("\n", "\r\n").encode("utf-8")}
     if product in {"smart-grain", "smart-denoise"}:
         script = next((item for item in files if item.filename.lower() == (parent + "Install.ps1").lower()), None)
         if not script:
@@ -111,7 +235,6 @@ try {
         if old not in text:
             raise ValueError("Rebalance install guide has changed; preserve it for review")
         additions[guide_item.filename] = text.replace(old, new, 1).replace("\n", "\r\n").encode("utf-8")
-    repaired = {"rebalance", "smart-grain", "smart-denoise", "choke-it"}
     if product not in repaired and any(name.lower() in existing for name in additions):
         raise ValueError("Existing installer needs a product-specific repair")
     with zipfile.ZipFile(destination, "w", compression=zipfile.ZIP_DEFLATED, allowZip64=True) as output:

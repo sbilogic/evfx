@@ -23,6 +23,19 @@ test('a native package installs from a path with spaces to a newly created Media
     assert.match(launcher,/%~dp0/i);
     assert.match(launcher,/ExecutionPolicy\s+Bypass/i);
     assert.match(launcher,/-Verb\s+RunAs/i);
+    const line=launcher.split(/\r?\n/).find(value=>/^powershell\.exe\s/i.test(value));
+    const expression=line?.match(/-Command "([\s\S]*)"$/i)?.[1];
+    assert(expression,'launcher does not expose a PowerShell command');
+    const checkElevation=`function Start-Process {
+      param($FilePath,$Verb,[switch]$Wait,[switch]$PassThru,$ArgumentList)
+      $expected = '-NoProfile -ExecutionPolicy Bypass -File ' + [char]34 + $env:EVFX_INSTALL_SCRIPT + [char]34
+      if ($FilePath -ne 'powershell.exe' -or $Verb -ne 'RunAs' -or -not $Wait -or $ArgumentList -ne $expected) { throw 'Incorrect elevation arguments' }
+      [pscustomobject]@{ ExitCode = 0 }
+    }; `+expression;
+    const elevation=run('powershell.exe',['-NoProfile','-ExecutionPolicy','Bypass','-Command',checkElevation],{
+      env:{...process.env,EVFX_INSTALL_SCRIPT:join(folder,'Install.ps1')}
+    });
+    assert.equal(elevation.status,0,elevation.stderr+elevation.stdout);
     const programFiles=join(base,'Program Files'),local=join(base,'Local App Data');
     await mkdir(local,{recursive:true});
     const installer=join(folder,'Install.ps1');
@@ -83,5 +96,91 @@ test('an installer that depended on the developer registry defaults to shared Me
     assert.equal(fix.status,0,fix.stderr);
     const check=run('python',['-c','import sys,zipfile;z=zipfile.ZipFile(sys.argv[1]);p="delivery/";s=z.read(p+"install.ps1");assert b"$env:ProgramFiles" in s and b"Adobe/Common/Plug-ins/7.0/MediaCore" in s and b"After Effects not found" not in s;assert b"-Verb RunAs" in z.read(p+"Install.cmd")',output]);
     assert.equal(check.status,0,check.stderr);
+  }finally{await rm(base,{recursive:true,force:true});}
+});
+
+test('repairing a package updates its installer manifest and checksums',async()=>{
+  const base=await mkdtemp(join(tmpdir(),'evfx manifest installer '));
+  try{
+    const input=join(base,'input.zip'),output=join(base,'output.zip');
+    const code=`import sys,zipfile,json,hashlib
+files={'EVFX Flares.aex':b'plugin','Install EVFX Flares.cmd':b'old launcher','install.ps1':b"param([string]$PluginDirectory='')\\nif(-not $PluginDirectory) {\\n    $aeRegistry='HKLM:\\\\SOFTWARE\\\\Adobe'\\n}\\nif(-not $PluginDirectory) {throw 'After Effects installation not found.'}\\nWrite-Host $PluginDirectory\\n"}
+manifest=json.dumps({'files':[{'path':n,'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()} for n,b in files.items()]}).encode()
+files['manifest.json']=manifest
+files['SHA256SUMS.txt']=''.join(hashlib.sha256(b).hexdigest()+'  '+n+'\\n' for n,b in files.items()).encode()
+with zipfile.ZipFile(sys.argv[1],'w') as z:
+ for n,b in files.items():z.writestr(n,b)`;
+    const make=run('python',['-c',code,input]);assert.equal(make.status,0,make.stderr);
+    const fix=run('python',[join(root,'scripts','prepare-windows-installer.py'),input,output,'flares']);
+    assert.equal(fix.status,0,fix.stderr);
+    const check=run('python',['-c',`import sys,zipfile,json,hashlib
+z=zipfile.ZipFile(sys.argv[1]);m=json.loads(z.read('manifest.json'))
+for f in m['files']:
+ b=z.read(f['path']);assert len(b)==f['bytes'] and hashlib.sha256(b).hexdigest()==f['sha256']
+for line in z.read('SHA256SUMS.txt').decode().splitlines():
+ h,n=line.split('  ',1);assert hashlib.sha256(z.read(n)).hexdigest()==h
+assert b'-Verb RunAs' in z.read('Install EVFX Flares.cmd')
+assert b'Adobe/Common/Plug-ins/7.0/MediaCore' in z.read('install.ps1')`,output]);
+    assert.equal(check.status,0,check.stderr);
+  }finally{await rm(base,{recursive:true,force:true});}
+});
+
+test('a newer Flares installer keeps its panel options when repaired',async()=>{
+  const base=await mkdtemp(join(tmpdir(),'evfx flares newer '));
+  try{
+    const input=join(base,'input.zip'),output=join(base,'output.zip');
+    const code=`import sys,zipfile,json,hashlib
+files={'EVFX Flares.aex':b'plugin','Install EVFX Flares.cmd':b'old launcher','install.ps1':b"param(\\n [string]$PluginDirectory='',\\n [string[]]$PanelVersion,\\n [switch]$PanelOnly\\n)\\nif(-not $PanelOnly) {\\n if(-not $PluginDirectory) {\\n  $aeRegistry='HKLM:Adobe'\\n }\\n if(-not $PluginDirectory) {throw 'After Effects not found'}\\n}\\n$userAeBase=[Environment]::GetFolderPath('ApplicationData')\\n"}
+files['manifest.json']=json.dumps({'files':[{'path':n,'bytes':len(b),'sha256':hashlib.sha256(b).hexdigest()} for n,b in files.items()]}).encode()
+files['SHA256SUMS.txt']=''.join(hashlib.sha256(b).hexdigest()+'  '+n+'\\n' for n,b in files.items()).encode()
+with zipfile.ZipFile(sys.argv[1],'w') as z:
+ for n,b in files.items():z.writestr(n,b)`;
+    const make=run('python',['-c',code,input]);assert.equal(make.status,0,make.stderr);
+    const fix=run('python',[join(root,'scripts','prepare-windows-installer.py'),input,output,'flares']);
+    assert.equal(fix.status,0,fix.stderr);
+    const check=run('python',['-c',`import sys,zipfile
+z=zipfile.ZipFile(sys.argv[1]);s=z.read('install.ps1');w=z.read('Install EVFX Flares.cmd')
+assert b'$PanelVersion' in s and b'$PanelOnly' in s and b'$CallerAppData' in s
+assert b'Adobe/Common/Plug-ins/7.0/MediaCore' in s and b'-CallerAppData' in w`,output]);
+    assert.equal(check.status,0,check.stderr);
+  }finally{await rm(base,{recursive:true,force:true});}
+});
+
+test('the Crop installer finds the installed AE version and has an elevated launcher',async()=>{
+  const base=await mkdtemp(join(tmpdir(),'evfx crop installer '));
+  try{
+    const input=join(base,'input.zip'),output=join(base,'output.zip');
+    const code=`import sys,zipfile
+s="param(\\n    [string]$AfterEffectsRoot = 'C:\\\\Program Files\\\\Adobe\\\\Adobe After Effects 2026\\\\Support Files',\\n    [string]$PackageRoot,\\n    [string]$UserDataRoot,\\n    [string]$SharedPluginRoot = 'C:\\\\Program Files\\\\Adobe\\\\Common\\\\Plug-ins\\\\7.0\\\\MediaCore',\\n    [switch]$MachineWide\\n)\\n$ErrorActionPreference = 'Stop'\\n$appRoot = [IO.Path]::GetFullPath($AfterEffectsRoot)\\n"
+with zipfile.ZipFile(sys.argv[1],'w') as z:
+ z.writestr('EVFXCrop.aex',b'plugin');z.writestr('installer/Install.ps1',s)`;
+    const make=run('python',['-c',code,input]);assert.equal(make.status,0,make.stderr);
+    const fix=run('python',[join(root,'scripts','prepare-windows-installer.py'),input,output,'crop-ae']);
+    assert.equal(fix.status,0,fix.stderr);
+    const check=run('python',['-c',`import sys,zipfile
+z=zipfile.ZipFile(sys.argv[1]);s=z.read('installer/Install.ps1');w=z.read('Install.cmd')
+assert b'Adobe After Effects 2026' not in s and b'HKLM:' in s and b'InstallPath' in s
+assert b'$env:ProgramFiles' in s and b'MediaCore' in s
+assert b'-Verb RunAs' in w and b'installer\\\\Install.ps1' in w`,output]);
+    assert.equal(check.status,0,check.stderr);
+  }finally{await rm(base,{recursive:true,force:true});}
+});
+
+test('already safe packages stay byte-identical and unknown unsafe installers are rejected',async()=>{
+  const base=await mkdtemp(join(tmpdir(),'evfx safe package '));
+  try{
+    const input=join(base,'input.zip'),output=join(base,'output.zip');
+    const make=(safe)=>run('python',['-c',`import sys,zipfile
+with zipfile.ZipFile(sys.argv[1],'w') as z:
+ z.writestr('Example.aex',b'plugin')
+ z.writestr('Install.ps1',b'$target = Join-Path $env:ProgramFiles "Adobe/Common/Plug-ins/7.0/MediaCore"')
+ z.writestr('Install.cmd',sys.argv[2])`,input,safe?'%~dp0 ExecutionPolicy Bypass -Verb RunAs':'%~dp0 ExecutionPolicy Bypass']);
+    assert.equal(make(true).status,0);
+    let result=run('python',[join(root,'scripts','prepare-windows-installer.py'),input,output,'new-tool']);
+    assert.equal(result.status,0,result.stderr);
+    assert.deepEqual(await readFile(output),await readFile(input));
+    assert.equal(make(false).status,0);
+    result=run('python',[join(root,'scripts','prepare-windows-installer.py'),input,output,'new-tool']);
+    assert.notEqual(result.status,0);
   }finally{await rm(base,{recursive:true,force:true});}
 });

@@ -12,13 +12,13 @@
       "description": "Preserve original grain and match grain in edited areas.",
       "detail": "Preserves the original plate’s captured grain in unchanged areas and generates matched grain where your comp differs from the denoised plate. Match against a representative frame, then finish the shot with one effect.",
       "requirements": "Windows x64 · After Effects · 8 / 16 / 32 bpc",
-      "install": "Extract the ZIP, close After Effects, then run Install.cmd. Restart AE and find EVFX Smart Grain v2 in the EVFX effects category. Select your original and denoised plates, then click Match Grain at Full resolution.",
+      "install": "Extract the ZIP, close After Effects, then run Install.cmd and approve the administrator prompt. Restart AE and find EVFX Smart Grain v2 in the EVFX effects category. Select your original and denoised plates, then click Match Grain at Full resolution.",
       "status": "release",
       "readiness": {
         "state": "reviewed",
-        "releaseTag": "smart-grain-v2.2.3-af150566b8",
-        "reviewedAt": "2026-10-31",
-        "evidence": "EVFXSmartGrain/docs/smartfx-bounds-validation.md: current 2.2.3 AEX and live AE opening/render checks."
+        "releaseTag": "smart-grain-v2.2.3-8b6a1e0f4c",
+        "reviewedAt": "2026-11-13",
+        "evidence": "The repaired package installer was run in an isolated Windows folder; its AEX is byte-identical to the 2.2.3 binary reviewed in live AE (EVFXSmartGrain/docs/smartfx-bounds-validation.md). The launcher elevation arguments were tested without accepting a UAC prompt."
       },
       "localProject": {
         "identity": "a7c442d7-a385-4637-933d-f10fe05458b5",
@@ -40,7 +40,7 @@
       "description": "Reduce noise with automatic analysis and spatial and temporal filtering.",
       "detail": "Noise-profile-based denoising with automatic analysis, temporal filtering, NVIDIA CUDA acceleration and CPU fallback.",
       "requirements": "Windows x64 · After Effects · 8 / 16 / 32 bpc · NVIDIA CUDA optional",
-      "install": "Extract the ZIP, close After Effects, run Install.cmd, and restart After Effects.",
+      "install": "Extract the ZIP, close After Effects, run Install.cmd, approve the administrator prompt, and restart After Effects.",
       "status": "preview",
       "readiness": {
         "state": "experimental",
@@ -97,7 +97,7 @@
       "description": "Sample up to eight colours and generate gradients.",
       "detail": "Up to eight Live, Frozen or Custom colour samplers, smooth and ordered gradients, and tracked-null sampler layouts.",
       "requirements": "Windows x64 · After Effects · 8 / 16 / 32 bpc",
-      "install": "Close After Effects. Copy EVFX_PixelPicker.aex to the shared Adobe MediaCore plug-ins folder, then restart AE. Keep only one copy of this build.",
+      "install": "Extract the ZIP, close After Effects, run Install.cmd, approve the administrator prompt, and restart AE. Keep only one copy of this build.",
       "status": "release",
       "readiness": {
         "state": "unverified",
@@ -126,7 +126,7 @@
       "description": "Match foreground black and white levels to a reference plate.",
       "detail": "Matches foreground shadow and highlight luminance to a background plate across red, green, and blue channels. The native SmartFX effect includes keyframeable strength and gamma controls.",
       "requirements": "Windows x64 · After Effects · 8 / 16 / 32 bpc",
-      "install": "Close AE and copy EVFX_AutoLevels.aex into Adobe’s shared MediaCore plug-ins folder. Restart AE, apply Auto Levels from the EVFX category, and choose your background reference.",
+      "install": "Extract the ZIP, close AE, run Install.cmd, and approve the administrator prompt. Restart AE, apply Auto Levels from the EVFX category, and choose your background reference.",
       "status": "release",
       "readiness": {
         "state": "unverified",
@@ -155,7 +155,7 @@
       "description": "RGBA blur, directional choke/grow, and optional matte shading.",
       "detail": "RGBA blur, directional choke/grow, and optional matte shading.",
       "requirements": "Windows x64 · After Effects",
-      "install": "Extract the ZIP and follow the included installation instructions.",
+      "install": "Extract the ZIP, close After Effects, run Install.cmd, approve the administrator prompt, and restart After Effects.",
       "status": "preview",
       "autoDiscovered": true,
       "readiness": {
@@ -185,7 +185,7 @@
       "description": "100 named signatures plus 12 templates, five styles and GPU rendering.",
       "detail": "100 named signatures plus 12 templates, five styles and GPU rendering.",
       "requirements": "Windows x64 · After Effects",
-      "install": "Extract the ZIP and follow the included installation instructions.",
+      "install": "Extract the ZIP, close After Effects, run Install EVFX Flares.cmd, approve the administrator prompt, and restart After Effects.",
       "status": "preview",
       "autoDiscovered": true,
       "readiness": {
@@ -279,7 +279,7 @@
       "description": "Crop layers from rendered alpha; preview and prerender.",
       "detail": "Crops from rendered alpha with editable previews, duration and mask crops, and recoverable prerenders. A native effect and dockable panel keep the crop workflow inside After Effects.",
       "requirements": "Windows x64 · After Effects",
-      "install": "Extract the ZIP and follow the included README and installer instructions. Restart After Effects, then open EVFX Crop from the Window menu or the installed layer menu.",
+      "install": "Extract the ZIP, close After Effects, run Install.cmd, and approve the administrator prompt. Restart AE, then open EVFX Crop from the Window menu or the installed layer menu.",
       "status": "release",
       "readiness": {
         "state": "incomplete",
@@ -366,7 +366,7 @@
       "description": "Store shot status, reviewer and notes inside an AE project.",
       "detail": "Stores a shot’s QC status, shot ID, reviewer, and notes in an After Effects effect instance. Includes a passed checkbox and optional preview overlay. An early development build for trying the workflow.",
       "requirements": "Windows x64 · After Effects · Development build",
-      "install": "Close AE and copy EVFXShotQC.aex into Adobe’s shared MediaCore plug-ins folder. Restart AE and search for EVFX Shot QC. Keep a backup when evaluating development builds.",
+      "install": "Extract the ZIP, close AE, run Install.cmd, and approve the administrator prompt. Restart AE and search for EVFX Shot QC. Keep a backup when evaluating development builds.",
       "status": "preview",
       "readiness": {
         "state": "experimental",
@@ -568,7 +568,7 @@
       "description": "After Effects effect that remaps a layer's range to 0–1 (Forward) or restores it from 0–1 back to its original range (Reverse).",
       "detail": "After Effects effect that remaps a layer's range to 0–1 (Forward) or restores it from 0–1 back to its original range (Reverse).",
       "requirements": "Windows x64 · After Effects",
-      "install": "Extract the ZIP and follow the included installation instructions.",
+      "install": "Extract the ZIP, close After Effects, run Install.cmd, approve the administrator prompt, and restart After Effects.",
       "status": "preview",
       "autoDiscovered": true,
       "readiness": {

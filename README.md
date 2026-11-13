@@ -80,6 +80,8 @@ New EVFX project setup must run `node <path-to-EVFX-Site>/scripts/install-build-
 
 The normal build/package command publishes automatically; running sync manually is not part of the release workflow. `Sync EVFX.cmd` remains an optional repair command for direct edits without a build. `node scripts/discover.mjs` previews discovery without uploading. `node scripts/publish.mjs --prepare-only` prepares and checks packages without publishing. `--only=smart-grain,blurry` limits a manual publication.
 
+Before publication, native After Effects ZIPs are checked for a usable installer. Simple AEX packages receive an elevated Windows launcher; known packages retain their companion files and receive targeted fixes. The launcher uses a temporary execution-policy bypass and creates the shared Adobe MediaCore folder when needed. If an unfamiliar installer cannot be checked safely, publication stops with an error rather than replacing it. This runs only as part of a build or explicit publication; it does not run in the background.
+
 ## Preview and verification
 
 ```sh

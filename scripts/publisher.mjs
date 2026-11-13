@@ -61,9 +61,20 @@ async function publish({automatic=false,prepareOnly=false,only=null,expectedFing
     else{
       const base=source.bundleRoot?sourcePath(root,config,source,source.bundleRoot):sourceRoot(root,config,source);
       const path=join(output,`EVFX-${tool.id}-${version||'snapshot'}.zip`);
-      const guide=`EVFX ${tool.name}${version?' '+version:''}\n\n${tool.detail}\n\nREQUIREMENTS\n${tool.requirements}\n\nINSTALLATION\n${tool.install}\n\nFor a native AEX: close After Effects, then copy the AEX into:\nC:\\Program Files\\Adobe\\Common\\Plug-ins\\7.0\\MediaCore\\EVFX\\\nCreate the EVFX folder if needed. Do not keep duplicate copies in other AE plug-in folders. Administrator permission may be needed. Restart AE.\n\nFor a JSX panel, use your After Effects Scripts/ScriptUI Panels folder, or File > Scripts > Run Script File.\n\nLatest releases: https://github.com/${catalog.repository}/releases\n`;
+      const guide=`EVFX ${tool.name}${version?' '+version:''}\n\n${tool.detail}\n\nREQUIREMENTS\n${tool.requirements}\n\nINSTALLATION\n${tool.install}\n\nFor a native AEX, close After Effects, then run the Install.cmd beside the plugin. Approve the administrator prompt and restart AE. Keep only one installed copy.\n\nFor a JSX panel, use your After Effects Scripts/ScriptUI Panels folder, or File > Scripts > Run Script File.\n\nLatest releases: https://github.com/${catalog.repository}/releases\n`;
       run(process.env.EVFX_PYTHON||process.env.PYTHON||'python',['-X','utf8',join(root,'scripts/bundle.py')],{input:JSON.stringify({base,output:path,files:source.files,preservePaths:!!source.bundleRoot,guide,...(source.templateArtifact?{template:sourcePath(root,config,source,source.templateArtifact)}:{})})});
       paths=[path];
+    }
+    if(tool.host==='After Effects'){
+      const safeDir=join(output,'installer-ready',tool.id);
+      await mkdir(safeDir,{recursive:true});
+      paths=paths.map(path=>{
+        if(!/\.zip$/i.test(path))return path;
+        const repaired=join(safeDir,basename(path));
+        run(process.env.EVFX_PYTHON||process.env.PYTHON||'python',
+          ['-X','utf8',join(root,'scripts/prepare-windows-installer.py'),path,repaired,tool.id]);
+        return repaired;
+      });
     }
     const assets=[];
     for(let i=0;i<paths.length;i++){
