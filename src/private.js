@@ -41,6 +41,31 @@ export async function decryptVault(data, password) {
   ));
 }
 
+export async function readPrivateDownload(response, onProgress) {
+  if (!response.ok) throw new Error('Download unavailable');
+  const reader = response.body?.getReader();
+  if (!reader) {
+    const bytes = new Uint8Array(await response.arrayBuffer());
+    onProgress(100, bytes.length);
+    return bytes;
+  }
+  const expected = Number(response.headers.get('content-length')) || 0;
+  const chunks = [];
+  let received = 0, last = -1;
+  while (true) {
+    const {done,value} = await reader.read();
+    if (done) break;
+    chunks.push(value);
+    received += value.length;
+    const progress = expected ? Math.min(100, Math.floor(received * 100 / expected)) : null;
+    if (progress !== last) { last = progress; onProgress(progress, received); }
+  }
+  const data = new Uint8Array(received);
+  let offset = 0;
+  for (const chunk of chunks) { data.set(chunk, offset); offset += chunk.length; }
+  return data;
+}
+
 if (typeof document !== 'undefined') {
   const section = document.getElementById('private');
   if (section) {
@@ -85,11 +110,14 @@ if (typeof document !== 'undefined') {
       action.type = 'button';
       action.addEventListener('click', async () => {
         action.disabled = true;
-        say('Downloading and decrypting…');
+        say('Downloading…');
         try {
           const response = await fetch('./vault/' + entry.asset);
-          if (!response.ok) throw new Error('Download unavailable');
-          const file = await decryptVault(await response.arrayBuffer(), password);
+          const data = await readPrivateDownload(response, percent => {
+            if (percent !== null) say(`Downloading… ${percent}%`);
+          });
+          say('Decrypting…');
+          const file = await decryptVault(data, password);
           const url = URL.createObjectURL(new Blob([file], {type:'application/zip'}));
           const link = element('a');
           link.href = url;
