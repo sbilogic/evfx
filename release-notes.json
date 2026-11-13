@@ -1,0 +1,49 @@
+{
+  "version": 1,
+  "releases": {
+    "smart-denoise-v1.1.1-ce8e3ccd8f": [
+      "Reduces coarse grain and blotchy color noise with additional low-resolution filtering."
+    ],
+    "smart-denoise-v1.1.0-ea841c685a": [
+      "Improves temporal denoising on moving footage with subpixel motion estimation and more accurate noise analysis."
+    ],
+    "smart-denoise-v1.0.3-9668cc0409": [
+      "Rejects mismatched temporal samples and prevents nonfinite values from contaminating output.",
+      "Corrects handling of cropped and offset After Effects buffers."
+    ],
+    "blurry-v2.6.7-25715f96f5": [
+      "Extends visible edge pixels at composition boundaries to prevent blurred layers from losing coverage."
+    ],
+    "blurry-v2.6.6-566bfcefc9": [
+      "Corrects alpha handling at the After Effects boundary to reduce dark outlines."
+    ],
+    "blurry-v2.6.5-1360f00387": [
+      "Smooths the background transition and preserves color at edges with chromatic aberration."
+    ],
+    "sequencer-v0.12.3-9943638aae": [
+      "Submit bug reports and feature requests from the Help menu."
+    ],
+    "sequencer-v0.12.1-7aa90ec001": [
+      "Report bugs and request features with feedback forms and a clipboard fallback."
+    ],
+    "corridor-key-v0.19.1-d3c0bb5b50": [
+      "Choose an export folder when rendering or queueing; it is remembered for later exports."
+    ],
+    "corridor-key-v0.19.0-822c713eb3": [
+      "Queue multiple clips in Batch render and download verified software updates."
+    ],
+    "corridor-key-v0.18.0-5559f2b3f2": [
+      "Import multiple clips and queue them for batch rendering with their saved masks, crop and color settings."
+    ],
+    "omnicast-v0.17.28-d9df987d04": [
+      "Optional secure-desktop support can relay clicks to Windows administrator prompts during a full-control session."
+    ],
+    "smart-grain-v2.2.3-af150566b8": [
+      "Corrects cropped and offset SmartFX frame bounds and handles empty checkouts as transparent regions."
+    ],
+    "multilayer-exr-v1.0.4-91759a560d": [
+      "Adds a native Windows folder picker and standalone installer.",
+      "Fixes quoted paths in the After Effects command line."
+    ]
+  }
+}

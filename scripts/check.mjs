@@ -30,6 +30,18 @@ for(const tool of catalog.tools){
   const release=releases[tool.id];
   if(process.argv.includes('--require-downloads')&&tool.status!=='lab')assert(release,`${tool.id} needs a published release`);
   if(!release)continue;
+  if(release.history){
+    assert(Array.isArray(release.history)&&release.history.length<=3,`${tool.id}: invalid release history`);
+    for(const entry of release.history){
+      assert(typeof entry.tag==='string'&&entry.tag,`${tool.id}: history needs a release tag`);
+      const historyUrl=new URL(entry.releaseUrl);
+      assert.equal(historyUrl.origin,'https://github.com');
+      assert(historyUrl.pathname.startsWith(`/${catalog.repository}/releases/tag/`));
+      assert(!historyUrl.username&&!historyUrl.password&&!historyUrl.search&&!historyUrl.hash);
+      assert(Number.isFinite(Date.parse(entry.publishedAt)),`${tool.id}: invalid release date`);
+      assert(Array.isArray(entry.notes)&&entry.notes.length<=2&&entry.notes.every(note=>typeof note==='string'&&note.length>0&&note.length<=240),`${tool.id}: invalid release notes`);
+    }
+  }
   if(release.complete){assert.equal(getReadiness(tool,release.complete).state,'reviewed',`${tool.id}: complete download lacks a matching review`);}
   assert.match(release.releaseUrl,new RegExp(`^https://github\\.com/${catalog.repository}/releases/tag/`));
   assert(release.downloads.length>0);

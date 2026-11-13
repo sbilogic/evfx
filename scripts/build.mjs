@@ -39,6 +39,19 @@ function download(tool,release,warningId) {
   return `<div class="line"><span class="release-meta"><span class="meta">${meta}</span>${uploaded}</span>${action}</div>${notes.replace('</details>',mobileInstall(mobileReleases[tool.id],escape)+'</details>')}`;
 }
 
+function releaseNotes(tool,release) {
+  const versions=release?.history||[];
+  const rows=versions.map(item=>{
+    const date=new Date(item.publishedAt);
+    const label=item.version?`v${item.version}${item.build!==undefined?` · build ${item.build}`:''}`:'Snapshot';
+    const time=Number.isFinite(date.getTime())?`<span>${item.uploaded?'Uploaded':'Published'} <time datetime="${escape(date.toISOString())}">${escape(utcTime.format(date))}</time></span>`:'';
+    const note=item.notes?.length?item.notes.map(text=>`<p>${escape(text)}</p>`).join(''):'<p>No release notes recorded.</p>';
+    const link=item.releaseUrl?.startsWith(`https://github.com/${catalog.repository}/releases/tag/`)?`<a href="${escape(item.releaseUrl)}" aria-label="Open ${escape(tool.name)} ${escape(label)} release">Release ↗</a>`:'';
+    return `<li><div class="history-meta"><strong>${escape(label)}</strong>${item.prerelease?'<span class="history-preview">⚠ Preview</span>':''}${time}${link}</div>${note}</li>`;
+  }).join('');
+  return `<details class="history"><summary>Release notes<span class="sr-only"> for ${escape(tool.name)}</span></summary>${rows?`<ol>${rows}</ol>`:'<p>No published versions.</p>'}</details>`;
+}
+
 function toolRow(tool,release,variant,hasComplete) {
   const readiness=getReadiness(tool,release);
   const hasWarning=readiness.state!=='reviewed';
@@ -57,11 +70,11 @@ function toolRow(tool,release,variant,hasComplete) {
   </article>`;
 }
 
-function detailPage(template,tool,release) {
+function detailPage(template,tool,release,latest) {
   const {steps,limits}=explain[tool.id];
   const body=`<article class="detail">
     <div class="detail-art" aria-hidden="true">${toolArt(tool.art)}</div>
-    <div class="detail-head"><h1>${escape(tool.name)}</h1><p class="desc">${escape(release?.collection?collectionDescription(release.collection):tool.description)}</p>${download(tool,release)}</div>
+    <div class="detail-head"><h1>${escape(tool.name)}</h1><p class="desc">${escape(release?.collection?collectionDescription(release.collection):tool.description)}</p>${download(tool,release)}${releaseNotes(tool,latest)}</div>
     <section class="flow" aria-labelledby="flow-title"><h2 id="flow-title">How it works</h2><ol>${steps.map(([title,text])=>`<li><h3>${escape(title)}</h3><p>${escape(text)}</p></li>`).join('')}</ol></section>
     <section class="limits" aria-labelledby="limits-title"><h2 id="limits-title">Limits</h2><ul>${limits.map(l=>`<li>${escape(l)}</li>`).join('')}</ul></section>
   </article>`;
@@ -87,10 +100,11 @@ for(const tool of catalog.tools){
       row=row.replace('</article>',`${development}</article>`);
       devCount++;
     }
+    row=row.replace('</article>',`${releaseNotes(tool,latest)}</article>`);
     group.rows.push(row);group.complete++;completeCount++;
     if(explain[tool.id])pages.push([tool,complete]);
   }else{
-    group.rows.push(toolRow(tool,latest,'development',false));devCount++;
+    group.rows.push(toolRow(tool,latest,'development',false).replace('</article>',`${releaseNotes(tool,latest)}</article>`));devCount++;
   }
 }
 const year=new Date().getFullYear();
@@ -110,7 +124,7 @@ await writeFile(join(root,'dist/updates/sequencer-android.json'),JSON.stringify(
 await writeFile(join(root,'dist/updates/corridor-key.json'),JSON.stringify(corridorKeyUpdateFeed(releases),null,2)+'\n');
 for(const [tool,release] of pages){
   await mkdir(join(root,'dist',tool.id),{recursive:true});
-  await writeFile(join(root,'dist',tool.id,'index.html'),fill(detailPage(pageTemplate,tool,release)));
+  await writeFile(join(root,'dist',tool.id,'index.html'),fill(detailPage(pageTemplate,tool,release,releases[tool.id])));
 }
 const redirects=catalog.tools.flatMap(tool=>{
   const aliases=[...(tool.aliases||[]),...(!pages.some(([page])=>page.id===tool.id)?[tool.id]:[])];

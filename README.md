@@ -96,6 +96,8 @@ GitHub Actions checks and deploys pushes and explicit publisher dispatches. Meta
 
 Each download shows its GitHub asset upload date and time, including the timezone. The browser formats it in the visitor's local timezone; without JavaScript, the static UTC time remains visible. Older metadata without an asset timestamp is labelled Published using the release date. Site rebuilds and release-note edits do not reset upload times.
 
+Each tool shows up to three recent versions or identifiable builds under Release notes. GitHub release notes and version-specific notes inside the built package are used when available; missing change notes are labelled rather than guessed. `release-notes.json` preserves notes recovered from older matching releases. New builds capture their own versioned notes automatically, and private history stays encrypted.
+
 CSS and JavaScript URLs include content hashes so new display code loads after a deployment while unchanged assets stay cached.
 
 ## Private downloads

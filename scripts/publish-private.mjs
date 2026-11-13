@@ -7,6 +7,8 @@ import { encryptVault, decryptVault } from '../src/private.js';
 import { github } from './github.mjs';
 import { loadJson, saveJson, withLock } from './sync-files.mjs';
 import { remapPrivateProject } from './private-project.mjs';
+import { privateHistory } from './private-history.mjs';
+import { packageNotes,projectNotes } from './package-notes.mjs';
 
 const root = dirname(dirname(fileURLToPath(import.meta.url)));
 const args = process.argv.slice(2);
@@ -62,15 +64,7 @@ async function publish() {
   let release, changed = false;
   for (const id of selected) {
     const source = config.sources[id];
-    const temporary = join(root,'.local',`private-${randomBytes(12).toString('hex')}.zip`);
-    let bytes;
-    try {
-      run('python',['scripts/package-private.py'],{input:JSON.stringify({...source.recipe,output:temporary})});
-      bytes = await readFile(temporary);
-    } finally { await unlink(temporary).catch(() => {}); }
-    const old = manifest.entries.find(entry => entry.id === id);
-    const buildSha = hash(bytes);
-    let entry = {...source.display,id,buildSha};
+    let entry = {...source.display,id};
     if (source.versionFile && source.versionPattern) {
       const match = new RegExp(source.versionPattern,'i').exec(await readFile(source.versionFile,'utf8'));
       if (match?.[1]) entry.version = match[1];
@@ -79,6 +73,18 @@ async function publish() {
       const match = new RegExp(source.namePattern,'i').exec(await readFile(source.nameFile,'utf8'));
       if (match?.[1]) entry.name = match[1];
     }
+    const temporary = join(root,'.local',`private-${randomBytes(12).toString('hex')}.zip`);
+    let bytes, changes=[];
+    try {
+      run('python',['scripts/package-private.py'],{input:JSON.stringify({...source.recipe,output:temporary})});
+      changes=packageNotes(temporary,entry.version);
+      if(!changes.length&&source.projectRoot&&source.recipe.files?.[0]?.from)
+        changes=await projectNotes(source.projectRoot,entry.version,source.recipe.files[0].from);
+      bytes = await readFile(temporary);
+    } finally { await unlink(temporary).catch(() => {}); }
+    const old = manifest.entries.find(entry => entry.id === id);
+    const buildSha = hash(bytes);
+    entry.buildSha=buildSha;
     if (old?.buildSha === buildSha && index.assets.some(asset => asset.name === old.asset)) {
       entry = {...entry,asset:old.asset,uploadedAt:old.uploadedAt};
     } else {
@@ -107,6 +113,7 @@ async function publish() {
       changed = true;
       console.log('Uploaded an encrypted private build.');
     }
+    entry.history=privateHistory(old,entry,changes);
     if (JSON.stringify(old) !== JSON.stringify(entry)) changed = true;
     manifest.entries = [...manifest.entries.filter(item => item.id !== id),entry];
   }

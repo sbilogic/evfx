@@ -43,7 +43,73 @@
           "uploadedAt": "2026-10-31T00:41:29Z"
         }
       ]
-    }
+    },
+    "history": [
+      {
+        "version": "2.2.3",
+        "tag": "smart-grain-v2.2.3-af150566b8",
+        "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/smart-grain-v2.2.3-af150566b8",
+        "publishedAt": "2026-10-31T00:41:29Z",
+        "uploaded": true,
+        "prerelease": false,
+        "notes": [
+          "Corrects cropped and offset SmartFX frame bounds and handles empty checkouts as transparent regions."
+        ]
+      }
+    ]
+  },
+  "smart-denoise": {
+    "version": "1.1.1",
+    "publishedAt": "2026-11-05T07:10:21Z",
+    "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/smart-denoise-v1.1.1-ce8e3ccd8f",
+    "tag": "smart-denoise-v1.1.1-ce8e3ccd8f",
+    "prerelease": true,
+    "downloads": [
+      {
+        "name": "EVFXSmartDenoise-v1.1.1-Windows.zip",
+        "url": "https://github.com/sbilogic/evfx/releases/download/smart-denoise-v1.1.1-ce8e3ccd8f/EVFXSmartDenoise-v1.1.1-Windows.zip",
+        "bytes": 481107,
+        "sha256": "0a187df31b8f99872ef7126c6c5e7ab3b58fddf5e7f0dd499ab7da9429dd492c",
+        "primary": true,
+        "uploadedAt": "2026-11-05T07:10:19Z"
+      }
+    ],
+    "history": [
+      {
+        "version": "1.1.1",
+        "tag": "smart-denoise-v1.1.1-ce8e3ccd8f",
+        "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/smart-denoise-v1.1.1-ce8e3ccd8f",
+        "publishedAt": "2026-11-05T07:10:19Z",
+        "uploaded": true,
+        "prerelease": true,
+        "notes": [
+          "Reduces coarse grain and blotchy color noise with additional low-resolution filtering."
+        ]
+      },
+      {
+        "version": "1.1.0",
+        "tag": "smart-denoise-v1.1.0-ea841c685a",
+        "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/smart-denoise-v1.1.0-ea841c685a",
+        "publishedAt": "2026-11-04T23:09:43Z",
+        "uploaded": true,
+        "prerelease": true,
+        "notes": [
+          "Improves temporal denoising on moving footage with subpixel motion estimation and more accurate noise analysis."
+        ]
+      },
+      {
+        "version": "1.0.3",
+        "tag": "smart-denoise-v1.0.3-9668cc0409",
+        "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/smart-denoise-v1.0.3-9668cc0409",
+        "publishedAt": "2026-11-04T18:58:55Z",
+        "uploaded": true,
+        "prerelease": true,
+        "notes": [
+          "Rejects mismatched temporal samples and prevents nonfinite values from contaminating output.",
+          "Corrects handling of cropped and offset After Effects buffers."
+        ]
+      }
+    ]
   },
   "blurry": {
     "version": "2.6.7",
@@ -83,22 +149,40 @@
           "uploadedAt": "2026-10-31T00:41:35Z"
         }
       ]
-    }
-  },
-  "crop-ae": {
-    "version": "0.1.2",
-    "publishedAt": "2026-10-31T00:41:41Z",
-    "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/crop-ae-v0.1.2-665298049e",
-    "tag": "crop-ae-v0.1.2-665298049e",
-    "prerelease": true,
-    "downloads": [
+    },
+    "history": [
       {
-        "name": "EVFXCrop-0.1.2-Windows.zip",
-        "url": "https://github.com/sbilogic/evfx/releases/download/crop-ae-v0.1.2-665298049e/EVFXCrop-0.1.2-Windows.zip",
-        "bytes": 259365,
-        "sha256": "89bb9bbb8edc1eb91e778332a28a63be8d0c305990b47047b6e92a3453b7cca0",
-        "primary": true,
-        "uploadedAt": "2026-10-31T00:41:39Z"
+        "version": "2.6.7",
+        "tag": "blurry-v2.6.7-25715f96f5",
+        "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/blurry-v2.6.7-25715f96f5",
+        "publishedAt": "2026-11-01T06:51:26Z",
+        "uploaded": true,
+        "prerelease": true,
+        "notes": [
+          "Extends visible edge pixels at composition boundaries to prevent blurred layers from losing coverage."
+        ]
+      },
+      {
+        "version": "2.6.6",
+        "tag": "blurry-v2.6.6-566bfcefc9",
+        "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/blurry-v2.6.6-566bfcefc9",
+        "publishedAt": "2026-11-01T06:42:07Z",
+        "uploaded": true,
+        "prerelease": true,
+        "notes": [
+          "Corrects alpha handling at the After Effects boundary to reduce dark outlines."
+        ]
+      },
+      {
+        "version": "2.6.5",
+        "tag": "blurry-v2.6.5-1360f00387",
+        "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/blurry-v2.6.5-1360f00387",
+        "publishedAt": "2026-11-01T05:18:12Z",
+        "uploaded": true,
+        "prerelease": true,
+        "notes": [
+          "Smooths the background transition and preserves color at edges with chromatic aberration."
+        ]
       }
     ]
   },
@@ -123,6 +207,37 @@
         "primary": true,
         "uploadedAt": "2026-10-31T21:44:02Z"
       }
+    ],
+    "history": [
+      {
+        "version": "2.1.0",
+        "build": 2,
+        "tag": "pixel-picker-v2.1.0-a09fd97287",
+        "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/pixel-picker-v2.1.0-a09fd97287",
+        "publishedAt": "2026-10-31T21:44:02Z",
+        "uploaded": true,
+        "prerelease": true,
+        "notes": []
+      },
+      {
+        "version": "2.1.0",
+        "build": 1,
+        "tag": "pixel-picker-v2.1.0-5d35400dbd",
+        "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/pixel-picker-v2.1.0-5d35400dbd",
+        "publishedAt": "2026-10-31T21:31:24Z",
+        "uploaded": true,
+        "prerelease": true,
+        "notes": []
+      },
+      {
+        "version": "1.1.0",
+        "tag": "pixel-picker-v1.1.0-fbc4b929df",
+        "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/pixel-picker-v1.1.0-fbc4b929df",
+        "publishedAt": "2026-10-31T00:41:43Z",
+        "uploaded": true,
+        "prerelease": true,
+        "notes": []
+      }
     ]
   },
   "auto-levels": {
@@ -146,204 +261,26 @@
         "primary": true,
         "uploadedAt": "2026-10-31T21:44:05Z"
       }
-    ]
-  },
-  "multilayer-exr": {
-    "version": "1.0.4",
-    "publishedAt": "2026-10-31T00:41:51Z",
-    "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/multilayer-exr-v1.0.4-91759a560d",
-    "tag": "multilayer-exr-v1.0.4-91759a560d",
-    "prerelease": true,
-    "downloads": [
-      {
-        "name": "EVFX_Multilayer_EXR_for_After_Effects_Setup_v1.0.4.exe",
-        "url": "https://github.com/sbilogic/evfx/releases/download/multilayer-exr-v1.0.4-91759a560d/EVFX_Multilayer_EXR_for_After_Effects_Setup_v1.0.4.exe",
-        "bytes": 123392,
-        "sha256": "e5b82d4dc0c0a32362748a562fa0b15e9fe75e6333579f6a302db9a6cf34b1f8",
-        "primary": true,
-        "uploadedAt": "2026-10-31T00:41:49Z"
-      }
-    ]
-  },
-  "null-tracker": {
-    "version": "2.0.0",
-    "publishedAt": "2026-10-31T00:41:55Z",
-    "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/null-tracker-v2.0.0-9d9f0d251f",
-    "tag": "null-tracker-v2.0.0-9d9f0d251f",
-    "prerelease": true,
-    "downloads": [
-      {
-        "name": "EVFX-null-tracker-2.0.0.zip",
-        "url": "https://github.com/sbilogic/evfx/releases/download/null-tracker-v2.0.0-9d9f0d251f/EVFX-null-tracker-2.0.0.zip",
-        "bytes": 19232,
-        "sha256": "d70a7f72bae31eba5e8fb94f9aac52d72d1e85812d0e316b502511f73a629e68",
-        "primary": true,
-        "uploadedAt": "2026-10-31T00:41:53Z"
-      }
-    ]
-  },
-  "crop-blender": {
-    "version": "0.2.0",
-    "publishedAt": "2026-10-31T00:42:06Z",
-    "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/crop-blender-v0.2.0-c73569f80b",
-    "tag": "crop-blender-v0.2.0-c73569f80b",
-    "prerelease": true,
-    "downloads": [
-      {
-        "name": "evfx_crop-0.2.0.zip",
-        "url": "https://github.com/sbilogic/evfx/releases/download/crop-blender-v0.2.0-c73569f80b/evfx_crop-0.2.0.zip",
-        "bytes": 46679,
-        "sha256": "5008eb408e6b3578d07bca8ebf2c818ee97113ddf8c794c54b17c3f5f525b01b",
-        "primary": true,
-        "uploadedAt": "2026-10-31T00:42:04Z"
-      }
-    ]
-  },
-  "sequencer": {
-    "version": "0.12.3",
-    "publishedAt": "2026-11-11T12:00:31Z",
-    "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/sequencer-v0.12.3-9943638aae",
-    "tag": "sequencer-v0.12.3-9943638aae",
-    "prerelease": false,
-    "review": {
-      "state": "complete",
-      "runtimeVerified": true,
-      "sha256": "77fbe5c6d37a08c1887b182f1ce83738933ced4f4926fd5acc0d1a4e3f0a5fd5",
-      "evidence": "EVFX Sequencer/evfx-release.json"
-    },
-    "downloads": [
-      {
-        "name": "EVFX-Sequencer-0.12.3-Windows-x64-Setup.exe",
-        "url": "https://github.com/sbilogic/evfx/releases/download/sequencer-v0.12.3-9943638aae/EVFX-Sequencer-0.12.3-Windows-x64-Setup.exe",
-        "bytes": 182102016,
-        "sha256": "77fbe5c6d37a08c1887b182f1ce83738933ced4f4926fd5acc0d1a4e3f0a5fd5",
-        "primary": true,
-        "uploadedAt": "2026-11-11T11:59:39Z"
-      },
-      {
-        "name": "EVFX-Sequencer-0.12.3-Windows-x64-Portable.zip",
-        "url": "https://github.com/sbilogic/evfx/releases/download/sequencer-v0.12.3-9943638aae/EVFX-Sequencer-0.12.3-Windows-x64-Portable.zip",
-        "bytes": 182004074,
-        "sha256": "1eef4e44dfbe19ebc03fbd7e4353441edf9006331f531823aa05e9f4334e4bf4",
-        "primary": false,
-        "uploadedAt": "2026-11-11T12:00:06Z"
-      }
     ],
-    "complete": {
-      "version": "0.12.3",
-      "publishedAt": "2026-11-11T12:00:31Z",
-      "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/sequencer-v0.12.3-9943638aae",
-      "tag": "sequencer-v0.12.3-9943638aae",
-      "prerelease": false,
-      "review": {
-        "state": "complete",
-        "runtimeVerified": true,
-        "sha256": "77fbe5c6d37a08c1887b182f1ce83738933ced4f4926fd5acc0d1a4e3f0a5fd5",
-        "evidence": "EVFX Sequencer/evfx-release.json"
+    "history": [
+      {
+        "version": "2.0.0-dev1",
+        "build": 1,
+        "tag": "auto-levels-v2.0.0-dev1-85476d0a59",
+        "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/auto-levels-v2.0.0-dev1-85476d0a59",
+        "publishedAt": "2026-10-31T21:44:05Z",
+        "uploaded": true,
+        "prerelease": true,
+        "notes": []
       },
-      "downloads": [
-        {
-          "name": "EVFX-Sequencer-0.12.3-Windows-x64-Setup.exe",
-          "url": "https://github.com/sbilogic/evfx/releases/download/sequencer-v0.12.3-9943638aae/EVFX-Sequencer-0.12.3-Windows-x64-Setup.exe",
-          "bytes": 182102016,
-          "sha256": "77fbe5c6d37a08c1887b182f1ce83738933ced4f4926fd5acc0d1a4e3f0a5fd5",
-          "primary": true,
-          "uploadedAt": "2026-11-11T11:59:39Z"
-        },
-        {
-          "name": "EVFX-Sequencer-0.12.3-Windows-x64-Portable.zip",
-          "url": "https://github.com/sbilogic/evfx/releases/download/sequencer-v0.12.3-9943638aae/EVFX-Sequencer-0.12.3-Windows-x64-Portable.zip",
-          "bytes": 182004074,
-          "sha256": "1eef4e44dfbe19ebc03fbd7e4353441edf9006331f531823aa05e9f4334e4bf4",
-          "primary": false,
-          "uploadedAt": "2026-11-11T12:00:06Z"
-        }
-      ]
-    }
-  },
-  "menu": {
-    "version": null,
-    "publishedAt": "2026-10-31T00:42:58Z",
-    "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/menu-snapshot-bb04c29611",
-    "tag": "menu-snapshot-bb04c29611",
-    "prerelease": false,
-    "review": {
-      "state": "complete",
-      "runtimeVerified": true,
-      "sha256": "49844778142bb9d834d7de9969d367a82442a451c2de8a53bb30aeac6fe0437c",
-      "evidence": "EVFX Menu/README.md and bin/validation.json: tested processing formats and bundled encoder verification; supported input limits remain explicit."
-    },
-    "downloads": [
       {
-        "name": "EVFX-menu-snapshot.zip",
-        "url": "https://github.com/sbilogic/evfx/releases/download/menu-snapshot-bb04c29611/EVFX-menu-snapshot.zip",
-        "bytes": 194925,
-        "sha256": "49844778142bb9d834d7de9969d367a82442a451c2de8a53bb30aeac6fe0437c",
-        "primary": true,
-        "uploadedAt": "2026-10-31T00:42:56Z"
-      }
-    ],
-    "complete": {
-      "version": null,
-      "publishedAt": "2026-10-31T00:42:58Z",
-      "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/menu-snapshot-bb04c29611",
-      "tag": "menu-snapshot-bb04c29611",
-      "prerelease": false,
-      "review": {
-        "state": "complete",
-        "runtimeVerified": true,
-        "sha256": "49844778142bb9d834d7de9969d367a82442a451c2de8a53bb30aeac6fe0437c",
-        "evidence": "EVFX Menu/README.md and bin/validation.json: tested processing formats and bundled encoder verification; supported input limits remain explicit."
-      },
-      "downloads": [
-        {
-          "name": "EVFX-menu-snapshot.zip",
-          "url": "https://github.com/sbilogic/evfx/releases/download/menu-snapshot-bb04c29611/EVFX-menu-snapshot.zip",
-          "bytes": 194925,
-          "sha256": "49844778142bb9d834d7de9969d367a82442a451c2de8a53bb30aeac6fe0437c",
-          "primary": true,
-          "uploadedAt": "2026-10-31T00:42:56Z"
-        }
-      ]
-    }
-  },
-  "corridor-key": {
-    "version": "0.19.1",
-    "publishedAt": "2026-11-05T20:51:36Z",
-    "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/corridor-key-v0.19.1-d3c0bb5b50",
-    "tag": "corridor-key-v0.19.1-d3c0bb5b50",
-    "prerelease": true,
-    "downloads": [
-      {
-        "name": "EVFX-Corridor-Key-2.0-0.19.1-Windows-x64-Setup.exe",
-        "url": "https://github.com/sbilogic/evfx/releases/download/corridor-key-v0.19.1-d3c0bb5b50/EVFX-Corridor-Key-2.0-0.19.1-Windows-x64-Setup.exe",
-        "bytes": 18631078,
-        "sha256": "b9d337651ed2ff1b8ffec9d9a6bafff1b87ccbf6cb3a4a1b3b2d4ae5ca340046",
-        "primary": true,
-        "uploadedAt": "2026-11-05T20:51:30Z"
-      }
-    ]
-  },
-  "shot-qc": {
-    "version": "0.4.0-dev1",
-    "build": 1,
-    "aeVersion": 131073,
-    "binary": {
-      "name": "EVFXShotQC.aex",
-      "sha256": "9e1a137cae904e43b7410458bf44466cb0176fbfe2a0038fcf6772afdc371727"
-    },
-    "publishedAt": "2026-10-31T21:44:09Z",
-    "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/shot-qc-v0.4.0-dev1-7f6da9c299",
-    "tag": "shot-qc-v0.4.0-dev1-7f6da9c299",
-    "prerelease": true,
-    "downloads": [
-      {
-        "name": "EVFX-shot-qc-0.4.0-dev1.zip",
-        "url": "https://github.com/sbilogic/evfx/releases/download/shot-qc-v0.4.0-dev1-7f6da9c299/EVFX-shot-qc-0.4.0-dev1.zip",
-        "bytes": 8295,
-        "sha256": "96437782e87e15f8a8aa689c7133fdec169c5bd934c8199c46281f2f56df03c2",
-        "primary": true,
-        "uploadedAt": "2026-10-31T21:44:08Z"
+        "version": "2.0.0",
+        "tag": "auto-levels-v2.0.0-fe42881538",
+        "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/auto-levels-v2.0.0-fe42881538",
+        "publishedAt": "2026-10-31T00:41:46Z",
+        "uploaded": true,
+        "prerelease": true,
+        "notes": []
       }
     ]
   },
@@ -362,6 +299,17 @@
         "primary": true,
         "uploadedAt": "2026-10-31T02:13:13Z"
       }
+    ],
+    "history": [
+      {
+        "version": "1.2.0",
+        "tag": "choke-it-v1.2.0-d53f9942f2",
+        "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/choke-it-v1.2.0-d53f9942f2",
+        "publishedAt": "2026-10-31T02:13:13Z",
+        "uploaded": true,
+        "prerelease": true,
+        "notes": []
+      }
     ]
   },
   "flares": {
@@ -378,6 +326,17 @@
         "sha256": "d14fc2e6772f810b2782980565562f4ff3726533659e10fb51d36ccc0b523b1c",
         "primary": true,
         "uploadedAt": "2026-11-08T09:18:42Z"
+      }
+    ],
+    "history": [
+      {
+        "version": "0.4.0-dev17",
+        "tag": "flares-v0.4.0-dev17-4023cbe5e0",
+        "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/flares-v0.4.0-dev17-4023cbe5e0",
+        "publishedAt": "2026-11-08T09:18:42Z",
+        "uploaded": true,
+        "prerelease": true,
+        "notes": []
       }
     ]
   },
@@ -480,45 +439,288 @@
         "primary": true,
         "uploadedAt": "2026-11-04T09:24:36Z"
       }
-    ]
-  },
-  "normalize-levels": {
-    "version": "2.1.1",
-    "build": 1,
-    "aeVersion": 1084929,
-    "binary": {
-      "name": "EVFX Normalize Levels v2.aex",
-      "sha256": "883ec7d3b3ac55d702d858a4fd7ccbec5708554aa1d91bc69bcd16f24b7c5cef"
-    },
-    "publishedAt": "2026-11-04T07:42:06Z",
-    "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/normalize-levels-v2.1.1-55fa006b4d",
-    "tag": "normalize-levels-v2.1.1-55fa006b4d",
-    "prerelease": true,
-    "downloads": [
+    ],
+    "history": [
       {
-        "name": "EVFX-normalize-levels-2.1.1.zip",
-        "url": "https://github.com/sbilogic/evfx/releases/download/normalize-levels-v2.1.1-55fa006b4d/EVFX-normalize-levels-2.1.1.zip",
-        "bytes": 90969,
-        "sha256": "c90327f448f8ff8a872aaf14e19414bce98235db5402650e4b6f4c9ec7a063ad",
-        "primary": true,
-        "uploadedAt": "2026-11-04T07:42:05Z"
+        "version": "1.5.3",
+        "tag": "utility-collection-v1.5.3-b927f0c026",
+        "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/utility-collection-v1.5.3-b927f0c026",
+        "publishedAt": "2026-11-04T09:24:36Z",
+        "uploaded": true,
+        "prerelease": true,
+        "notes": []
+      },
+      {
+        "version": "1.5.2",
+        "tag": "utility-collection-v1.5.2-0d8e1d82f1",
+        "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/utility-collection-v1.5.2-0d8e1d82f1",
+        "publishedAt": "2026-11-04T08:34:44Z",
+        "uploaded": true,
+        "prerelease": true,
+        "notes": []
+      },
+      {
+        "version": "1.5.1",
+        "tag": "utility-collection-v1.5.1-dcc4e12cda",
+        "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/utility-collection-v1.5.1-dcc4e12cda",
+        "publishedAt": "2026-11-04T06:52:16Z",
+        "uploaded": true,
+        "prerelease": true,
+        "notes": []
       }
     ]
   },
-  "smart-denoise": {
-    "version": "1.1.1",
-    "publishedAt": "2026-11-05T07:10:21Z",
-    "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/smart-denoise-v1.1.1-ce8e3ccd8f",
-    "tag": "smart-denoise-v1.1.1-ce8e3ccd8f",
+  "crop-ae": {
+    "version": "0.1.2",
+    "publishedAt": "2026-10-31T00:41:41Z",
+    "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/crop-ae-v0.1.2-665298049e",
+    "tag": "crop-ae-v0.1.2-665298049e",
     "prerelease": true,
     "downloads": [
       {
-        "name": "EVFXSmartDenoise-v1.1.1-Windows.zip",
-        "url": "https://github.com/sbilogic/evfx/releases/download/smart-denoise-v1.1.1-ce8e3ccd8f/EVFXSmartDenoise-v1.1.1-Windows.zip",
-        "bytes": 481107,
-        "sha256": "0a187df31b8f99872ef7126c6c5e7ab3b58fddf5e7f0dd499ab7da9429dd492c",
+        "name": "EVFXCrop-0.1.2-Windows.zip",
+        "url": "https://github.com/sbilogic/evfx/releases/download/crop-ae-v0.1.2-665298049e/EVFXCrop-0.1.2-Windows.zip",
+        "bytes": 259365,
+        "sha256": "89bb9bbb8edc1eb91e778332a28a63be8d0c305990b47047b6e92a3453b7cca0",
         "primary": true,
-        "uploadedAt": "2026-11-05T07:10:19Z"
+        "uploadedAt": "2026-10-31T00:41:39Z"
+      }
+    ],
+    "history": [
+      {
+        "version": "0.1.2",
+        "tag": "crop-ae-v0.1.2-665298049e",
+        "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/crop-ae-v0.1.2-665298049e",
+        "publishedAt": "2026-10-31T00:41:39Z",
+        "uploaded": true,
+        "prerelease": true,
+        "notes": []
+      }
+    ]
+  },
+  "multilayer-exr": {
+    "version": "1.0.4",
+    "publishedAt": "2026-10-31T00:41:51Z",
+    "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/multilayer-exr-v1.0.4-91759a560d",
+    "tag": "multilayer-exr-v1.0.4-91759a560d",
+    "prerelease": true,
+    "downloads": [
+      {
+        "name": "EVFX_Multilayer_EXR_for_After_Effects_Setup_v1.0.4.exe",
+        "url": "https://github.com/sbilogic/evfx/releases/download/multilayer-exr-v1.0.4-91759a560d/EVFX_Multilayer_EXR_for_After_Effects_Setup_v1.0.4.exe",
+        "bytes": 123392,
+        "sha256": "e5b82d4dc0c0a32362748a562fa0b15e9fe75e6333579f6a302db9a6cf34b1f8",
+        "primary": true,
+        "uploadedAt": "2026-10-31T00:41:49Z"
+      }
+    ],
+    "history": [
+      {
+        "version": "1.0.4",
+        "tag": "multilayer-exr-v1.0.4-91759a560d",
+        "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/multilayer-exr-v1.0.4-91759a560d",
+        "publishedAt": "2026-10-31T00:41:49Z",
+        "uploaded": true,
+        "prerelease": true,
+        "notes": [
+          "Adds a native Windows folder picker and standalone installer.",
+          "Fixes quoted paths in the After Effects command line."
+        ]
+      }
+    ]
+  },
+  "null-tracker": {
+    "version": "2.0.0",
+    "publishedAt": "2026-10-31T00:41:55Z",
+    "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/null-tracker-v2.0.0-9d9f0d251f",
+    "tag": "null-tracker-v2.0.0-9d9f0d251f",
+    "prerelease": true,
+    "downloads": [
+      {
+        "name": "EVFX-null-tracker-2.0.0.zip",
+        "url": "https://github.com/sbilogic/evfx/releases/download/null-tracker-v2.0.0-9d9f0d251f/EVFX-null-tracker-2.0.0.zip",
+        "bytes": 19232,
+        "sha256": "d70a7f72bae31eba5e8fb94f9aac52d72d1e85812d0e316b502511f73a629e68",
+        "primary": true,
+        "uploadedAt": "2026-10-31T00:41:53Z"
+      }
+    ],
+    "history": [
+      {
+        "version": "2.0.0",
+        "tag": "null-tracker-v2.0.0-9d9f0d251f",
+        "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/null-tracker-v2.0.0-9d9f0d251f",
+        "publishedAt": "2026-10-31T00:41:53Z",
+        "uploaded": true,
+        "prerelease": true,
+        "notes": []
+      }
+    ]
+  },
+  "shot-qc": {
+    "version": "0.4.0-dev1",
+    "build": 1,
+    "aeVersion": 131073,
+    "binary": {
+      "name": "EVFXShotQC.aex",
+      "sha256": "9e1a137cae904e43b7410458bf44466cb0176fbfe2a0038fcf6772afdc371727"
+    },
+    "publishedAt": "2026-10-31T21:44:09Z",
+    "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/shot-qc-v0.4.0-dev1-7f6da9c299",
+    "tag": "shot-qc-v0.4.0-dev1-7f6da9c299",
+    "prerelease": true,
+    "downloads": [
+      {
+        "name": "EVFX-shot-qc-0.4.0-dev1.zip",
+        "url": "https://github.com/sbilogic/evfx/releases/download/shot-qc-v0.4.0-dev1-7f6da9c299/EVFX-shot-qc-0.4.0-dev1.zip",
+        "bytes": 8295,
+        "sha256": "96437782e87e15f8a8aa689c7133fdec169c5bd934c8199c46281f2f56df03c2",
+        "primary": true,
+        "uploadedAt": "2026-10-31T21:44:08Z"
+      }
+    ],
+    "history": [
+      {
+        "version": "0.4.0-dev1",
+        "build": 1,
+        "tag": "shot-qc-v0.4.0-dev1-7f6da9c299",
+        "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/shot-qc-v0.4.0-dev1-7f6da9c299",
+        "publishedAt": "2026-10-31T21:44:08Z",
+        "uploaded": true,
+        "prerelease": true,
+        "notes": []
+      },
+      {
+        "version": "0.2.0",
+        "tag": "shot-qc-v0.2.0-227dabd192",
+        "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/shot-qc-v0.2.0-227dabd192",
+        "publishedAt": "2026-10-31T00:43:05Z",
+        "uploaded": true,
+        "prerelease": true,
+        "notes": []
+      }
+    ]
+  },
+  "crop-blender": {
+    "version": "0.2.0",
+    "publishedAt": "2026-10-31T00:42:06Z",
+    "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/crop-blender-v0.2.0-c73569f80b",
+    "tag": "crop-blender-v0.2.0-c73569f80b",
+    "prerelease": true,
+    "downloads": [
+      {
+        "name": "evfx_crop-0.2.0.zip",
+        "url": "https://github.com/sbilogic/evfx/releases/download/crop-blender-v0.2.0-c73569f80b/evfx_crop-0.2.0.zip",
+        "bytes": 46679,
+        "sha256": "5008eb408e6b3578d07bca8ebf2c818ee97113ddf8c794c54b17c3f5f525b01b",
+        "primary": true,
+        "uploadedAt": "2026-10-31T00:42:04Z"
+      }
+    ],
+    "history": [
+      {
+        "version": "0.2.0",
+        "tag": "crop-blender-v0.2.0-c73569f80b",
+        "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/crop-blender-v0.2.0-c73569f80b",
+        "publishedAt": "2026-10-31T00:42:04Z",
+        "uploaded": true,
+        "prerelease": true,
+        "notes": []
+      }
+    ]
+  },
+  "sequencer": {
+    "version": "0.12.3",
+    "publishedAt": "2026-11-11T12:00:31Z",
+    "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/sequencer-v0.12.3-9943638aae",
+    "tag": "sequencer-v0.12.3-9943638aae",
+    "prerelease": false,
+    "review": {
+      "state": "complete",
+      "runtimeVerified": true,
+      "sha256": "77fbe5c6d37a08c1887b182f1ce83738933ced4f4926fd5acc0d1a4e3f0a5fd5",
+      "evidence": "EVFX Sequencer/evfx-release.json"
+    },
+    "downloads": [
+      {
+        "name": "EVFX-Sequencer-0.12.3-Windows-x64-Setup.exe",
+        "url": "https://github.com/sbilogic/evfx/releases/download/sequencer-v0.12.3-9943638aae/EVFX-Sequencer-0.12.3-Windows-x64-Setup.exe",
+        "bytes": 182102016,
+        "sha256": "77fbe5c6d37a08c1887b182f1ce83738933ced4f4926fd5acc0d1a4e3f0a5fd5",
+        "primary": true,
+        "uploadedAt": "2026-11-11T11:59:39Z"
+      },
+      {
+        "name": "EVFX-Sequencer-0.12.3-Windows-x64-Portable.zip",
+        "url": "https://github.com/sbilogic/evfx/releases/download/sequencer-v0.12.3-9943638aae/EVFX-Sequencer-0.12.3-Windows-x64-Portable.zip",
+        "bytes": 182004074,
+        "sha256": "1eef4e44dfbe19ebc03fbd7e4353441edf9006331f531823aa05e9f4334e4bf4",
+        "primary": false,
+        "uploadedAt": "2026-11-11T12:00:06Z"
+      }
+    ],
+    "complete": {
+      "version": "0.12.3",
+      "publishedAt": "2026-11-11T12:00:31Z",
+      "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/sequencer-v0.12.3-9943638aae",
+      "tag": "sequencer-v0.12.3-9943638aae",
+      "prerelease": false,
+      "review": {
+        "state": "complete",
+        "runtimeVerified": true,
+        "sha256": "77fbe5c6d37a08c1887b182f1ce83738933ced4f4926fd5acc0d1a4e3f0a5fd5",
+        "evidence": "EVFX Sequencer/evfx-release.json"
+      },
+      "downloads": [
+        {
+          "name": "EVFX-Sequencer-0.12.3-Windows-x64-Setup.exe",
+          "url": "https://github.com/sbilogic/evfx/releases/download/sequencer-v0.12.3-9943638aae/EVFX-Sequencer-0.12.3-Windows-x64-Setup.exe",
+          "bytes": 182102016,
+          "sha256": "77fbe5c6d37a08c1887b182f1ce83738933ced4f4926fd5acc0d1a4e3f0a5fd5",
+          "primary": true,
+          "uploadedAt": "2026-11-11T11:59:39Z"
+        },
+        {
+          "name": "EVFX-Sequencer-0.12.3-Windows-x64-Portable.zip",
+          "url": "https://github.com/sbilogic/evfx/releases/download/sequencer-v0.12.3-9943638aae/EVFX-Sequencer-0.12.3-Windows-x64-Portable.zip",
+          "bytes": 182004074,
+          "sha256": "1eef4e44dfbe19ebc03fbd7e4353441edf9006331f531823aa05e9f4334e4bf4",
+          "primary": false,
+          "uploadedAt": "2026-11-11T12:00:06Z"
+        }
+      ]
+    },
+    "history": [
+      {
+        "version": "0.12.3",
+        "tag": "sequencer-v0.12.3-9943638aae",
+        "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/sequencer-v0.12.3-9943638aae",
+        "publishedAt": "2026-11-11T11:59:39Z",
+        "uploaded": true,
+        "prerelease": false,
+        "notes": [
+          "Submit bug reports and feature requests from the Help menu."
+        ]
+      },
+      {
+        "version": "0.12.2",
+        "tag": "sequencer-v0.12.2-4b3c0e668f",
+        "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/sequencer-v0.12.2-4b3c0e668f",
+        "publishedAt": "2026-11-11T11:52:20Z",
+        "uploaded": true,
+        "prerelease": true,
+        "notes": []
+      },
+      {
+        "version": "0.12.1",
+        "tag": "sequencer-v0.12.1-7aa90ec001",
+        "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/sequencer-v0.12.1-7aa90ec001",
+        "publishedAt": "2026-11-11T11:23:12Z",
+        "uploaded": true,
+        "prerelease": false,
+        "notes": [
+          "Report bugs and request features with feedback forms and a clipboard fallback."
+        ]
       }
     ]
   },
@@ -544,6 +746,201 @@
         "sha256": "aeac9818c4ccb1cf9a41a23497144d0e2ac133e82ca180bf0e1fa2ac5b81846e",
         "primary": false,
         "uploadedAt": "2026-11-12T12:42:53Z"
+      }
+    ],
+    "history": [
+      {
+        "version": "0.17.29",
+        "tag": "omnicast-v0.17.29-83b7c8faf9",
+        "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/omnicast-v0.17.29-83b7c8faf9",
+        "publishedAt": "2026-11-12T12:42:26Z",
+        "uploaded": true,
+        "prerelease": true,
+        "notes": []
+      },
+      {
+        "version": "0.17.28",
+        "tag": "omnicast-v0.17.28-d9df987d04",
+        "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/omnicast-v0.17.28-d9df987d04",
+        "publishedAt": "2026-11-12T10:03:48Z",
+        "uploaded": true,
+        "prerelease": true,
+        "notes": [
+          "Optional secure-desktop support can relay clicks to Windows administrator prompts during a full-control session."
+        ]
+      },
+      {
+        "version": "0.17.27",
+        "tag": "omnicast-v0.17.27-8ec78a7eae",
+        "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/omnicast-v0.17.27-8ec78a7eae",
+        "publishedAt": "2026-11-12T09:28:23Z",
+        "uploaded": true,
+        "prerelease": true,
+        "notes": []
+      }
+    ]
+  },
+  "menu": {
+    "version": null,
+    "publishedAt": "2026-10-31T00:42:58Z",
+    "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/menu-snapshot-bb04c29611",
+    "tag": "menu-snapshot-bb04c29611",
+    "prerelease": false,
+    "review": {
+      "state": "complete",
+      "runtimeVerified": true,
+      "sha256": "49844778142bb9d834d7de9969d367a82442a451c2de8a53bb30aeac6fe0437c",
+      "evidence": "EVFX Menu/README.md and bin/validation.json: tested processing formats and bundled encoder verification; supported input limits remain explicit."
+    },
+    "downloads": [
+      {
+        "name": "EVFX-menu-snapshot.zip",
+        "url": "https://github.com/sbilogic/evfx/releases/download/menu-snapshot-bb04c29611/EVFX-menu-snapshot.zip",
+        "bytes": 194925,
+        "sha256": "49844778142bb9d834d7de9969d367a82442a451c2de8a53bb30aeac6fe0437c",
+        "primary": true,
+        "uploadedAt": "2026-10-31T00:42:56Z"
+      }
+    ],
+    "complete": {
+      "version": null,
+      "publishedAt": "2026-10-31T00:42:58Z",
+      "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/menu-snapshot-bb04c29611",
+      "tag": "menu-snapshot-bb04c29611",
+      "prerelease": false,
+      "review": {
+        "state": "complete",
+        "runtimeVerified": true,
+        "sha256": "49844778142bb9d834d7de9969d367a82442a451c2de8a53bb30aeac6fe0437c",
+        "evidence": "EVFX Menu/README.md and bin/validation.json: tested processing formats and bundled encoder verification; supported input limits remain explicit."
+      },
+      "downloads": [
+        {
+          "name": "EVFX-menu-snapshot.zip",
+          "url": "https://github.com/sbilogic/evfx/releases/download/menu-snapshot-bb04c29611/EVFX-menu-snapshot.zip",
+          "bytes": 194925,
+          "sha256": "49844778142bb9d834d7de9969d367a82442a451c2de8a53bb30aeac6fe0437c",
+          "primary": true,
+          "uploadedAt": "2026-10-31T00:42:56Z"
+        }
+      ]
+    },
+    "history": [
+      {
+        "version": null,
+        "tag": "menu-snapshot-bb04c29611",
+        "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/menu-snapshot-bb04c29611",
+        "publishedAt": "2026-10-31T00:42:56Z",
+        "uploaded": true,
+        "prerelease": false,
+        "notes": []
+      }
+    ]
+  },
+  "corridor-key": {
+    "version": "0.19.1",
+    "publishedAt": "2026-11-05T20:51:36Z",
+    "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/corridor-key-v0.19.1-d3c0bb5b50",
+    "tag": "corridor-key-v0.19.1-d3c0bb5b50",
+    "prerelease": true,
+    "downloads": [
+      {
+        "name": "EVFX-Corridor-Key-2.0-0.19.1-Windows-x64-Setup.exe",
+        "url": "https://github.com/sbilogic/evfx/releases/download/corridor-key-v0.19.1-d3c0bb5b50/EVFX-Corridor-Key-2.0-0.19.1-Windows-x64-Setup.exe",
+        "bytes": 18631078,
+        "sha256": "b9d337651ed2ff1b8ffec9d9a6bafff1b87ccbf6cb3a4a1b3b2d4ae5ca340046",
+        "primary": true,
+        "uploadedAt": "2026-11-05T20:51:30Z"
+      }
+    ],
+    "history": [
+      {
+        "version": "0.19.1",
+        "tag": "corridor-key-v0.19.1-d3c0bb5b50",
+        "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/corridor-key-v0.19.1-d3c0bb5b50",
+        "publishedAt": "2026-11-05T20:51:30Z",
+        "uploaded": true,
+        "prerelease": true,
+        "notes": [
+          "Choose an export folder when rendering or queueing; it is remembered for later exports."
+        ]
+      },
+      {
+        "version": "0.19.0",
+        "tag": "corridor-key-v0.19.0-822c713eb3",
+        "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/corridor-key-v0.19.0-822c713eb3",
+        "publishedAt": "2026-11-05T20:22:18Z",
+        "uploaded": true,
+        "prerelease": true,
+        "notes": [
+          "Queue multiple clips in Batch render and download verified software updates."
+        ]
+      },
+      {
+        "version": "0.18.0",
+        "tag": "corridor-key-v0.18.0-5559f2b3f2",
+        "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/corridor-key-v0.18.0-5559f2b3f2",
+        "publishedAt": "2026-11-05T19:49:31Z",
+        "uploaded": true,
+        "prerelease": true,
+        "notes": [
+          "Import multiple clips and queue them for batch rendering with their saved masks, crop and color settings."
+        ]
+      }
+    ]
+  },
+  "normalize-levels": {
+    "version": "2.1.1",
+    "build": 1,
+    "aeVersion": 1084929,
+    "binary": {
+      "name": "EVFX Normalize Levels v2.aex",
+      "sha256": "883ec7d3b3ac55d702d858a4fd7ccbec5708554aa1d91bc69bcd16f24b7c5cef"
+    },
+    "publishedAt": "2026-11-04T07:42:06Z",
+    "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/normalize-levels-v2.1.1-55fa006b4d",
+    "tag": "normalize-levels-v2.1.1-55fa006b4d",
+    "prerelease": true,
+    "downloads": [
+      {
+        "name": "EVFX-normalize-levels-2.1.1.zip",
+        "url": "https://github.com/sbilogic/evfx/releases/download/normalize-levels-v2.1.1-55fa006b4d/EVFX-normalize-levels-2.1.1.zip",
+        "bytes": 90969,
+        "sha256": "c90327f448f8ff8a872aaf14e19414bce98235db5402650e4b6f4c9ec7a063ad",
+        "primary": true,
+        "uploadedAt": "2026-11-04T07:42:05Z"
+      }
+    ],
+    "history": [
+      {
+        "version": "2.1.1",
+        "build": 1,
+        "tag": "normalize-levels-v2.1.1-55fa006b4d",
+        "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/normalize-levels-v2.1.1-55fa006b4d",
+        "publishedAt": "2026-11-04T07:42:05Z",
+        "uploaded": true,
+        "prerelease": true,
+        "notes": []
+      },
+      {
+        "version": "2.1.0",
+        "build": 2,
+        "tag": "normalize-levels-v2.1.0-1f6b2295eb",
+        "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/normalize-levels-v2.1.0-1f6b2295eb",
+        "publishedAt": "2026-11-04T07:23:46Z",
+        "uploaded": true,
+        "prerelease": true,
+        "notes": []
+      },
+      {
+        "version": "2.0.1",
+        "build": 1,
+        "tag": "normalize-levels-v2.0.1-0f4167f3ab",
+        "releaseUrl": "https://github.com/sbilogic/evfx/releases/tag/normalize-levels-v2.0.1-0f4167f3ab",
+        "publishedAt": "2026-11-04T06:39:14Z",
+        "uploaded": true,
+        "prerelease": true,
+        "notes": []
       }
     ]
   }

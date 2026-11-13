@@ -134,6 +134,27 @@ if (typeof document !== 'undefined') {
       line.append(info, action);
       article.append(line);
       if (entry.install) article.append(element('p', 'private-install', entry.install));
+      const history = element('details', 'history');
+      history.append(element('summary', '', 'Release notes'));
+      const rows=element('ol');
+      const versions=Array.isArray(entry.history)?entry.history.slice(0,3):[{version:entry.version,uploadedAt:entry.uploadedAt,notes:[]}];
+      for(const version of versions){
+        const row=element('li'),meta=element('div','history-meta');
+        meta.append(element('strong','',version.version?`v${version.version}`:'Snapshot'));
+        const date=new Date(version.uploadedAt);
+        if(Number.isFinite(date.getTime())){
+          const time=element('time','',new Intl.DateTimeFormat(undefined,{
+            day:'numeric',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit',hourCycle:'h23',timeZoneName:'short'
+          }).format(date));
+          time.dateTime=date.toISOString();const stamp=element('span');stamp.append('Uploaded ',time);meta.append(stamp);
+        }
+        row.append(meta);
+        const notes=Array.isArray(version.notes)?version.notes.filter(note=>typeof note==='string').slice(0,2):[];
+        for(const note of notes.length?notes:['No release notes recorded.'])row.append(element('p','',note));
+        rows.append(row);
+      }
+      history.append(rows);
+      article.append(history);
       list.append(article);
     }
 

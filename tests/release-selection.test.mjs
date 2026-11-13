@@ -15,6 +15,14 @@ test('an unverified update preserves the last reviewed download for the complete
   assert.equal(lock.sample.complete.version,'1.0.0');
 });
 
+test('a newer build of the same version is not replaced by an older release-stage build',()=>{
+  const old=release('2.0.0'),newer=release('2.0.0-dev1',{prerelease:true});
+  old.published_at='2026-10-30T10:00:00Z';
+  newer.published_at='2026-10-31T10:00:00Z';
+  const lock=selectReleases(catalog,[old,newer]);
+  assert.equal(lock.sample.version,'2.0.0-dev1');
+});
+
 test('GitHub refresh preserves the included tools for each actual collection version',()=>{
   const old={schema:1,artifact:'Utility.jsx',sha256:'b'.repeat(64),members:[{id:'first',name:'First',tab:'First'}]};
   const latest={...old,sha256:'c'.repeat(64),members:[{id:'second',name:'Second',tab:'Second'}],retired:['first']};

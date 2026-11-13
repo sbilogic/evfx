@@ -4,10 +4,12 @@ import { createHash } from 'node:crypto';
 import { spawnSync } from 'node:child_process';
 import { dirname,join,basename } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { github,lockFromRelease } from './github.mjs';
+import { github,lockFromRelease,metadataFromRelease } from './github.mjs';
 import { getReadiness,warningMarkdown } from './readiness.mjs';
 import { discoverLocalPlugins,sourcePath,sourceRoot } from './local-plugins.mjs';
 import { loadJson,saveJson,withLock } from './sync-files.mjs';
+import { packageNotes,projectNotes } from './package-notes.mjs';
+import { mergeHistory,releaseHistory } from './release-history.mjs';
 
 const root=dirname(dirname(fileURLToPath(import.meta.url)));
 const generated=new Set(['catalog.json','sources.json','releases.lock.json','mobile-releases.json']);
@@ -46,6 +48,7 @@ async function publish({automatic=false,prepareOnly=false,only=null,expectedFing
   if(scan.issues.length)throw new Error(scan.issues.join('\n'));
   ({catalog,sources}=scan);
   const locks=await loadJson(join(root,'releases.lock.json'));
+  const archivedNotes=await loadJson(join(root,'release-notes.json'),{version:1,releases:{}});
   for(const id of Object.keys(locks))if(!catalog.tools.some(t=>t.id===id))delete locks[id];
   const output=join(root,'.packages');await mkdir(output,{recursive:true});
   const prepared=[];
@@ -86,7 +89,15 @@ async function publish({automatic=false,prepareOnly=false,only=null,expectedFing
     const native=source.files?.find(file=>/\.aex$/i.test(file));
     const identity={...(source.build!==undefined?{build:source.build}:{}),...(source.aeVersion?{aeVersion:source.aeVersion}:{}),...(source.collection?{collection:source.collection}:{})};
     if(native&&!source.bundleRoot)identity.binary={name:basename(native),sha256:await hashFile(sourcePath(root,config,source,native))};
-    prepared.push({tool,version,assets,tag,validatedSource,identity});
+    let changes=assets.flatMap(asset=>packageNotes(asset.path,version)).slice(0,2);
+    if(!changes.length&&source.project){
+      const project=sourcePath(root,config,source,source.project);
+      const artifact=source.files?.[0]
+        ? source.bundleRoot?join(sourcePath(root,config,source,source.bundleRoot),source.files[0]):sourcePath(root,config,source,source.files[0])
+        : assets[0].path;
+      changes=await projectNotes(project,version,artifact);
+    }
+    prepared.push({tool,version,assets,tag,validatedSource,identity,changes});
     console.log(`Prepared ${tool.id} ${version||'snapshot'}`);
   }
   // Reject a build that changed while its payload was being prepared.
@@ -107,13 +118,18 @@ async function publish({automatic=false,prepareOnly=false,only=null,expectedFing
   const remote=run(git,['remote','get-url','origin']);
   if(!remote.toLowerCase().endsWith(`github.com/${catalog.repository.toLowerCase()}.git`))throw new Error('Unexpected site Git remote.');
   let releaseChanged=false;
-  for(const {tool,version,assets,tag,validatedSource,identity} of prepared){
+  for(const {tool,version,assets,tag,validatedSource,identity,changes:preparedChanges} of prepared){
     const previous=locks[tool.id];
     const complete=previous?.complete||(previous&&getReadiness(tool,previous).state==='reviewed'?previous:null);
     let release=await github(`/repos/${catalog.repository}/releases/tags/${tag}`,{allow404:true});
+    const existingMetadata=release&&metadataFromRelease(release);
+    const existingChanges=existingMetadata?releaseHistory([{release,meta:existingMetadata}],archivedNotes.releases)[0]?.notes:[];
+    const changes=existingChanges?.length?existingChanges:preparedChanges;
     const ready=getReadiness(tool,{tag,version,prerelease:false}).state==='reviewed'&&!version?.includes('-')&&(!release?.prerelease||validatedSource);
-    const metadata={id:tool.id,version,...identity,files:assets.map(({path,...asset})=>asset),...(ready?{readiness:{state:'complete',runtimeVerified:true,sha256:assets[0].sha256,evidence:tool.readiness.evidence}}:{})};
-    const notes=warningMarkdown(tool,{tag,version,prerelease:!ready})+`${tool.detail}\n\n${identity.build!==undefined?`Version ${version} (build ${identity.build}).${identity.aeVersion?` After Effects version: ${identity.aeVersion}.`:''}\n\n`:''}### Requirements\n${tool.requirements}\n\n### Installation\n${tool.install}\n\n### SHA-256\n${assets.map(a=>`- \`${a.name}\`: \`${a.sha256}\``).join('\n')}${identity.binary?`\n- AEX \`${identity.binary.name}\`: \`${identity.binary.sha256}\``:''}\n\n<!-- evfx-release\n${JSON.stringify(metadata)}\n-->`;
+    const metadata={id:tool.id,version,...identity,...(changes.length?{releaseNotes:changes}:{}),files:assets.map(({path,...asset})=>asset),...(ready?{readiness:{state:'complete',runtimeVerified:true,sha256:assets[0].sha256,evidence:tool.readiness.evidence}}:{})};
+    const safeNote=value=>value.replace(/@/g,'@\u200b').replace(/[\\`*_\[\]<>]/g,'\\$&');
+    const changesBlock=changes.length?`### Changes\n${changes.map(note=>`- ${safeNote(note)}`).join('\n')}\n\n`:'';
+    const notes=warningMarkdown(tool,{tag,version,prerelease:!ready})+`${tool.detail}\n\n${identity.build!==undefined?`Version ${version} (build ${identity.build}).${identity.aeVersion?` After Effects version: ${identity.aeVersion}.`:''}\n\n`:''}${changesBlock}### Requirements\n${tool.requirements}\n\n### Installation\n${tool.install}\n\n### SHA-256\n${assets.map(a=>`- \`${a.name}\`: \`${a.sha256}\``).join('\n')}${identity.binary?`\n- AEX \`${identity.binary.name}\`: \`${identity.binary.sha256}\``:''}\n\n<!-- evfx-release\n${JSON.stringify(metadata)}\n-->`;
     if(!release){
       release=await github(`/repos/${catalog.repository}/releases`,{method:'POST',body:{tag_name:tag,target_commitish:'main',name:`EVFX ${tool.name} — ${version||'snapshot'}${identity.build!==undefined?` (build ${identity.build})`:''}`,body:notes,draft:true,prerelease:!ready,make_latest:'false'}});releaseChanged=true;
     }else if(release.body!==notes||release.prerelease!==!ready){
@@ -136,7 +152,8 @@ async function publish({automatic=false,prepareOnly=false,only=null,expectedFing
     release=await github(`/repos/${catalog.repository}/releases/${release.id}`);
     const next=lockFromRelease(release,metadata);
     const {complete:unused,...oldComplete}=complete||{};
-    locks[tool.id]={...next,...(ready?{complete:{...next}}:complete&&complete.tag!==tag?{complete:oldComplete}:{})};
+    const history=mergeHistory(releaseHistory([{release,meta:metadata}],archivedNotes.releases),previous?.history||[]);
+    locks[tool.id]={...next,...(ready?{complete:{...next}}:complete&&complete.tag!==tag?{complete:oldComplete}:{}),history};
     await saveJson(join(root,'releases.lock.json'),locks);
     console.log(`Verified ${tool.id}`);
   }
